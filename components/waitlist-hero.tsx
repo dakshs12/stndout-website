@@ -39,12 +39,12 @@ export function WaitlistHero() {
   }
 
   return (
-    <div className="relative min-h-screen w-full bg-background">
+    <div className="relative h-[100dvh] w-full bg-background flex flex-col items-center justify-center overflow-hidden">
 
 
       {/* Content */}
-      <div className="flex min-h-screen flex-col items-center justify-center px-6 py-20 sm:px-8">
-        <div className="w-full max-w-4xl space-y-12 text-center">
+      <div className="flex w-full flex-col items-center justify-center px-4 sm:px-6">
+        <div className="w-full max-w-4xl space-y-4 text-center">
           {/* Logo */}
           <motion.div 
             className="flex justify-center"
@@ -53,15 +53,15 @@ export function WaitlistHero() {
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
             <img 
-              src="/stndout-logo.svg" 
+              src="name-with-tagline-bg-removed.png" 
               alt="StndOut" 
-              className="h-64 w-64 text-foreground"
+              className="mx-auto h-auto max-h-[300px] w-full max-w-[300px] sm:max-w-[400px] md:max-w-[500px] lg:max-w-[550px] object-contain text-foreground"
             />
           </motion.div>
 
           {/* Main Headline */}
           <motion.h1 
-            className="font-serif text-balance text-5xl font-normal leading-[1.15] tracking-tight text-foreground sm:text-6xl md:text-7xl lg:text-8xl"
+            className="font-serif text-balance text-4xl font-normal leading-[1.1] tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl"
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
@@ -113,14 +113,14 @@ export function WaitlistHero() {
               </button>
             </form>
 
-            <p className="text-sm text-muted-foreground">
+            <p className="mt-2 text-sm text-muted-foreground">
               {'Press '}<kbd className="rounded border border-border bg-muted px-2 py-0.5 text-xs font-medium">{'Enter'}</kbd>{' to submit'}
             </p>
           </div>
 
           {/* Trust Indicators */}
-          <div className="flex flex-wrap items-center justify-center gap-6 pt-8 text-sm text-muted-foreground">
-            <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center justify-center gap-4 pt-4 text-sm text-muted-foreground">
+            <div className="flex items-center gap-1.5">
               <div className="h-1.5 w-1.5 rounded-full bg-accent" />
               <span>{'No spam, ever'}</span>
             </div>

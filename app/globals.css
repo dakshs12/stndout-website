@@ -15,7 +15,7 @@ body {
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 153 34% 36%;
+    --foreground: 0 0% 33%;
     --card: 150 20% 97%;
     --card-foreground: 153 34% 36%;
     --popover: 150 20% 97%;
@@ -49,8 +49,8 @@ body {
     --sidebar-ring: 153 34% 36%;
   }
   .dark {
-    --background: 153 25% 8%;
-    --foreground: 150 20% 95%;
+    --background: 0 0% 100%;
+    --foreground: 0 0% 33%;
     --card: 153 25% 10%;
     --card-foreground: 150 20% 95%;
     --popover: 153 25% 10%;
@@ -90,5 +90,8 @@ body {
   }
   body {
     @apply bg-background text-foreground;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    color: #000000;
   }
 }
