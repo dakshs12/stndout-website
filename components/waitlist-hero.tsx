@@ -15,21 +15,26 @@ export function WaitlistHero() {
     setIsLoading(true)
 
     try {
-      const response = await fetch('/api/waitlist', {
+      const response = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Accept: 'application/json',
         },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({
+          access_key: '905eedf2-f663-4b8e-b56f-be8fb3c0cbc3',
+          subject: 'New Waitlist Lead',
+          email: email,
+        }),
       })
 
       const data = await response.json()
 
-      if (response.ok) {
-        toast.success(data.message)
+      if (response.status === 200) {
+        toast.success('Thanks for joining the waitlist!')
         setEmail('')
       } else {
-        toast.error(data.error)
+        toast.error(data.message || 'Failed to submit email.')
       }
     } catch (error) {
       toast.error('Network error. Please try again.')
@@ -84,6 +89,10 @@ export function WaitlistHero() {
           {/* Email Form */}
           <div className="mx-auto max-w-md space-y-4 pt-4">
             <form onSubmit={handleSubmit} className="relative">
+              {/* Web3Forms required hidden fields for static HTML (Optional but safe to include since we are doing a fetch anyway) */}
+              <input type="hidden" name="access_key" value="905eedf2-f663-4b8e-b56f-be8fb3c0cbc3" />
+              <input type="hidden" name="subject" value="New Waitlist Lead" />
+
               <motion.div 
                 className="relative"
                 whileHover={{ scale: 1.02 }}
@@ -91,6 +100,7 @@ export function WaitlistHero() {
               >
                 <input
                   type="email"
+                  name="email"
                   placeholder="Enter your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
