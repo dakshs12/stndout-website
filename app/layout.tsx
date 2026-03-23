@@ -1,39 +1,32 @@
-import React from "react"
-import type { Metadata } from 'next'
-import { Playfair_Display, Inter } from 'next/font/google'
-import { Toaster } from '@/components/ui/sonner'
-
-import './globals.css'
-
-const playfairDisplay = Playfair_Display({ 
-  subsets: ['latin'],
-  variable: '--font-serif',
-  display: 'swap'
-})
+import type { Metadata } from "next";
+import { Inter, JetBrains_Mono } from "next/font/google";
+import "./globals.css"; // Note: Adjust this path if your globals.css is in the styles/ folder
 
 const inter = Inter({ 
-  subsets: ['latin'],
-  variable: '--font-sans',
-  display: 'swap'
-})
+  subsets: ["latin"],
+  variable: '--font-inter',
+});
+
+const jetbrainsMono = JetBrains_Mono({ 
+  subsets: ["latin"],
+  variable: '--font-jetbrains-mono',
+});
 
 export const metadata: Metadata = {
-  title: 'StndOut - Coming Soon | Join Our Waitlist',
-  description: 'StndOut is launching soon. Be the first to experience something amazing. Join our exclusive waitlist and get early access when we launch.',
-  generator: 'v0.app',
-}
+  title: "StndOut | Marketing That Actually Gets Noticed",
+  description: "StndOut is a challenger marketing agency. We refuse to let your brand blend in. See how strong your brand is — free in 60 seconds.",
+};
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${playfairDisplay.variable} ${inter.variable}`}>
-      <body className="font-sans antialiased">
+    <html lang="en" className="scroll-smooth">
+      <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans bg-brand-white text-brand-dark antialiased`}>
         {children}
-        <Toaster />
       </body>
     </html>
-  )
+  );
 }
