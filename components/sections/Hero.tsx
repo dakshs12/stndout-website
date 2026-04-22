@@ -1,117 +1,117 @@
 "use client";
 
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import gsap from 'gsap';
-import { Cormorant_Garamond } from 'next/font/google';
+import { SplitText } from 'gsap/SplitText'; // We can officially use this natively now!
+import { useGSAP } from '@gsap/react';
+import { Playfair_Display } from 'next/font/google';
 
-// Injecting a high-fashion, editorial Serif font
-const cormorant = Cormorant_Garamond({ 
+// Register the premium plugins natively
+gsap.registerPlugin(SplitText, useGSAP);
+
+const playfair = Playfair_Display({ 
   subsets: ['latin'],
-  weight: ['300', '400', '600', '700'],
-  style: ['italic', 'normal']
+  weight: ['700', '900'],
+  style: ['italic']
 });
 
 export function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const softTextRef = useRef<HTMLHeadingElement>(null);
-  const boldTextRef = useRef<HTMLSpanElement>(null);
-  const highlightRef = useRef<HTMLDivElement>(null);
-  const sparkRef = useRef<SVGSVGElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const eyebrowRef = useRef<HTMLParagraphElement>(null);
+  
+  const glass1Ref = useRef<HTMLDivElement>(null);
+  const glass2Ref = useRef<HTMLDivElement>(null);
+  const glass3Ref = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ delay: 0.2 });
+  useGSAP(() => {
+    // 1. PREMIUM TYPOGRAPHY ORCHESTRATION
+    // SplitText intelligently breaks the DOM elements into accessible, animatable divs
+    const splitTitle = new SplitText(titleRef.current, { type: "words,chars" });
+    const splitEyebrow = new SplitText(eyebrowRef.current, { type: "words" });
 
-      // 1. Gently fade in the soft, delicate text
-      tl.fromTo(softTextRef.current,
-        { opacity: 0, x: -20 },
-        { opacity: 1, x: 0, duration: 1.5, ease: "power2.out" }
-      );
+    const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
 
-      // 2. The Teal Highlight sweeps across the screen
-      tl.fromTo(highlightRef.current,
-        { scaleX: 0, transformOrigin: "left center" },
-        { scaleX: 1, duration: 0.8, ease: "expo.inOut" },
-        "-=0.5"
-      );
+    // Initial states (hidden and pushed down)
+    gsap.set([splitTitle.chars, splitEyebrow.words], { opacity: 0, yPercent: 100, rotateX: -90 });
+    gsap.set([glass1Ref.current, glass2Ref.current, glass3Ref.current], { scale: 0, opacity: 0 });
 
-      // 3. The text "We refuse" fades in exactly as the highlight hits
-      tl.fromTo(boldTextRef.current,
-        { opacity: 0, y: 10 },
-        { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" },
-        "-=0.3"
-      );
+    // The Reveal Sequence
+    tl.to(splitEyebrow.words, {
+      opacity: 1,
+      yPercent: 0,
+      rotateX: 0,
+      duration: 1.2,
+      stagger: 0.05,
+    })
+    .to(splitTitle.chars, {
+      opacity: 1,
+      yPercent: 0,
+      rotateX: 0,
+      duration: 1.5,
+      stagger: 0.02, // Cinematic ripple effect across the letters
+    }, "-=0.8")
+    .to([glass1Ref.current, glass2Ref.current, glass3Ref.current], {
+      scale: 1,
+      opacity: 1,
+      duration: 1.5,
+      ease: "back.out(1.5)",
+      stagger: 0.1
+    }, "-=1.2");
 
-      // 4. The "Spark" element pops in and starts a continuous slow rotation
-      tl.fromTo(sparkRef.current,
-        { scale: 0, rotation: -90 },
-        { scale: 1, rotation: 0, duration: 1, ease: "back.out(1.5)" },
-        "-=0.4"
-      );
+    // 2. HIGH-PERFORMANCE MOUSE PARALLAX (quickTo)
+    const xTo1 = gsap.quickTo(glass1Ref.current, "x", { duration: 0.8, ease: "power3" });
+    const yTo1 = gsap.quickTo(glass1Ref.current, "y", { duration: 0.8, ease: "power3" });
+    
+    const xTo2 = gsap.quickTo(glass2Ref.current, "x", { duration: 1.2, ease: "power3" });
+    const yTo2 = gsap.quickTo(glass2Ref.current, "y", { duration: 1.2, ease: "power3" });
+    
+    const xTo3 = gsap.quickTo(glass3Ref.current, "x", { duration: 0.5, ease: "power3" });
+    const yTo3 = gsap.quickTo(glass3Ref.current, "y", { duration: 0.5, ease: "power3" });
 
-      gsap.to(sparkRef.current, {
-        rotation: 360,
-        duration: 20,
-        repeat: -1,
-        ease: "linear"
-      });
+    const handleMouseMove = (e: MouseEvent) => {
+      const { clientX, clientY } = e;
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+      
+      const xPos = (clientX - centerX) / centerX;
+      const yPos = (clientY - centerY) / centerY;
 
-    }, containerRef);
+      xTo1(xPos * -60); yTo1(yPos * -60);
+      xTo2(xPos * 90);  yTo2(yPos * 90);
+      xTo3(xPos * -120); yTo3(yPos * 120);
+    };
 
-    return () => ctx.revert();
-  }, []);
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+    
+  }, { scope: containerRef }); 
 
   return (
-    <section ref={containerRef} id="hero" className="relative min-h-[100svh] flex items-center bg-brand-cream overflow-hidden pt-16">
+    <section ref={containerRef} id="hero" className="relative min-h-[100svh] flex items-center justify-center bg-[#070707] overflow-hidden perspective-[1000px]">
       
-      {/* 1. "The Swarm" - Blurry, out-of-focus background text representing the boring majority */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden select-none">
-        <span className="absolute top-[20%] left-[10%] text-6xl text-brand-dark/5 blur-[6px] font-bold">SYNERGY</span>
-        <span className="absolute top-[60%] left-[5%] text-8xl text-brand-dark/5 blur-[8px] font-bold">PIVOT</span>
-        <span className="absolute top-[30%] right-[15%] text-7xl text-brand-dark/5 blur-[5px] font-bold">LEVERAGE</span>
-        <span className="absolute top-[75%] right-[20%] text-9xl text-brand-dark/5 blur-[10px] font-bold">ROI</span>
-        <span className="absolute top-[50%] left-[40%] text-5xl text-brand-dark/5 blur-[4px] font-bold">HOLISTIC</span>
-      </div>
+      {/* Animated Aurora Orbs with ScrollSmoother Data-Speed Parallax */}
+      <div data-speed="0.8" className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-brand-primary/30 blur-[120px] rounded-full mix-blend-screen animate-[spin_20s_linear_infinite]" />
+      <div data-speed="1.2" className="absolute bottom-[-10%] right-[-10%] w-[60vw] h-[60vw] bg-brand-cream/10 blur-[150px] rounded-full mix-blend-screen animate-[spin_25s_linear_infinite_reverse]" />
 
-      {/* Fluid Container */}
-      <div className="w-full max-w-[1600px] mx-auto px-6 md:px-12 lg:px-16 xl:px-24 relative z-10 flex flex-col justify-center min-h-[60vh]">
+      {/* Floating Glassmorphism Elements */}
+      <div ref={glass1Ref} className="absolute top-[20%] left-[15%] w-32 h-32 md:w-64 md:h-64 rounded-full bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl z-10 hidden md:block will-change-transform" />
+      <div ref={glass2Ref} className="absolute bottom-[20%] right-[15%] w-48 h-64 md:w-80 md:h-[400px] rounded-[40px] rotate-12 bg-white/5 backdrop-blur-md border border-white/10 shadow-2xl z-10 hidden md:block will-change-transform" />
+      <div ref={glass3Ref} className="absolute top-[40%] right-[30%] w-16 h-16 md:w-24 md:h-24 rounded-lg -rotate-12 bg-brand-primary/20 backdrop-blur-2xl border border-brand-primary/30 shadow-2xl z-10 will-change-transform" />
+
+      {/* Foreground Content */}
+      <div className="w-full max-w-[1600px] mx-auto px-6 relative z-20 text-center flex flex-col items-center">
         
-        <div className="max-w-5xl">
-          {/* Delicate, blending-in text using the premium Serif font */}
-          <h1 
-            ref={softTextRef}
-            className={`${cormorant.className} text-5xl md:text-[80px] lg:text-[110px] text-brand-dark/40 font-light italic leading-[1.1] tracking-tight mb-4 md:mb-8 opacity-0`}
-          >
+        <div className="overflow-hidden mb-6">
+          <p ref={eyebrowRef} className="text-brand-cream/60 font-semibold uppercase tracking-[0.4em] md:tracking-[0.6em] text-sm md:text-lg">
             Most brands blend in.
+          </p>
+        </div>
+        
+        <div className="perspective-[1000px]">
+          <h1 ref={titleRef} className={`${playfair.className} text-6xl md:text-[130px] lg:text-[180px] font-black italic text-brand-cream leading-none drop-shadow-[0_0_40px_rgba(236,220,201,0.3)]`}>
+            We refuse.
           </h1>
-          
-          <div className="relative inline-flex items-center">
-            
-            {/* The Animated Highlight Box */}
-            <div 
-              ref={highlightRef}
-              className="absolute inset-0 bg-brand-primary -left-4 -right-4 md:-left-8 md:-right-8 skew-x-[-6deg] rounded-sm"
-            />
-            
-            {/* The Bold Challenger Text */}
-            <span 
-              ref={boldTextRef}
-              className="relative z-10 text-5xl md:text-[85px] lg:text-[120px] font-extrabold text-brand-beige tracking-tighter uppercase leading-none opacity-0 py-2 md:py-4"
-            >
-              We refuse.
-            </span>
-
-            {/* The Sharp "Stand Out" Spark Element */}
-            <svg 
-              ref={sparkRef}
-              viewBox="0 0 24 24" 
-              className="absolute -right-16 md:-right-32 -top-8 md:-top-16 w-12 h-12 md:w-24 md:h-24 text-brand-dark opacity-0"
-              fill="currentColor"
-            >
-              <path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z" />
-            </svg>
-
-          </div>
         </div>
         
       </div>

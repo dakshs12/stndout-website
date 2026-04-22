@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css"; // Note: Adjust this path if your globals.css is in the styles/ folder
+import { SmoothScroll } from "@/components/animations/SmoothScroll";
+import { Navbar } from "@/components/sections/Navbar"; // <-- Imported the Navbar
 
 const inter = Inter({ 
   subsets: ["latin"],
@@ -25,7 +27,15 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans bg-brand-white text-brand-dark antialiased`}>
-        {children}
+        
+        {/* Navbar sits OUTSIDE the physics wrapper so it can stay position: fixed */}
+        <Navbar />
+
+        {/* The rest of the site gets the premium momentum scroll */}
+        <SmoothScroll>
+          {children}
+        </SmoothScroll>
+        
       </body>
     </html>
   );
