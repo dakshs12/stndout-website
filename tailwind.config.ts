@@ -11,7 +11,7 @@ const config: Config = {
       colors: {
         brand: {
           primary: "#1E7C70", // Blue Spruce
-          cream: "#ECDCC9",   // Almond Cream
+          cream: "#fff8f4",   // Warm White
           beige: "#F5F5DC",   // Beige
           dark: "#070707",    // Almost Black
           white: "#FFFFFF",   // White

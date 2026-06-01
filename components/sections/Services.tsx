@@ -1,11 +1,12 @@
 "use client";
 
 import { useRef } from 'react';
+import Link from 'next/link';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { Playfair_Display } from 'next/font/google';
-import { ArrowUpRight } from 'lucide-react'; // Make sure lucide-react is installed, Next.js usually includes it!
+import { ArrowUpRight } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -187,16 +188,20 @@ export function Services() {
                 The Complete<br/>Arsenal.
               </h2>
             </div>
-            <button className="group flex items-center gap-3 px-8 py-4 bg-brand-primary text-brand-white font-bold rounded-full hover:bg-brand-cream hover:text-[#070707] transition-all duration-300 w-fit">
-              View All Services
+            <Link
+              href="/services"
+              className="group flex items-center gap-3 px-8 py-4 bg-brand-primary text-brand-white font-bold rounded-full hover:bg-brand-cream hover:text-[#070707] transition-all duration-300 w-fit"
+            >
+              Details →
               <ArrowUpRight className="w-5 h-5 group-hover:rotate-45 transition-transform duration-300" />
-            </button>
+            </Link>
           </div>
 
           {/* Bento Box Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {services.map(svc => (
-              <div 
+              <Link 
+                href={`/services#${svc.id === '01' ? 'strategy' : svc.id === '02' ? 'media' : svc.id === '03' ? 'content' : 'technical'}`}
                 key={`summary-${svc.id}`} 
                 className="bg-white/5 border border-white/10 rounded-[2rem] p-8 flex flex-col hover:bg-white/10 transition-colors duration-300 group cursor-pointer"
               >
@@ -222,7 +227,7 @@ export function Services() {
                     </span>
                   ))}
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
 

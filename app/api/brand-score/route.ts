@@ -5,8 +5,10 @@ import { NextResponse } from 'next/server';
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 
 export async function POST(req: Request) {
+  let body: { url?: string; industry?: string; size?: string; channels?: string[] } = {};
+
   try {
-    const body = await req.json();
+    body = await req.json();
     const { url, industry, size, channels } = body;
 
     if (!url) {

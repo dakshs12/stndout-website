@@ -5,6 +5,7 @@ import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { Playfair_Display } from 'next/font/google';
 import { ArrowRight, Check, Sparkles, RefreshCcw, ChevronDown, AlertTriangle, TrendingUp, Zap } from 'lucide-react';
+import Link from 'next/link';
 
 gsap.registerPlugin(useGSAP);
 
@@ -12,7 +13,7 @@ const playfair = Playfair_Display({ subsets: ['latin'], weight: ['700', '900'], 
 
 const marketingChannels = ["Social Media", "SEO / Content", "Paid Ads", "Email Marketing", "Referrals / WOM", "Influencers / PR"];
 const sizeOptions = ["1 - 10 Employees", "11 - 50 Employees", "50 - 200 Employees", "200+ Employees"];
-const industryOptions = ["Technology / SaaS", "E-commerce", "Real Estate", "Healthcare", "Finance", "Agency / Services", "Other"];
+const industryOptions = ["Technology / SaaS", "E-commerce", "Real Estate", "Healthcare", "Finance", "Agency / Services", "Agriculture", "Other"];
 
 // --- Custom UI Dropdown Component ---
 function CustomSelect({ label, options, value, onChange }: { label: string, options: string[], value: string, onChange: (val: string) => void }) {
@@ -111,14 +112,21 @@ export function BrandScore() {
   useGSAP(() => {
     if (phase === 1) {
       // PHASE 1: TRANSITION & SCANNING
-      gsap.to(formRef.current, { y: -30, opacity: 0, filter: "blur(10px)", duration: 0.4, display: "none" });
-      gsap.fromTo(scanRef.current, { scale: 0.8, opacity: 0, display: "none" }, { scale: 1, opacity: 1, display: "flex", duration: 0.5, ease: "back.out(1.5)" });
+      const transitionTl = gsap.timeline();
+      transitionTl.to(formRef.current, { y: -30, opacity: 0, filter: "blur(10px)", duration: 0.3 })
+                  .set(formRef.current, { display: "none" })
+                  .fromTo(scanRef.current, { scale: 0.8, opacity: 0, display: "none" }, { scale: 1, opacity: 1, display: "flex", duration: 0.4, ease: "back.out(1.5)" }, "+=0.1");
 
-      gsap.to('.scan-text', { opacity: 1, y: 0, stagger: 0.4, duration: 0.1 });
+      const scanTexts = gsap.utils.toArray('.scan-text');
+      const textTl = gsap.timeline({ delay: 0.8 });
+      scanTexts.forEach((text: any) => {
+        textTl.fromTo(text, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.3 })
+              .to(text, { opacity: 0, y: -10, duration: 0.3 }, "+=0.5");
+      });
 
       // Simulate a long load that speeds up when the API returns
       progressTimeline.current = gsap.timeline();
-      progressTimeline.current.to('.progress-bar', { width: "85%", duration: 4, ease: "power1.out" })
+      progressTimeline.current.to('.progress-bar', { width: "85%", duration: 4, ease: "power1.out", delay: 0.5 })
                               .to('.progress-bar', { width: "100%", duration: 0.5, ease: "power1.in" });
 
     } else if (phase === 2) {
@@ -132,6 +140,9 @@ export function BrandScore() {
       );
     } else if (phase === 0) {
       // RESTORE FORM
+      gsap.to(resultRef.current, { opacity: 0, scale: 0.9, duration: 0.3, display: "none" });
+      gsap.set(scanRef.current, { display: "none" });
+      gsap.set(formRef.current, { filter: "blur(0px)" });
       gsap.fromTo(formRef.current, { opacity: 0, y: 20, display: "none" }, { opacity: 1, y: 0, display: "block", duration: 0.6, delay: 0.2 });
     }
   }, { dependencies: [phase, result], scope: containerRef });
@@ -139,15 +150,15 @@ export function BrandScore() {
   // Dynamic UI based on Score
   const getScoreUI = () => {
     if (result.score < 50) return {
-      color: "text-red-500", glow: "shadow-[0_0_50px_rgba(239,68,68,0.3)]", icon: <AlertTriangle className="w-8 h-8 text-red-500 mb-4" />,
+      color: "text-red-500", glow: "drop-shadow-[0_0_25px_rgba(239,68,68,0.8)]", icon: <AlertTriangle className="w-8 h-8 text-red-500 mb-4" />,
       title: "Critical Alert: You are invisible.", cta: "Emergency Strategy Call",
     };
     if (result.score < 75) return {
-      color: "text-yellow-400", glow: "shadow-[0_0_50px_rgba(250,204,21,0.3)]", icon: <TrendingUp className="w-8 h-8 text-yellow-400 mb-4" />,
+      color: "text-yellow-400", glow: "drop-shadow-[0_0_25px_rgba(250,204,21,0.8)]", icon: <TrendingUp className="w-8 h-8 text-yellow-400 mb-4" />,
       title: "You are blending into the noise.", cta: "Break the Mold (Book Call)",
     };
     return {
-      color: "text-brand-primary", glow: "shadow-[0_0_50px_rgba(30,124,112,0.4)]", icon: <Zap className="w-8 h-8 text-brand-primary mb-4" />,
+      color: "text-brand-primary", glow: "drop-shadow-[0_0_25px_rgba(30,124,112,0.8)]", icon: <Zap className="w-8 h-8 text-brand-primary mb-4" />,
       title: "Strong, but leaving money on the table.", cta: "Scale to Dominance",
     };
   };
@@ -162,9 +173,6 @@ export function BrandScore() {
         
         {/* PITCH COLUMN */}
         <div className="xl:w-5/12 flex flex-col justify-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-brand-primary/30 bg-brand-primary/10 text-brand-primary font-bold text-xs uppercase tracking-widest w-fit mb-6">
-            <Sparkles className="w-4 h-4" /> Free AI Tool
-          </div>
           <h2 className={`${playfair.className} text-6xl md:text-[80px] lg:text-[100px] font-black text-brand-cream leading-[0.9] tracking-tight mb-8`}>
             How strong is your brand?
           </h2>
@@ -187,7 +195,7 @@ export function BrandScore() {
                     type="url" 
                     value={formData.url}
                     onChange={(e) => setFormData({...formData, url: e.target.value})}
-                    placeholder="[https://yourwebsite.com](https://yourwebsite.com)" 
+                    placeholder="https://yourwebsite.com" 
                     className="w-full bg-transparent border-b border-white/20 pb-2 text-brand-white placeholder:text-white/20 focus:outline-none focus:border-brand-primary transition-colors" 
                   />
                   {error && <span className="text-red-500 text-xs mt-1">{error}</span>}
@@ -244,11 +252,11 @@ export function BrandScore() {
                 <div className="absolute inset-0 border-4 border-brand-primary/20 rounded-full" />
                 <div className="absolute inset-0 border-4 border-brand-primary border-t-transparent rounded-full animate-spin" />
               </div>
-              <div className="h-12 overflow-hidden flex flex-col items-center mb-8 relative w-full">
-                <p className="scan-text opacity-0 translate-y-4 text-brand-cream/60 font-mono text-sm tracking-widest uppercase absolute">Connecting to Gemini Engine...</p>
-                <p className="scan-text opacity-0 translate-y-4 text-brand-primary font-mono text-sm tracking-widest uppercase absolute">Analyzing Market Delta...</p>
-                <p className="scan-text opacity-0 translate-y-4 text-brand-cream/60 font-mono text-sm tracking-widest uppercase absolute">Evaluating Channel Strategy...</p>
-                <p className="scan-text opacity-0 translate-y-4 text-white font-mono text-sm tracking-widest uppercase absolute">Compiling StndOut Verdict...</p>
+              <div className="h-12 overflow-hidden flex flex-col justify-center items-center mb-8 relative w-full">
+                <p className="scan-text opacity-0 text-brand-cream/60 font-mono text-sm tracking-widest uppercase absolute">Connecting to Gemini Engine...</p>
+                <p className="scan-text opacity-0 text-brand-primary font-mono text-sm tracking-widest uppercase absolute">Analyzing Market Delta...</p>
+                <p className="scan-text opacity-0 text-brand-cream/60 font-mono text-sm tracking-widest uppercase absolute">Evaluating Channel Strategy...</p>
+                <p className="scan-text opacity-0 text-white font-mono text-sm tracking-widest uppercase absolute">Compiling StndOut Verdict...</p>
               </div>
               <div className="w-full max-w-sm h-1 bg-white/10 rounded-full overflow-hidden">
                 <div className="progress-bar h-full bg-brand-primary w-0 shadow-[0_0_10px_rgba(30,124,112,1)]" />
@@ -272,9 +280,9 @@ export function BrandScore() {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 w-full">
-                <button className="flex-1 bg-brand-cream text-[#070707] font-black py-4 rounded-xl hover:bg-white transition-colors shadow-[0_0_20px_rgba(236,220,201,0.3)]">
+                <Link href="/contact" className="flex-1 bg-brand-cream text-[#070707] font-black py-4 rounded-xl flex items-center justify-center hover:bg-white transition-colors shadow-[0_0_20px_rgba(236,220,201,0.3)]">
                   {scoreUI.cta}
-                </button>
+                </Link>
                 <button 
                   onClick={handleReset}
                   className="flex items-center justify-center gap-2 px-6 py-4 bg-transparent border border-white/20 text-brand-cream font-bold rounded-xl hover:bg-white/10 transition-colors"

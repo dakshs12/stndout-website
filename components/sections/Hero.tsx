@@ -1,119 +1,172 @@
 "use client";
 
-import { useRef } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import gsap from 'gsap';
-import { SplitText } from 'gsap/SplitText'; // We can officially use this natively now!
+import { SplitText } from 'gsap/SplitText';
 import { useGSAP } from '@gsap/react';
 import { Playfair_Display } from 'next/font/google';
+import { ArrowRight, Sparkles } from 'lucide-react';
+import Link from 'next/link';
 
-// Register the premium plugins natively
 gsap.registerPlugin(SplitText, useGSAP);
 
-const playfair = Playfair_Display({ 
+const playfair = Playfair_Display({
   subsets: ['latin'],
   weight: ['700', '900'],
-  style: ['italic']
+  style: ['italic', 'normal'],
 });
 
 export function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
-  const eyebrowRef = useRef<HTMLParagraphElement>(null);
+  const maskRef = useRef<HTMLDivElement>(null);
   
-  const glass1Ref = useRef<HTMLDivElement>(null);
-  const glass2Ref = useRef<HTMLDivElement>(null);
-  const glass3Ref = useRef<HTMLDivElement>(null);
+  const baseContentRef = useRef<HTMLDivElement>(null);
+  const revealContentRef = useRef<HTMLDivElement>(null);
+  
+  const headlineBaseRef = useRef<HTMLHeadingElement>(null);
+  const headlineRevealRef = useRef<HTMLHeadingElement>(null);
+  const buttonsRef = useRef<HTMLDivElement>(null);
+  
+  const [isMouseDevice, setIsMouseDevice] = useState(true);
+
+  useEffect(() => {
+    if (window.matchMedia("(hover: none)").matches) {
+      setIsMouseDevice(false);
+    }
+  }, []);
 
   useGSAP(() => {
-    // 1. PREMIUM TYPOGRAPHY ORCHESTRATION
-    // SplitText intelligently breaks the DOM elements into accessible, animatable divs
-    const splitTitle = new SplitText(titleRef.current, { type: "words,chars" });
-    const splitEyebrow = new SplitText(eyebrowRef.current, { type: "words" });
+    if (!containerRef.current || !headlineBaseRef.current || !headlineRevealRef.current) return;
 
-    const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
+    // Center mask initially
+    gsap.set(maskRef.current, { 
+      '--x': window.innerWidth / 2, 
+      '--y': window.innerHeight / 2,
+      '--mask-size': '0px'
+    });
 
-    // Initial states (hidden and pushed down)
-    gsap.set([splitTitle.chars, splitEyebrow.words], { opacity: 0, yPercent: 100, rotateX: -90 });
-    gsap.set([glass1Ref.current, glass2Ref.current, glass3Ref.current], { scale: 0, opacity: 0 });
+    // High performance tracking
+    const xTo = gsap.quickTo(maskRef.current, "--x", { duration: 0.4, ease: "power3.out" });
+    const yTo = gsap.quickTo(maskRef.current, "--y", { duration: 0.4, ease: "power3.out" });
 
-    // The Reveal Sequence
-    tl.to(splitEyebrow.words, {
-      opacity: 1,
-      yPercent: 0,
-      rotateX: 0,
-      duration: 1.2,
-      stagger: 0.05,
-    })
-    .to(splitTitle.chars, {
-      opacity: 1,
-      yPercent: 0,
-      rotateX: 0,
-      duration: 1.5,
-      stagger: 0.02, // Cinematic ripple effect across the letters
-    }, "-=0.8")
-    .to([glass1Ref.current, glass2Ref.current, glass3Ref.current], {
-      scale: 1,
-      opacity: 1,
-      duration: 1.5,
-      ease: "back.out(1.5)",
-      stagger: 0.1
-    }, "-=1.2");
+    const moveMask = (e: MouseEvent) => {
+      // Spotlight coordinates
+      xTo(e.clientX);
+      yTo(e.clientY);
 
-    // 2. HIGH-PERFORMANCE MOUSE PARALLAX (quickTo)
-    const xTo1 = gsap.quickTo(glass1Ref.current, "x", { duration: 0.8, ease: "power3" });
-    const yTo1 = gsap.quickTo(glass1Ref.current, "y", { duration: 0.8, ease: "power3" });
-    
-    const xTo2 = gsap.quickTo(glass2Ref.current, "x", { duration: 1.2, ease: "power3" });
-    const yTo2 = gsap.quickTo(glass2Ref.current, "y", { duration: 1.2, ease: "power3" });
-    
-    const xTo3 = gsap.quickTo(glass3Ref.current, "x", { duration: 0.5, ease: "power3" });
-    const yTo3 = gsap.quickTo(glass3Ref.current, "y", { duration: 0.5, ease: "power3" });
-
-    const handleMouseMove = (e: MouseEvent) => {
-      const { clientX, clientY } = e;
-      const centerX = window.innerWidth / 2;
-      const centerY = window.innerHeight / 2;
+      // Subtle Parallax for the text
+      const xOffset = (e.clientX / window.innerWidth - 0.5) * 30;
+      const yOffset = (e.clientY / window.innerHeight - 0.5) * 30;
       
-      const xPos = (clientX - centerX) / centerX;
-      const yPos = (clientY - centerY) / centerY;
-
-      xTo1(xPos * -60); yTo1(yPos * -60);
-      xTo2(xPos * 90);  yTo2(yPos * 90);
-      xTo3(xPos * -120); yTo3(yPos * 120);
+      gsap.to([baseContentRef.current, revealContentRef.current], {
+        x: -xOffset,
+        y: -yOffset,
+        duration: 1.5,
+        ease: "power2.out"
+      });
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-    
-  }, { scope: containerRef }); 
+    if (isMouseDevice) {
+      window.addEventListener("mousemove", moveMask);
+    }
+
+    // Intro Animation Sequence
+    const splitBase = new SplitText(headlineBaseRef.current, { type: "words,chars" });
+    const splitReveal = new SplitText(headlineRevealRef.current, { type: "words,chars" });
+
+    const tl = gsap.timeline({ defaults: { ease: "expo.out" }, delay: 0.2 });
+
+    gsap.set([splitBase.chars, splitReveal.chars], { opacity: 0, yPercent: 100, rotateX: -90 });
+    gsap.set(buttonsRef.current, { opacity: 0, y: 30 });
+
+    tl.to([splitBase.chars, splitReveal.chars], {
+      opacity: 1,
+      yPercent: 0,
+      rotateX: 0,
+      duration: 1.5,
+      stagger: 0.02,
+    })
+    .to(maskRef.current, {
+      '--mask-size': isMouseDevice ? '450px' : '150vw',
+      duration: 1.5,
+      ease: "power2.inOut"
+    }, "-=1.0")
+    .to(buttonsRef.current, {
+      opacity: 1,
+      y: 0,
+      duration: 1,
+    }, "-=0.8");
+
+    return () => {
+      if (isMouseDevice) window.removeEventListener("mousemove", moveMask);
+      splitBase.revert();
+      splitReveal.revert();
+    };
+
+  }, { scope: containerRef, dependencies: [isMouseDevice] });
+
+  const ContentBlock = ({ isRevealed, headlineRef, wrapperRef }: { isRevealed: boolean, headlineRef: React.RefObject<HTMLHeadingElement | null>, wrapperRef: React.RefObject<HTMLDivElement | null> }) => (
+    <div ref={wrapperRef} className="flex flex-col items-center text-center max-w-5xl mx-auto px-6 mt-16">
+      <h1 
+        ref={headlineRef}
+        className={`${playfair.className} text-5xl sm:text-6xl md:text-7xl lg:text-[100px] xl:text-[120px] font-black leading-[0.95] tracking-tight mb-8 ${isRevealed ? 'text-brand-cream' : 'text-white/10'}`}
+      >
+        Most brands <span className={`italic ${isRevealed ? 'text-white' : 'text-white/5'}`}>blend in.</span><br />
+        We <span className={`italic ${isRevealed ? 'text-brand-dark' : 'text-white/20'}`}>refuse.</span>
+      </h1>
+      <p className={`text-lg md:text-xl font-medium leading-relaxed max-w-xl mb-12 ${isRevealed ? 'text-brand-cream/80' : 'text-white/20'}`}>
+        StndOUT crafts marketing strategies that shatter the noise. We don't do "holistic 360° marketing." We do what works — and make your brand impossible to ignore.
+      </p>
+    </div>
+  );
 
   return (
-    <section ref={containerRef} id="hero" className="relative min-h-[100svh] flex items-center justify-center bg-[#070707] overflow-hidden perspective-[1000px]">
-      
-      {/* Animated Aurora Orbs with ScrollSmoother Data-Speed Parallax */}
-      <div data-speed="0.8" className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-brand-primary/30 blur-[120px] rounded-full mix-blend-screen animate-[spin_20s_linear_infinite]" />
-      <div data-speed="1.2" className="absolute bottom-[-10%] right-[-10%] w-[60vw] h-[60vw] bg-brand-cream/10 blur-[150px] rounded-full mix-blend-screen animate-[spin_25s_linear_infinite_reverse]" />
+    <section
+      ref={containerRef}
+      id="hero"
+      className="relative min-h-[100svh] flex items-center justify-center overflow-hidden bg-[#070707]"
+    >
+      {/* Background Noise Texture */}
+      <div className="absolute inset-0 opacity-20 mix-blend-overlay pointer-events-none" 
+           style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}>
+      </div>
 
-      {/* Floating Glassmorphism Elements */}
-      <div ref={glass1Ref} className="absolute top-[20%] left-[15%] w-32 h-32 md:w-64 md:h-64 rounded-full bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl z-10 hidden md:block will-change-transform" />
-      <div ref={glass2Ref} className="absolute bottom-[20%] right-[15%] w-48 h-64 md:w-80 md:h-[400px] rounded-[40px] rotate-12 bg-white/5 backdrop-blur-md border border-white/10 shadow-2xl z-10 hidden md:block will-change-transform" />
-      <div ref={glass3Ref} className="absolute top-[40%] right-[30%] w-16 h-16 md:w-24 md:h-24 rounded-lg -rotate-12 bg-brand-primary/20 backdrop-blur-2xl border border-brand-primary/30 shadow-2xl z-10 will-change-transform" />
+      {/* LAYER 1: BASE (Boring / Dark) */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+        <ContentBlock isRevealed={false} headlineRef={headlineBaseRef} wrapperRef={baseContentRef} />
+      </div>
 
-      {/* Foreground Content */}
-      <div className="w-full max-w-[1600px] mx-auto px-6 relative z-20 text-center flex flex-col items-center">
-        
-        <div className="overflow-hidden mb-6">
-          <p ref={eyebrowRef} className="text-brand-cream/60 font-semibold uppercase tracking-[0.4em] md:tracking-[0.6em] text-sm md:text-lg">
-            Most brands blend in.
-          </p>
+      {/* LAYER 2: THE REVEAL (Masked Spotlight) */}
+      <div 
+        ref={maskRef}
+        className="absolute inset-0 z-10 pointer-events-none flex flex-col items-center justify-center bg-gradient-to-br from-brand-primary via-[#18655b] to-[#0d332e]"
+        style={{
+          maskImage: `radial-gradient(circle var(--mask-size) at calc(var(--x) * 1px) calc(var(--y) * 1px), black 20%, transparent 80%)`,
+          WebkitMaskImage: `radial-gradient(circle var(--mask-size) at calc(var(--x) * 1px) calc(var(--y) * 1px), black 20%, transparent 80%)`
+        } as React.CSSProperties}
+      >
+        <ContentBlock isRevealed={true} headlineRef={headlineRevealRef} wrapperRef={revealContentRef} />
+      </div>
+
+      {/* LAYER 3: INTERACTIVE UI (Buttons) */}
+      <div className="absolute bottom-16 md:bottom-24 left-0 right-0 z-20 flex justify-center pointer-events-none">
+        <div ref={buttonsRef} className="flex flex-wrap gap-4 justify-center pointer-events-auto px-6">
+          <Link
+            href="/#services"
+            className="group flex items-center justify-center gap-2 px-8 py-4 bg-brand-cream text-brand-dark font-bold text-base rounded-full shadow-[0_4px_20px_rgba(255,248,244,0.15)] hover:shadow-[0_8px_30px_rgba(255,248,244,0.3)] hover:scale-105 transition-all duration-300"
+          >
+            Our Services
+            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+          </Link>
+
+          <Link
+            href="/#brand-score"
+            className="group flex items-center justify-center gap-2 px-8 py-4 bg-[#070707]/50 backdrop-blur-md border border-brand-cream/20 text-brand-cream font-bold text-base rounded-full hover:bg-brand-cream hover:text-brand-dark hover:scale-105 transition-all duration-300"
+          >
+            <Sparkles className="w-5 h-5" />
+            AI Brand Score
+          </Link>
         </div>
-        
-        <div className="perspective-[1000px]">
-          <h1 ref={titleRef} className={`${playfair.className} text-6xl md:text-[130px] lg:text-[180px] font-black italic text-brand-cream leading-none drop-shadow-[0_0_40px_rgba(236,220,201,0.3)]`}>
-            We refuse.
-          </h1>
-        </div>
-        
       </div>
     </section>
   );
