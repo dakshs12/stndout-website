@@ -30,7 +30,7 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <div ref={wrapperRef} id="smooth-wrapper" className="overflow-hidden bg-[#070707]">
+    <div ref={wrapperRef} id="smooth-wrapper" className="overflow-hidden bg-transparent">
       <div ref={contentRef} id="smooth-content" className="will-change-transform">
         {children}
       </div>

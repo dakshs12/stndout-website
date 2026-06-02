@@ -35,6 +35,8 @@ export function Navbar() {
     setIsMobileMenuOpen(false);
   };
 
+  const isDarkPage = pathname === '/';
+
   useGSAP(() => {
     // FIX: We animate strictly colors and single integers now. No complex strings!
     const animateToLight = () => {
@@ -74,7 +76,12 @@ export function Navbar() {
       }
     });
 
-    animateToDark();
+    // Default theme depends on the page
+    if (isDarkPage) {
+      animateToDark();
+    } else {
+      animateToLight();
+    }
 
     // Give the DOM a moment to mount the new page's sections
     const timer = setTimeout(() => {
@@ -112,13 +119,13 @@ export function Navbar() {
         ref={navRef} 
         className="fixed top-4 md:top-8 left-1/2 -translate-x-1/2 w-[95%] max-w-[1200px] z-[100]"
         style={{
-          '--nav-bg': 'rgba(255, 255, 255, 0.05)',
-          '--nav-border': 'rgba(255, 255, 255, 0.1)',
-          '--logo-invert': 1, // Start inverted for dark mode
-          '--nav-text': 'rgba(255, 248, 244, 0.9)',
-          '--btn-bg': '#fff8f4',
-          '--btn-text': '#070707',
-          '--btn-shadow-color': 'rgba(255, 248, 244, 0.3)',
+          '--nav-bg': isDarkPage ? 'rgba(255, 255, 255, 0.05)' : 'rgba(7, 7, 7, 0.05)',
+          '--nav-border': isDarkPage ? 'rgba(255, 255, 255, 0.1)' : 'rgba(7, 7, 7, 0.2)',
+          '--logo-invert': isDarkPage ? 1 : 0,
+          '--nav-text': isDarkPage ? 'rgba(255, 248, 244, 0.9)' : 'rgba(7, 7, 7, 0.9)',
+          '--btn-bg': isDarkPage ? '#fff8f4' : '#070707',
+          '--btn-text': isDarkPage ? '#070707' : '#fff8f4',
+          '--btn-shadow-color': isDarkPage ? 'rgba(255, 248, 244, 0.3)' : 'rgba(7, 7, 7, 0.2)',
         } as React.CSSProperties}
       >
         <header className="w-full backdrop-blur-xl border shadow-[0_8px_32px_rgba(0,0,0,0.3)] rounded-2xl md:rounded-full px-4 md:px-8 py-3 md:py-4 flex items-center justify-between bg-[var(--nav-bg)] border-[color:var(--nav-border)]">

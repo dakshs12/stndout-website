@@ -112,7 +112,7 @@ export default function AboutPage() {
         {/* ============================================ */}
         {/* HERO: Brand Manifesto                        */}
         {/* ============================================ */}
-        <section className="relative min-h-[80vh] flex items-center bg-[#070707] overflow-hidden pt-32 pb-20">
+        <section className="relative min-h-[80vh] flex items-center bg-transparent overflow-hidden pt-32 pb-20">
           {/* Ambient background */}
           <div className="absolute top-0 right-0 w-[60vw] h-[60vh] bg-brand-primary/10 blur-[150px] rounded-full pointer-events-none" />
           <div className="absolute bottom-0 left-0 w-[40vw] h-[40vh] bg-brand-cream/5 blur-[120px] rounded-full pointer-events-none" />
@@ -122,12 +122,12 @@ export default function AboutPage() {
               <p className="about-reveal text-brand-primary font-bold uppercase tracking-[0.3em] text-sm mb-6">
                 About StndOUT
               </p>
-              <h1 className={`about-reveal ${playfair.className} text-5xl md:text-7xl lg:text-[100px] font-black text-brand-cream leading-[0.95] tracking-tight mb-8`}>
+              <h1 className={`about-reveal ${playfair.className} text-5xl md:text-7xl lg:text-[100px] font-black text-brand-dark leading-[0.95] tracking-tight mb-8`}>
                 We exist because{' '}
                 <span className="italic text-brand-primary">mediocre marketing</span>{' '}
                 shouldn&apos;t.
               </h1>
-              <p className="about-reveal text-brand-cream/50 text-xl md:text-2xl font-light leading-relaxed max-w-2xl">
+              <p className="about-reveal text-brand-dark/70 text-xl md:text-2xl font-light leading-relaxed max-w-2xl">
                 StndOUT was born from a simple frustration: too many brilliant brands are invisible because their marketing plays it safe. We built an agency that doesn&apos;t know how to play it safe.
               </p>
             </div>
@@ -155,16 +155,16 @@ export default function AboutPage() {
               </div>
 
               {/* Vision */}
-              <div className="about-reveal bg-[#070707] rounded-[2rem] p-10 md:p-14 shadow-[0_20px_60px_rgba(0,0,0,0.1)]">
-                <span className="inline-block px-4 py-2 rounded-full border border-brand-cream/20 bg-brand-cream/5 text-brand-cream text-xs font-bold uppercase tracking-[0.2em] mb-6">
+              <div className="about-reveal bg-white/40 backdrop-blur-xl border border-brand-primary/10 rounded-[2rem] p-10 md:p-14 shadow-[0_20px_60px_rgba(0,0,0,0.04)]">
+                <span className="inline-block px-4 py-2 rounded-full border border-brand-primary/20 bg-brand-primary/5 text-brand-primary text-xs font-bold uppercase tracking-[0.2em] mb-6">
                   Our Vision
                 </span>
-                <h2 className={`${playfair.className} text-3xl md:text-4xl font-black text-brand-cream leading-tight mb-6`}>
+                <h2 className={`${playfair.className} text-3xl md:text-4xl font-black text-brand-dark leading-tight mb-6`}>
                   A world where the{' '}
                   <span className="italic text-brand-primary">best brands win,</span>{' '}
                   not the loudest.
                 </h2>
-                <p className="text-brand-cream/50 text-lg leading-relaxed">
+                <p className="text-brand-dark/60 text-lg leading-relaxed">
                   We envision a marketing landscape where quality wins over quantity, where authenticity beats artifice, and where every brand — no matter its size — has the strategy to stand out.
                 </p>
               </div>
@@ -177,13 +177,13 @@ export default function AboutPage() {
         {/* ============================================ */}
         {/* OUR PHILOSOPHY / VALUES                      */}
         {/* ============================================ */}
-        <section className="bg-[#070707] py-24 md:py-32">
+        <section className="bg-transparent py-24 md:py-32">
           <div className="max-w-[1600px] mx-auto px-6 md:px-12">
             <div className="mb-16 md:mb-20">
               <p className="about-reveal text-brand-primary font-bold uppercase tracking-[0.3em] text-sm mb-4">
                 What We Believe
               </p>
-              <h2 className={`about-reveal ${playfair.className} text-4xl md:text-6xl lg:text-7xl font-black text-brand-cream leading-[0.95] tracking-tight`}>
+              <h2 className={`about-reveal ${playfair.className} text-4xl md:text-6xl lg:text-7xl font-black text-brand-dark leading-[0.95] tracking-tight`}>
                 Our core{' '}
                 <span className="italic text-brand-primary">principles.</span>
               </h2>
@@ -195,15 +195,15 @@ export default function AboutPage() {
                 return (
                   <div
                     key={value.title}
-                    className={`value-card group bg-white/[0.03] border border-white/[0.06] rounded-[1.5rem] p-8 md:p-10 hover:bg-white/[0.06] transition-all duration-500 cursor-default ${value.border}`}
+                    className={`value-card group bg-white/60 backdrop-blur-xl border border-brand-primary/10 rounded-[1.5rem] p-8 md:p-10 hover:shadow-lg transition-all duration-500 cursor-default ${value.border}`}
                   >
-                    <div className={`w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
-                      <Icon className={`w-6 h-6 text-brand-cream/50 transition-colors duration-300 ${value.accent}`} />
+                    <div className={`w-14 h-14 rounded-2xl bg-brand-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                      <Icon className={`w-6 h-6 text-brand-primary transition-colors duration-300 ${value.accent}`} />
                     </div>
-                    <h3 className="text-xl font-bold text-brand-cream mb-3">
+                    <h3 className="text-xl font-bold text-brand-dark mb-3">
                       {value.title}
                     </h3>
-                    <p className="text-brand-cream/40 text-sm leading-relaxed">
+                    <p className="text-brand-dark/70 text-sm leading-relaxed">
                       {value.desc}
                     </p>
                   </div>

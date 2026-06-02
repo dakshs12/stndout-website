@@ -1,14 +1,11 @@
 "use client";
 
-import { useRef } from 'react';
+import { useState, useRef } from 'react';
 import Link from 'next/link';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import { Playfair_Display } from 'next/font/google';
-import { ArrowUpRight } from 'lucide-react';
-
-gsap.registerPlugin(ScrollTrigger, useGSAP);
+import { Playfair_Display, Quicksand } from 'next/font/google';
+import { ArrowRight } from 'lucide-react';
 
 const playfair = Playfair_Display({ 
   subsets: ['latin'],
@@ -16,224 +13,172 @@ const playfair = Playfair_Display({
   style: ['italic', 'normal']
 });
 
+const quicksand = Quicksand({
+  subsets: ['latin'],
+  weight: ['400', '600', '700'],
+});
+
 const services = [
   {
     id: "01",
-    title: "Strategy",
-    desc: "Expand your reach and unlock new markets with a plan tailored to your goals. From in-depth market research to cutting-edge digital strategies, we transform opportunities into real, measurable success.",
-    tags: ["Global Expansion", "Market Entry", "International"],
-    bg: "bg-brand-primary",
-    text: "text-brand-white",
-    descText: "text-brand-beige/90",
-    pillBg: "bg-brand-cream hover:bg-white text-[#070707]"
+    title: "Brand Consultancy",
+    subpoints: ["Brand Auditing", "Growth Strategy", "Brand Positioning"],
+    image: "/service-consultancy.png"
   },
   {
     id: "02",
-    title: "Media & Delivery",
-    desc: "Get real results with strategies built just for you. Whether it’s SEO, social media ads, or programmatic marketing, we’ll boost your visibility, skyrocket conversions, and deliver performance you can count on.",
-    tags: ["Social Ads", "Google Ads", "Programmatic"],
-    bg: "bg-[#070707]",
-    text: "text-brand-cream",
-    descText: "text-brand-cream/70",
-    pillBg: "bg-white/10 hover:bg-brand-primary text-brand-cream hover:text-white"
+    title: "Brand Development",
+    subpoints: ["Brand Launch Strategy", "Marketing Collaterals", "Market Research"],
+    image: "/service-development.png"
   },
   {
     id: "03",
-    title: "Content & SEO",
-    desc: "Grab your audience’s attention with content that gets results. Whether it’s persuasive copy, tailored emails, or scroll-stopping UGC videos, we craft authentic messages that keep your customers coming back.",
-    tags: ["Content Marketing", "Email", "Copywriting"],
-    bg: "bg-brand-cream",
-    text: "text-[#070707]",
-    descText: "text-[#070707]/80",
-    pillBg: "bg-[#070707]/5 hover:bg-brand-primary hover:text-white text-[#070707]"
+    title: "Digital & Technical Growth",
+    subpoints: ["Website Development", "Social Media Marketing", "Influencer Collaborations"],
+    image: "/service-digital.png"
   },
   {
     id: "04",
-    title: "Technical",
-    desc: "Boost your digital presence and stay ahead of the competition with powerful tools and responsive web design. Measure, optimize, and scale effortlessly to drive massive growth.",
-    tags: ["Web Design", "Web Development"],
-    bg: "bg-brand-primary",
-    text: "text-brand-white",
-    descText: "text-brand-beige/90",
-    pillBg: "bg-brand-cream hover:bg-white text-[#070707]"
+    title: "Events & Experiences",
+    subpoints: ["Trade Shows", "Exhibitions Booth Layout", "Event Data Analysis"],
+    image: "/service-events.png"
   }
 ];
 
 export function Services() {
+  const [activeIndex, setActiveIndex] = useState(0);
   const containerRef = useRef<HTMLElement>(null);
-
+  
+  // GSAP logic handles the crossfades smoothly when activeIndex changes
   useGSAP(() => {
-    const panels = gsap.utils.toArray('.service-panel') as HTMLElement[];
+    const leftImages = gsap.utils.toArray('.service-image');
+    const leftContents = gsap.utils.toArray('.service-content');
+    
+    // Crossfade Images
+    leftImages.forEach((img: any, i: number) => {
+      gsap.to(img, { 
+        autoAlpha: i === activeIndex ? 1 : 0, 
+        duration: 0.4, 
+        ease: "power2.out",
+        overwrite: "auto"
+      });
+    });
 
-    gsap.set(panels.slice(1), { clipPath: "circle(0% at 50% 50%)" });
-
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: containerRef.current,
-        start: "top top",
-        // FIX: Increased to 500% to give room for the 5th transition (The Summary Panel)
-        end: "+=500%", 
-        pin: true,
-        scrub: 1, 
-        anticipatePin: 1,
+    // Slide and fade Text Content
+    leftContents.forEach((content: any, i: number) => {
+      if (i === activeIndex) {
+        gsap.fromTo(content, 
+          { autoAlpha: 0, y: 15 }, 
+          { autoAlpha: 1, y: 0, duration: 0.5, ease: "power2.out", overwrite: "auto" }
+        );
+      } else {
+        gsap.to(content, { autoAlpha: 0, y: -15, duration: 0.3, overwrite: "auto" });
       }
     });
-
-    panels.forEach((panel, i) => {
-      if (i === 0) return; 
-
-      const prevPanel = panels[i - 1];
-
-      tl.to(prevPanel, {
-        scale: 0.85,
-        opacity: 0.5,
-        filter: "blur(10px)",
-        ease: "none"
-      }, `scene-${i}`);
-
-      tl.to(panel, {
-        clipPath: "circle(150% at 50% 50%)",
-        ease: "none"
-      }, `scene-${i}`);
-
-      const content = panel.querySelector('.panel-content');
-      tl.from(content, {
-        scale: 1.2,
-        opacity: 0,
-        y: 50,
-        ease: "none"
-      }, `scene-${i}`);
-    });
-
-  }, { scope: containerRef }); 
+  }, { scope: containerRef, dependencies: [activeIndex] });
 
   return (
     <section 
       ref={containerRef} 
       id="services" 
-      className="relative h-[100svh] w-full overflow-hidden perspective-[2000px] bg-[#070707]"
+      // Changed to min-h-[100svh] and added padding so content doesn't get clipped on smaller laptop screens
+      className="relative min-h-[100svh] w-full bg-brand-primary text-white flex flex-col justify-center py-24 md:py-32 selection:bg-brand-cream selection:text-brand-primary"
     >
-      
-      {/* ========================================= */}
-      {/* PANEL 0: THE INTRO                        */}
-      {/* ========================================= */}
-      <div className="service-panel absolute inset-0 w-full h-full bg-brand-cream z-0 flex flex-col justify-center items-center px-6 pt-20">
-        <div className="w-full max-w-[1400px] flex flex-col lg:flex-row lg:items-baseline justify-between gap-8 lg:gap-16 panel-content">
-          <h2 className={`${playfair.className} text-6xl md:text-[100px] lg:text-[130px] font-black text-[#070707] leading-[0.8] tracking-tight m-0`}>
-            What we do.
-          </h2>
-          <p className="text-[#070707]/80 text-lg md:text-2xl font-medium max-w-xl leading-relaxed m-0">
-            We don't do "360-degree holistic marketing." We do what works. Here is how we ensure your brand doesn't just blend in, but truly <strong className="font-bold text-brand-primary">stands out</strong> and becomes impossible to ignore.
-          </p>
-        </div>
-      </div>
-
-      {/* ========================================= */}
-      {/* PANELS 1-4: THE SERVICES                  */}
-      {/* ========================================= */}
-      {services.map((svc, index) => (
-        <div 
-          key={svc.id} 
-          className={`service-panel absolute inset-0 w-full h-full flex flex-col justify-center items-center px-6 pt-20 will-change-transform ${svc.bg}`}
-          style={{ zIndex: (index + 1) * 10 }}
-        >
-          <div className={`${playfair.className} absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[50vw] font-black text-white/5 pointer-events-none select-none mix-blend-overlay`}>
-            {svc.id}
-          </div>
-
-          <div className="w-full max-w-[1400px] flex flex-col lg:flex-row lg:items-center justify-between gap-12 lg:gap-24 relative z-10 panel-content">
-            <div className="lg:w-1/2 flex flex-col gap-4">
-              <span className={`${playfair.className} text-6xl md:text-8xl font-black ${svc.text} opacity-40 leading-none`}>
-                {svc.id}
-              </span>
-              <h3 className={`${playfair.className} text-5xl md:text-7xl lg:text-8xl font-bold ${svc.text} leading-[1.1]`}>
-                {svc.title}
-              </h3>
-            </div>
-
-            <div className="lg:w-1/2 flex flex-col gap-8">
-              <p className={`${svc.descText} text-xl md:text-2xl leading-relaxed font-light max-w-xl`}>
-                {svc.desc}
-              </p>
-              
-              <div className="flex flex-wrap gap-3">
-                {svc.tags.map(tag => (
-                  <span 
-                    key={tag} 
-                    className={`px-6 py-3 rounded-full text-sm font-bold uppercase tracking-wider transition-colors duration-300 shadow-sm cursor-default ${svc.pillBg}`}
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      ))}
-
-      {/* ========================================= */}
-      {/* PANEL 5: THE GRAND FINALE SUMMARY         */}
-      {/* ========================================= */}
-      <div 
-        className={`service-panel absolute inset-0 w-full h-full flex flex-col justify-center items-center px-6 pt-20 will-change-transform bg-[#070707]`}
-        // Z-index 60 ensures it sits on top of all other panels
-        style={{ zIndex: 60 }}
-      >
-        <div className="w-full max-w-[1400px] flex flex-col gap-12 lg:gap-16 relative z-10 panel-content">
+       <div className="w-full max-w-[1500px] mx-auto px-6 md:px-12 flex flex-col gap-6 lg:gap-10">
           
-          {/* Summary Header */}
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-            <div>
-              <h2 className={`${playfair.className} text-5xl md:text-7xl lg:text-8xl font-black text-brand-cream leading-[0.9]`}>
-                The Complete<br/>Arsenal.
-              </h2>
-            </div>
-            <Link
-              href="/services"
-              className="group flex items-center gap-3 px-8 py-4 bg-brand-primary text-brand-white font-bold rounded-full hover:bg-brand-cream hover:text-[#070707] transition-all duration-300 w-fit"
-            >
-              Details →
-              <ArrowUpRight className="w-5 h-5 group-hover:rotate-45 transition-transform duration-300" />
-            </Link>
-          </div>
+          {/* Section Heading - Playfair Display (Removed negative margins) */}
+          <h3 className={`${playfair.className} text-6xl md:text-7xl lg:text-[90px] xl:text-[110px] font-black text-brand-cream tracking-tight`}>
+            What we do.
+          </h3>
 
-          {/* Bento Box Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {services.map(svc => (
-              <Link 
-                href={`/services#${svc.id === '01' ? 'strategy' : svc.id === '02' ? 'media' : svc.id === '03' ? 'content' : 'technical'}`}
-                key={`summary-${svc.id}`} 
-                className="bg-white/5 border border-white/10 rounded-[2rem] p-8 flex flex-col hover:bg-white/10 transition-colors duration-300 group cursor-pointer"
-              >
-                <div className="flex justify-between items-start mb-12">
-                  <span className={`${playfair.className} text-4xl font-black text-brand-primary opacity-60 group-hover:opacity-100 transition-opacity`}>
-                    {svc.id}
-                  </span>
-                  <ArrowUpRight className="w-6 h-6 text-brand-cream/30 group-hover:text-brand-cream transition-colors" />
-                </div>
-                
-                <h4 className={`${playfair.className} text-3xl font-bold text-brand-white mb-6 leading-tight`}>
-                  {svc.title}
-                </h4>
-                
-                <div className="mt-auto flex flex-wrap gap-2">
-                  {/* Slicing to show only top 2 tags so the bento boxes stay clean */}
-                  {svc.tags.slice(0, 2).map(tag => (
-                    <span 
-                      key={tag} 
-                      className="px-3 py-1.5 rounded-full text-brand-cream/70 text-[10px] font-bold uppercase tracking-wider border border-white/10"
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center mt-6 lg:mt-12">
+            
+            {/* ======================================= */}
+            {/* LEFT COLUMN - Image and Subpoints       */}
+            {/* ======================================= */}
+            <div className="lg:col-span-5 flex flex-col justify-center order-2 lg:order-1">
+               <div className="flex flex-col justify-center w-full max-w-[500px] mx-auto lg:mx-0">
+                 
+                 {/* Images Stack - Removed background box and aligned left */}
+                 <div className="relative w-full max-w-[380px] aspect-[4/3] lg:aspect-[16/10] mb-6">
+                    {services.map((svc, i) => (
+                      <div 
+                        key={`img-${svc.id}`} 
+                        className="service-image absolute inset-0 w-full h-full" 
+                        style={{ opacity: i === 0 ? 1 : 0, visibility: i === 0 ? 'visible' : 'hidden' }}
+                      >
+                        <img 
+                          src={svc.image} 
+                          alt={svc.title} 
+                          className="absolute inset-0 w-full h-full object-contain object-left z-10" 
+                          onError={(e) => e.currentTarget.style.opacity = '0'} 
+                        />
+                      </div>
+                    ))}
+                 </div>
+
+               {/* Titles and Subpoints Stack */}
+               <div className="relative h-[160px] md:h-[180px] w-full">
+                  {services.map((svc, i) => (
+                    <div 
+                      key={`content-${svc.id}`} 
+                      className="service-content absolute inset-0 flex flex-col items-start gap-2"
+                      style={{ opacity: i === 0 ? 1 : 0, visibility: i === 0 ? 'visible' : 'hidden' }}
                     >
-                      {tag}
-                    </span>
+                       <h4 className="font-sans text-xs tracking-widest text-brand-cream/80 uppercase font-semibold">
+                         {svc.title}
+                       </h4>
+                       <ul className="flex flex-col gap-1.5 md:gap-2">
+                         {svc.subpoints.map(sp => (
+                           <li key={sp} className="text-white text-base md:text-lg font-medium tracking-wide flex items-center gap-3">
+                              <span className="w-1.5 h-1.5 rounded-full bg-[#D0FF27] shadow-[0_0_10px_rgba(208,255,39,0.5)]"></span>
+                              {sp}
+                           </li>
+                         ))}
+                       </ul>
+                       
+                       {/* Redirect CTA */}
+                       <Link 
+                         href={`/services#${svc.id === '01' ? 'strategy' : svc.id === '02' ? 'media' : svc.id === '03' ? 'content' : 'technical'}`}
+                         className="group mt-2 inline-flex items-center gap-2 text-[#D0FF27] font-bold tracking-wide hover:text-white transition-colors text-sm md:text-base uppercase"
+                       >
+                         View Details 
+                         <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                       </Link>
+                    </div>
                   ))}
-                </div>
-              </Link>
-            ))}
+               </div>
+             </div>
           </div>
 
-        </div>
-      </div>
+          {/* ======================================= */}
+          {/* RIGHT COLUMN - Hover List (All Visible) */}
+          {/* ======================================= */}
+          <div className="col-span-1 lg:col-span-7 flex flex-col w-full order-1 lg:order-2">
+             <div className="border-t border-white/10 w-full"></div>
+             {services.map((svc, index) => (
+               <div 
+                 key={`heading-${svc.id}`} 
+                 // Reduced vertical padding to keep the list compact
+                 className={`group flex flex-col w-full cursor-pointer transition-all duration-500 border-b border-white/10 py-5 lg:py-8 ${activeIndex === index ? 'opacity-100' : 'opacity-30 hover:opacity-70'}`}
+                 onMouseEnter={() => setActiveIndex(index)}
+                 onClick={() => setActiveIndex(index)}
+               >
+                  {/* Smaller font sizes so they all fit in one frame without scrolling */}
+                  <h2 
+                    className={`${quicksand.className} text-3xl sm:text-4xl md:text-5xl lg:text-[50px] xl:text-[60px] font-bold leading-[0.9] tracking-tight flex items-center gap-2 md:gap-4 transition-transform duration-500 origin-left ${activeIndex === index ? 'scale-100 lg:translate-x-4' : 'scale-100'}`}
+                  >
+                    <span className="flex-1">{svc.title}</span>
+                    <span className={`font-sans text-xs md:text-sm lg:text-lg font-bold whitespace-nowrap transition-colors duration-500 ${activeIndex === index ? 'text-[#D0FF27]' : 'text-white/50'}`}>
+                      {`{ ${svc.id} }`}
+                    </span>
+                  </h2>
+               </div>
+             ))}
+          </div>
 
+       </div>
+       </div>
     </section>
   );
 }

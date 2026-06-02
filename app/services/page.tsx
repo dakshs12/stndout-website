@@ -9,7 +9,8 @@ import { Footer } from '@/components/sections/Footer';
 import {
   ArrowUpRight, ArrowRight, Globe, Megaphone, PenTool, Code,
   Search, Target, BarChart3, Mail, Video, Smartphone,
-  Palette, LineChart, Layers, Gauge
+  Palette, LineChart, Layers, Gauge,
+  Briefcase, Handshake, Lightbulb, Box, Image as ImageIcon, Users, Monitor, FileText, PieChart, Layout
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -25,72 +26,81 @@ const services = [
   {
     id: 'strategy',
     number: '01',
-    title: 'Strategy',
+    title: 'Brand Consultancy',
     tagline: 'The blueprint to dominate your market.',
     desc: 'Expand your reach and unlock new markets with a plan tailored to your goals. From in-depth market research to cutting-edge digital strategies, we transform opportunities into real, measurable success.',
     color: 'brand-primary',
-    bgClass: 'bg-brand-primary',
-    textClass: 'text-white',
+    bgClass: 'bg-transparent',
+    textClass: 'text-brand-dark',
     icon: Globe,
     features: [
-      { icon: Target, label: 'Market Entry Strategy', desc: 'Identify and penetrate high-value markets with precision targeting.' },
-      { icon: BarChart3, label: 'Competitive Analysis', desc: 'Deep-dive into your competition to find whitespace opportunities.' },
-      { icon: Globe, label: 'Global Expansion', desc: 'Scale your brand internationally with culturally-aware strategies.' },
-      { icon: LineChart, label: 'Growth Roadmapping', desc: 'Quarterly and annual growth plans with clear KPIs and milestones.' },
+      { icon: Search, label: 'Brand Auditing', desc: 'A detailed review of your brand, marketing and competitive presence.' },
+      { icon: LineChart, label: 'Growth Strategy', desc: 'A clear roadmap to help your business scale with purpose.' },
+      { icon: Target, label: 'Brand Positioning', desc: 'Defining what makes your brand distinct and worth choosing.' },
+      { icon: Briefcase, label: 'Management Consultancy', desc: 'Strategic guidance to align marketing with business objectives.' },
+      { icon: Handshake, label: 'Brand Collaborations', desc: 'Identifying partnerships that expand reach and build credibility.' },
+      { icon: Lightbulb, label: 'Strategic Solutions', desc: 'Tailored recommendations to solve specific business challenges.' },
     ],
     process: ['Discovery & Audit', 'Market Research', 'Strategy Design', 'Implementation Plan', 'Performance Review'],
   },
   {
     id: 'media',
     number: '02',
-    title: 'Media & Delivery',
+    title: 'Brand Development',
     tagline: 'Performance marketing that actually performs.',
     desc: 'Get real results with strategies built just for you. Whether it\'s SEO, social media ads, or programmatic marketing, we\'ll boost your visibility, skyrocket conversions, and deliver performance you can count on.',
     color: 'brand-dark',
-    bgClass: 'bg-[#070707]',
-    textClass: 'text-brand-cream',
+    bgClass: 'bg-transparent',
+    textClass: 'text-brand-dark',
     icon: Megaphone,
     features: [
-      { icon: Smartphone, label: 'Social Media Ads', desc: 'Meta, TikTok, LinkedIn — campaigns that convert, not just impress.' },
-      { icon: Search, label: 'Google Ads & PPC', desc: 'Search, display, and shopping campaigns with obsessive ROI focus.' },
-      { icon: Layers, label: 'Programmatic', desc: 'AI-powered ad placement across premium inventory at scale.' },
-      { icon: Gauge, label: 'Analytics & Attribution', desc: 'Know exactly what\'s working with multi-touch attribution models.' },
+      { icon: Globe, label: 'Brand Launch Strategy', desc: 'A structured plan to introduce your brand with impact.' },
+      { icon: Megaphone, label: 'Product Launch', desc: 'Go-to-market campaigns designed to generate attention and demand.' },
+      { icon: PenTool, label: 'Logo & Tagline Creation', desc: 'Distinctive visual and verbal elements that define your identity.' },
+      { icon: Search, label: 'Market Research', desc: 'Insights into customer behavior, competitors and market opportunities.' },
+      { icon: FileText, label: 'Marketing Collaterals', desc: 'Brochures, presentations and materials that support your sales efforts.' },
+      { icon: Box, label: 'Packaging Design', desc: 'Packaging that communicates value and stands out on shelves.' },
+      { icon: Palette, label: 'Brand Voice & Colour Strategy', desc: 'Guidelines that ensure a consistent and recognizable brand presence.' },
     ],
     process: ['Audience Mapping', 'Channel Selection', 'Creative Production', 'Launch & Optimize', 'Scale Winners'],
   },
   {
     id: 'content',
     number: '03',
-    title: 'Content & SEO',
+    title: 'Digital & Technical Growth',
     tagline: 'Words that work. Content that converts.',
     desc: 'Grab your audience\'s attention with content that gets results. Whether it\'s persuasive copy, tailored emails, or scroll-stopping UGC videos, we craft authentic messages that keep your customers coming back.',
     color: 'brand-cream',
-    bgClass: 'bg-brand-cream',
+    bgClass: 'bg-transparent',
     textClass: 'text-brand-dark',
     icon: PenTool,
     features: [
-      { icon: PenTool, label: 'Copywriting', desc: 'Brand voice development, web copy, and conversion-focused messaging.' },
-      { icon: Mail, label: 'Email Marketing', desc: 'Automated sequences and campaigns that nurture leads into customers.' },
-      { icon: Video, label: 'UGC & Video', desc: 'Authentic creator content and video production that stops the scroll.' },
-      { icon: Search, label: 'SEO', desc: 'Technical SEO, content strategy, and link building for organic dominance.' },
+      { icon: Monitor, label: 'Website Development', desc: 'High-converting websites designed for both credibility and performance.' },
+      { icon: Smartphone, label: 'Social Media Marketing', desc: 'Content and campaigns that grow visibility and engagement.' },
+      { icon: FileText, label: 'Content Strategy', desc: 'A structured approach to what you say and when you say it.' },
+      { icon: Target, label: 'Campaign Marketing', desc: 'Integrated campaigns built around specific business goals.' },
+      { icon: Users, label: 'Influencer Collaborations', desc: 'Partnerships with creators who connect you with the right audience.' },
+      { icon: ImageIcon, label: 'Visual Design', desc: 'Creative assets that make your brand look polished and professional.' },
+      { icon: BarChart3, label: 'Paid Promotions', desc: 'Targeted advertising to reach qualified prospects faster.' },
+      { icon: PenTool, label: 'Copywriting', desc: 'Words that capture attention and drive action.' },
     ],
     process: ['Content Audit', 'Strategy & Calendar', 'Production', 'Distribution', 'Measure & Iterate'],
   },
   {
     id: 'technical',
     number: '04',
-    title: 'Technical',
+    title: 'Events & Experiences',
     tagline: 'Your digital presence, engineered to perfection.',
     desc: 'Boost your digital presence and stay ahead of the competition with powerful tools and responsive web design. Measure, optimize, and scale effortlessly to drive massive growth.',
     color: 'brand-primary',
-    bgClass: 'bg-brand-primary',
-    textClass: 'text-white',
+    bgClass: 'bg-transparent',
+    textClass: 'text-brand-dark',
     icon: Code,
     features: [
-      { icon: Palette, label: 'Web Design', desc: 'Award-worthy designs that convert visitors into customers.' },
-      { icon: Code, label: 'Web Development', desc: 'Fast, scalable, SEO-optimized websites built with modern stacks.' },
-      { icon: Gauge, label: 'Performance Optimization', desc: 'Core Web Vitals, speed optimization, and UX improvements.' },
-      { icon: BarChart3, label: 'Marketing Tech Stack', desc: 'CRM, analytics, and automation tool setup and integration.' },
+      { icon: Users, label: 'Trade Shows', desc: 'End-to-end planning and execution for industry events.' },
+      { icon: Layout, label: 'Exhibitions Booth Layout', desc: 'Branded spaces designed to attract and engage visitors.' },
+      { icon: FileText, label: 'Marketing Collaterals', desc: 'Printed materials that support conversations and conversions.' },
+      { icon: PieChart, label: 'Event Data Analysis', desc: 'Insights to measure performance and improve future events.' },
     ],
     process: ['Requirements', 'UX/UI Design', 'Development', 'Testing & QA', 'Launch & Support'],
   },
@@ -148,7 +158,7 @@ export default function ServicesPage() {
         {/* ============================================ */}
         {/* HERO                                         */}
         {/* ============================================ */}
-        <section className="relative min-h-[70vh] flex items-center bg-brand-cream overflow-hidden pt-32 pb-16">
+        <section className="relative min-h-[70vh] flex items-center bg-transparent overflow-hidden pt-32 pb-16">
           <div className="absolute top-0 right-0 w-[50vw] h-[50vh] bg-brand-primary/[0.05] blur-[120px] rounded-full pointer-events-none" />
           {/* Subtle grid */}
           <div
@@ -278,12 +288,12 @@ export default function ServicesPage() {
         {/* ============================================ */}
         {/* BOTTOM CTA                                   */}
         {/* ============================================ */}
-        <section className="bg-[#070707] py-24 md:py-32 text-center">
+        <section className="bg-transparent py-24 md:py-32 text-center">
           <div className="max-w-3xl mx-auto px-6">
-            <h2 className={`svc-reveal ${playfair.className} text-4xl md:text-6xl font-black text-brand-cream leading-tight mb-6`}>
+            <h2 className={`svc-reveal ${playfair.className} text-4xl md:text-6xl font-black text-brand-dark leading-tight mb-6`}>
               Not sure where to start?
             </h2>
-            <p className="svc-reveal text-brand-cream/50 text-lg mb-10 max-w-xl mx-auto">
+            <p className="svc-reveal text-brand-dark/70 text-lg mb-10 max-w-xl mx-auto">
               Take our free AI Brand Score assessment and we&apos;ll tell you exactly where you&apos;re blending in — and what to do about it.
             </p>
             <div className="svc-reveal flex flex-col sm:flex-row gap-4 justify-center">
@@ -296,7 +306,7 @@ export default function ServicesPage() {
               </Link>
               <Link
                 href="/contact"
-                className="group inline-flex items-center justify-center gap-3 px-10 py-5 bg-transparent border border-white/20 text-brand-cream font-bold text-lg rounded-full hover:bg-white/10 transition-all duration-300"
+                className="group inline-flex items-center justify-center gap-3 px-10 py-5 bg-transparent border border-brand-dark/20 text-brand-dark font-bold text-lg rounded-full hover:bg-brand-dark/5 transition-all duration-300"
               >
                 Grab a Coffee ☕
               </Link>
