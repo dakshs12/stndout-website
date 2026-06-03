@@ -15,15 +15,171 @@ const playfair = Playfair_Display({
   weight: ['700', '900'],
   style: ['italic', 'normal'],
 });
+const PillButton = ({
+  label, selected, onClick
+}: { label: string; selected: boolean; onClick: () => void }) => (
+  <button
+    type="button"
+    onClick={onClick}
+    className={`px-5 py-2.5 rounded-full text-sm font-bold border ${
+      selected
+        ? 'bg-brand-primary border-brand-primary text-white shadow-lg shadow-brand-primary/30'
+        : 'bg-white border-brand-dark/10 text-brand-dark/70 hover:border-brand-primary/50 hover:text-brand-dark'
+    }`}
+  >
+    {label}
+  </button>
+);
 
-export default function ContactPage() {
+function ContactForm({ playfair }: { playfair: any }) {
   const [stage, setStage] = useState('');
   const [offering, setOffering] = useState('');
-  const [help, setHelp] = useState('');
-  const [challenge, setChallenge] = useState('');
+  const [help, setHelp] = useState<string[]>([]);
+  const [challenge, setChallenge] = useState<string[]>([]);
   const [submitted, setSubmitted] = useState(false);
-  const pageRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
+
+  const toggleSelection = (setter: React.Dispatch<React.SetStateAction<string[]>>, option: string) => {
+    setter(prev => prev.includes(option) ? prev.filter(item => item !== option) : [...prev, option]);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    const formData = new FormData(e.target as HTMLFormElement);
+    formData.append("access_key", "905eedf2-f663-4b8e-b56f-be8fb3c0cbc3");
+    formData.append("subject", "New Strategy Call Request from StndOut!");
+    formData.append("from_name", "StndOut Website");
+    
+    if (stage) formData.append("Business Stage", stage);
+    if (offering) formData.append("Offering Type", offering);
+    if (help.length > 0) formData.append("Looking For", help.join(', '));
+    if (challenge.length > 0) formData.append("Biggest Challenge", challenge.join(', '));
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData
+      });
+      const data = await response.json();
+      
+      if (data.success) {
+        setSubmitted(true);
+        setTimeout(() => {
+          gsap.fromTo('.success-message',
+            { opacity: 0, scale: 0.9, y: 20 },
+            { opacity: 1, scale: 1, y: 0, duration: 0.6, ease: 'back.out(1.5)' }
+          );
+        }, 50);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong submitting the form.");
+    }
+  };
+
+  return (
+    <div className="lg:col-span-7">
+      {submitted ? (
+        <div className="success-message bg-white/95 border border-white rounded-[2rem] p-12 md:p-16 shadow-[0_20px_60px_rgba(0,0,0,0.05)] text-center">
+          <div className="text-6xl mb-6">🎉</div>
+          <h2 className={`${playfair.className} text-3xl md:text-4xl font-black text-brand-dark mb-4`}>
+            Coffee&apos;s brewing!
+          </h2>
+          <p className="text-brand-dark/60 text-lg max-w-md mx-auto">
+            We&apos;ve received your request and will get back to you within 24 hours. Time to start standing out.
+          </p>
+        </div>
+      ) : (
+        <div className="form-container bg-white/95 border border-white rounded-[2rem] p-8 md:p-12 shadow-[0_20px_60px_rgba(0,0,0,0.05)] relative">
+          <form ref={formRef} className="space-y-10" onSubmit={handleSubmit}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="form-field flex flex-col">
+                <label className="text-brand-dark/60 text-xs font-bold mb-2 uppercase tracking-widest">
+                  What should we call you? *
+                </label>
+                <input type="text" name="name" placeholder="Your Name" required className="bg-transparent border-b-2 border-brand-dark/10 py-3 text-brand-dark focus:outline-none focus:border-brand-primary transition-colors text-lg placeholder:text-brand-dark/30 font-medium" />
+              </div>
+              <div className="form-field flex flex-col">
+                <label className="text-brand-dark/60 text-xs font-bold mb-2 uppercase tracking-widest">
+                  Contact Details *
+                </label>
+                <input type="text" name="contact" placeholder="Email or Mobile" required className="bg-transparent border-b-2 border-brand-dark/10 py-3 text-brand-dark focus:outline-none focus:border-brand-primary transition-colors text-lg placeholder:text-brand-dark/30 font-medium" />
+              </div>
+              <div className="form-field flex flex-col md:col-span-2">
+                <label className="text-brand-dark/60 text-xs font-bold mb-2 uppercase tracking-widest">
+                  Company Name *
+                </label>
+                <input type="text" name="company" placeholder="Your Brand / Company" required className="bg-transparent border-b-2 border-brand-dark/10 py-3 text-brand-dark focus:outline-none focus:border-brand-primary transition-colors text-lg placeholder:text-brand-dark/30 font-medium" />
+              </div>
+            </div>
+
+            <div className="form-field pt-6 border-t border-brand-dark/10">
+              <p className="text-brand-primary font-bold text-sm tracking-widest uppercase mb-8">
+                Just a few quick questions
+              </p>
+            </div>
+
+            <div className="form-field">
+              <label className="block text-brand-dark text-lg font-bold mb-4">
+                1. What best describes your business?
+              </label>
+              <div className="flex flex-wrap gap-3">
+                {['Just starting out', 'Growing (0-3 years)', 'Settled (3-10 years)', 'Established (10+ years)'].map((opt) => (
+                  <PillButton key={opt} label={opt} selected={stage === opt} onClick={() => setStage(opt)} />
+                ))}
+              </div>
+            </div>
+
+            <div className="form-field">
+              <label className="block text-brand-dark text-lg font-bold mb-4">
+                2. What do you offer?
+              </label>
+              <div className="flex flex-wrap gap-3 mb-4">
+                {['Products', 'Services'].map((opt) => (
+                  <PillButton key={opt} label={opt} selected={offering === opt} onClick={() => setOffering(opt)} />
+                ))}
+              </div>
+              <input type="text" name="offering_description" placeholder="Briefly describe your offering..." className="w-full bg-white border border-brand-dark/10 rounded-xl px-5 py-4 text-brand-dark focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all font-medium placeholder:text-brand-dark/30 shadow-inner" />
+            </div>
+
+            <div className="form-field">
+              <label className="block text-brand-dark text-lg font-bold mb-4">
+                3. What are you looking for?
+              </label>
+              <div className="flex flex-wrap gap-3">
+                {['Marketing Strategy', 'Social Media Marketing', 'Performance Marketing', 'Website Development', 'Events & Trade Shows', 'Not sure yet'].map((opt) => (
+                  <PillButton key={opt} label={opt} selected={help.includes(opt)} onClick={() => toggleSelection(setHelp, opt)} />
+                ))}
+              </div>
+            </div>
+
+            <div className="form-field">
+              <label className="block text-brand-dark text-lg font-bold mb-4">
+                4. What&apos;s your biggest challenge right now?
+              </label>
+              <div className="flex flex-wrap gap-3">
+                {['Marketing feels random', 'No leads or conversion', 'Low visibility / engagement', 'No brand identity', 'Market Expansion'].map((opt) => (
+                  <PillButton key={opt} label={opt} selected={challenge.includes(opt)} onClick={() => toggleSelection(setChallenge, opt)} />
+                ))}
+              </div>
+            </div>
+
+            <div className="form-field pt-4">
+              <button type="submit" className="group w-full py-5 bg-brand-dark text-brand-beige rounded-xl font-bold text-lg hover:bg-brand-primary hover:text-white transition-all duration-300 shadow-xl hover:shadow-2xl hover:shadow-brand-primary/20 flex items-center justify-center gap-3">
+                Book a Strategy Call
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default function ContactPage() {
+  const pageRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
     if (!pageRef.current) return;
@@ -77,34 +233,7 @@ export default function ContactPage() {
       pin: true,
       pinSpacing: false,
     });
-  }, { scope: pageRef });
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Will be wired to Web3Forms later
-    setSubmitted(true);
-    gsap.fromTo('.success-message',
-      { opacity: 0, scale: 0.9, y: 20 },
-      { opacity: 1, scale: 1, y: 0, duration: 0.6, ease: 'back.out(1.5)' }
-    );
-  };
-
-  const PillButton = ({
-    label, selected, onClick
-  }: { label: string; selected: boolean; onClick: () => void }) => (
-    <button
-      type="button"
-      onClick={onClick}
-      className={`px-5 py-2.5 rounded-full text-sm font-bold transition-all duration-300 border ${
-        selected
-          ? 'bg-brand-primary border-brand-primary text-white shadow-lg shadow-brand-primary/30 scale-[1.02]'
-          : 'bg-white border-brand-dark/10 text-brand-dark/70 hover:border-brand-primary/50 hover:text-brand-dark'
-      }`}
-    >
-      {label}
-    </button>
-  );
-
+  }, { scope: pageRef, dependencies: [] });
   return (
     <div ref={pageRef}>
       <main className="min-h-screen bg-brand-cream selection:bg-brand-primary selection:text-white">
@@ -159,132 +288,7 @@ export default function ContactPage() {
               </div>
 
               {/* Right Column: The Form */}
-              <div className="lg:col-span-7">
-                {submitted ? (
-                  <div className="success-message bg-white/60 backdrop-blur-2xl border border-white rounded-[2rem] p-12 md:p-16 shadow-[0_20px_60px_rgba(0,0,0,0.05)] text-center">
-                    <div className="text-6xl mb-6">🎉</div>
-                    <h2 className={`${playfair.className} text-3xl md:text-4xl font-black text-brand-dark mb-4`}>
-                      Coffee&apos;s brewing!
-                    </h2>
-                    <p className="text-brand-dark/60 text-lg max-w-md mx-auto">
-                      We&apos;ve received your request and will get back to you within 24 hours. Time to start standing out.
-                    </p>
-                  </div>
-                ) : (
-                  <div className="form-container bg-white/60 backdrop-blur-2xl border border-white rounded-[2rem] p-8 md:p-12 shadow-[0_20px_60px_rgba(0,0,0,0.05)] relative">
-
-                    <form ref={formRef} className="space-y-10" onSubmit={handleSubmit}>
-
-                      {/* Compulsory Info */}
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div className="form-field flex flex-col">
-                          <label className="text-brand-dark/60 text-xs font-bold mb-2 uppercase tracking-widest">
-                            What should we call you? *
-                          </label>
-                          <input
-                            type="text"
-                            placeholder="Your Name"
-                            required
-                            className="bg-transparent border-b-2 border-brand-dark/10 py-3 text-brand-dark focus:outline-none focus:border-brand-primary transition-colors text-lg placeholder:text-brand-dark/30 font-medium"
-                          />
-                        </div>
-                        <div className="form-field flex flex-col">
-                          <label className="text-brand-dark/60 text-xs font-bold mb-2 uppercase tracking-widest">
-                            Contact Details *
-                          </label>
-                          <input
-                            type="text"
-                            placeholder="Email or Mobile"
-                            required
-                            className="bg-transparent border-b-2 border-brand-dark/10 py-3 text-brand-dark focus:outline-none focus:border-brand-primary transition-colors text-lg placeholder:text-brand-dark/30 font-medium"
-                          />
-                        </div>
-                        <div className="form-field flex flex-col md:col-span-2">
-                          <label className="text-brand-dark/60 text-xs font-bold mb-2 uppercase tracking-widest">
-                            Company Name *
-                          </label>
-                          <input
-                            type="text"
-                            placeholder="Your Brand / Company"
-                            required
-                            className="bg-transparent border-b-2 border-brand-dark/10 py-3 text-brand-dark focus:outline-none focus:border-brand-primary transition-colors text-lg placeholder:text-brand-dark/30 font-medium"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="form-field pt-6 border-t border-brand-dark/10">
-                        <p className="text-brand-primary font-bold text-sm tracking-widest uppercase mb-8">
-                          Just a few quick questions
-                        </p>
-                      </div>
-
-                      {/* Q1: Business Stage */}
-                      <div className="form-field">
-                        <label className="block text-brand-dark text-lg font-bold mb-4">
-                          1. What best describes your business?
-                        </label>
-                        <div className="flex flex-wrap gap-3">
-                          {['Just starting out', 'Growing (0-3 years)', 'Settled (3-10 years)', 'Established (10+ years)'].map((opt) => (
-                            <PillButton key={opt} label={opt} selected={stage === opt} onClick={() => setStage(opt)} />
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Q2: Offering */}
-                      <div className="form-field">
-                        <label className="block text-brand-dark text-lg font-bold mb-4">
-                          2. What do you offer?
-                        </label>
-                        <div className="flex flex-wrap gap-3 mb-4">
-                          {['Products', 'Services'].map((opt) => (
-                            <PillButton key={opt} label={opt} selected={offering === opt} onClick={() => setOffering(opt)} />
-                          ))}
-                        </div>
-                        <input
-                          type="text"
-                          placeholder="Briefly describe your offering..."
-                          className="w-full bg-white border border-brand-dark/10 rounded-xl px-5 py-4 text-brand-dark focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all font-medium placeholder:text-brand-dark/30 shadow-inner"
-                        />
-                      </div>
-
-                      {/* Q3: Help needed */}
-                      <div className="form-field">
-                        <label className="block text-brand-dark text-lg font-bold mb-4">
-                          3. What are you looking for?
-                        </label>
-                        <div className="flex flex-wrap gap-3">
-                          {['Marketing Strategy', 'Social Media Marketing', 'Performance Marketing', 'Website Development', 'Events & Trade Shows', 'Not sure yet'].map((opt) => (
-                            <PillButton key={opt} label={opt} selected={help === opt} onClick={() => setHelp(opt)} />
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Q4: Biggest Challenge */}
-                      <div className="form-field">
-                        <label className="block text-brand-dark text-lg font-bold mb-4">
-                          4. What&apos;s your biggest challenge right now?
-                        </label>
-                        <div className="flex flex-wrap gap-3">
-                          {['Marketing feels random', 'No leads or conversion', 'Low visibility / engagement', 'No brand identity', 'Market Expansion'].map((opt) => (
-                            <PillButton key={opt} label={opt} selected={challenge === opt} onClick={() => setChallenge(opt)} />
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Submit Button */}
-                      <div className="form-field pt-4">
-                        <button
-                          type="submit"
-                          className="group w-full py-5 bg-brand-dark text-brand-beige rounded-xl font-bold text-lg hover:bg-brand-primary hover:text-white transition-all duration-300 shadow-xl hover:shadow-2xl hover:shadow-brand-primary/20 flex items-center justify-center gap-3"
-                        >
-                          Book a Strategy Call
-                          <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                        </button>
-                      </div>
-                    </form>
-                  </div>
-                )}
-              </div>
+              <ContactForm playfair={playfair} />
             </div>
           </div>
         </section>

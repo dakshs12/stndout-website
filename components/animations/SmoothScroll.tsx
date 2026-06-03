@@ -20,8 +20,7 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
       content: contentRef.current,
       smooth: 1.5, // The momentum duration (how long it glides)
       effects: true, // Enables data-speed parallax on child elements
-      smoothTouch: 0.1, 
-      normalizeScroll: true,
+      smoothTouch: 0.1,
     });
 
     return () => {
