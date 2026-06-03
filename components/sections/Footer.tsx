@@ -3,13 +3,9 @@
 import { useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useGSAP } from '@gsap/react';
+import { usePathname } from 'next/navigation';
 import { Playfair_Display } from 'next/font/google';
 import { ArrowUpRight } from 'lucide-react';
-
-gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
@@ -68,27 +64,8 @@ const socials = [
 
 export function Footer() {
   const footerRef = useRef<HTMLElement>(null);
-
-  useGSAP(() => {
-    if (!footerRef.current) return;
-
-    const elements = footerRef.current.querySelectorAll('.footer-reveal');
-
-    gsap.set(elements, { opacity: 0, y: 40 });
-
-    gsap.to(elements, {
-      opacity: 1,
-      y: 0,
-      duration: 0.8,
-      stagger: 0.08,
-      ease: 'power3.out',
-      scrollTrigger: {
-        trigger: footerRef.current,
-        start: 'top 85%',
-        once: true,
-      },
-    });
-  }, { scope: footerRef });
+  const pathname = usePathname();
+  const isContactPage = pathname === '/contact';
 
   return (
     <footer ref={footerRef} className="relative bg-[#070707] text-brand-cream overflow-hidden">
@@ -96,25 +73,27 @@ export function Footer() {
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-brand-primary/40 to-transparent" />
 
       {/* CTA Banner */}
-      <div className="border-b border-white/[0.06]">
-        <div className="max-w-[1600px] mx-auto px-6 md:px-12 py-20 md:py-28 flex flex-col md:flex-row items-center justify-between gap-8">
-          <div className="footer-reveal">
-            <h2 className={`${playfair.className} text-4xl md:text-6xl lg:text-7xl font-black leading-[1] tracking-tight`}>
-              Ready to{' '}
-              <span className="italic text-brand-primary">stand out</span>?
-            </h2>
-          </div>
-          <div className="footer-reveal">
-            <Link
-              href="/contact"
-              className="group inline-flex items-center gap-3 px-10 py-5 bg-brand-cream text-[#070707] font-bold text-lg rounded-full hover:bg-brand-primary hover:text-white transition-all duration-300 shadow-[0_0_40px_rgba(236,220,201,0.15)]"
-            >
-              Let&apos;s Talk
-              <ArrowUpRight className="w-5 h-5 group-hover:rotate-45 transition-transform duration-300" />
-            </Link>
+      {!isContactPage && (
+        <div className="border-b border-white/[0.06]">
+          <div className="max-w-[1600px] mx-auto px-6 md:px-12 py-20 md:py-28 flex flex-col md:flex-row items-center justify-between gap-8">
+            <div className="footer-reveal">
+              <h2 className={`${playfair.className} text-4xl md:text-6xl lg:text-7xl font-black leading-[1] tracking-tight`}>
+                Ready to{' '}
+                <span className="italic text-brand-primary">stand out</span>?
+              </h2>
+            </div>
+            <div className="footer-reveal">
+              <Link
+                href="/contact"
+                className="group inline-flex items-center gap-3 px-10 py-5 bg-brand-cream text-[#070707] font-bold text-lg rounded-full hover:bg-brand-primary hover:text-white transition-all duration-300 shadow-[0_0_40px_rgba(236,220,201,0.15)]"
+              >
+                Let&apos;s Talk
+                <ArrowUpRight className="w-5 h-5 group-hover:rotate-45 transition-transform duration-300" />
+              </Link>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Footer columns */}
       <div className="max-w-[1600px] mx-auto px-6 md:px-12 py-16 md:py-20">

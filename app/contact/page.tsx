@@ -6,8 +6,9 @@ import { useGSAP } from '@gsap/react';
 import { Playfair_Display } from 'next/font/google';
 import { Footer } from '@/components/sections/Footer';
 import { Mail, Phone, MapPin, ArrowRight } from 'lucide-react';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-gsap.registerPlugin(useGSAP);
+gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
@@ -51,6 +52,31 @@ export default function ContactPage() {
       ease: 'power2.out',
       delay: 0.6,
     });
+
+    // Form container scroll reveal
+    gsap.fromTo('.form-container',
+      { opacity: 0, y: 80 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: '.form-container',
+          start: 'top 85%',
+        }
+      }
+    );
+
+    // Pin the left column since CSS 'sticky' fails inside ScrollSmoother's transform wrapper
+    ScrollTrigger.create({
+      trigger: '.sticky-column',
+      start: 'top 150px',
+      endTrigger: '.contact-grid',
+      end: 'bottom bottom',
+      pin: true,
+      pinSpacing: false,
+    });
   }, { scope: pageRef });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -84,7 +110,7 @@ export default function ContactPage() {
       <main className="min-h-screen bg-brand-cream selection:bg-brand-primary selection:text-white">
 
         {/* Important: bg-brand-cream on section for chameleon navbar */}
-        <section className="relative pt-40 pb-24 min-h-screen flex items-center overflow-hidden bg-brand-cream">
+        <section className="relative pt-32 lg:pt-48 pb-24 min-h-[120vh] flex items-start bg-brand-cream">
 
           {/* Subtle Background Accents */}
           <div className="absolute top-0 right-0 w-[50vw] h-[50vw] bg-brand-primary/[0.04] blur-[150px] rounded-full pointer-events-none" />
@@ -100,42 +126,35 @@ export default function ContactPage() {
           />
 
           <div className="w-full max-w-[1600px] mx-auto px-6 md:px-12 lg:px-16 xl:px-24 relative z-10">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-12">
+            <div className="contact-grid grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-12">
 
               {/* Left Column: Editorial Copy + Contact Info */}
-              <div className="lg:col-span-5 flex flex-col justify-center">
-                <div className="contact-reveal">
-                  <h1 className={`${playfair.className} text-5xl md:text-7xl lg:text-[90px] font-black text-brand-dark leading-[1] mb-8 tracking-tight`}>
+              <div className="sticky-column lg:col-span-5 flex flex-col justify-start">
+                <div className="contact-reveal overflow-visible">
+                  <h1 className={`${playfair.className} text-5xl md:text-7xl lg:text-[90px] font-black text-brand-dark leading-[1] mb-8 tracking-tight px-4 -mx-4 py-2`}>
                     Let&apos;s brew <br />
                     <span className="italic text-brand-primary">something</span><br />
-                    massive. ☕
+                    massive ☕
                   </h1>
                 </div>
                 <p className="contact-reveal text-xl text-brand-dark/70 max-w-md font-medium leading-relaxed mb-12">
-                  No boring sales pitches. Just a conversation about what it takes to make your brand completely impossible to ignore.
+                  No boring sales pitches. <br />
+                  Just a conversation about what it takes to make your brand &quot;Stand Out&quot;.
                 </p>
 
                 {/* Contact details */}
                 <div className="space-y-5">
                   <a
-                    href="mailto:hello@stndout.com"
+                    href="mailto:stndoutmarketing@gmail.com"
                     className="contact-reveal flex items-center gap-4 group"
                   >
                     <div className="w-11 h-11 rounded-xl bg-brand-primary/10 flex items-center justify-center group-hover:bg-brand-primary/20 transition-colors">
                       <Mail className="w-5 h-5 text-brand-primary" />
                     </div>
                     <span className="text-brand-dark/70 font-medium group-hover:text-brand-primary transition-colors">
-                      hello@stndout.com
+                      stndoutmarketing@gmail.com
                     </span>
                   </a>
-                  <div className="contact-reveal flex items-center gap-4">
-                    <div className="w-11 h-11 rounded-xl bg-brand-primary/10 flex items-center justify-center">
-                      <MapPin className="w-5 h-5 text-brand-primary" />
-                    </div>
-                    <span className="text-brand-dark/70 font-medium">
-                      Remote-first, globally available
-                    </span>
-                  </div>
                 </div>
               </div>
 
@@ -152,7 +171,7 @@ export default function ContactPage() {
                     </p>
                   </div>
                 ) : (
-                  <div className="bg-white/60 backdrop-blur-2xl border border-white rounded-[2rem] p-8 md:p-12 shadow-[0_20px_60px_rgba(0,0,0,0.05)] relative">
+                  <div className="form-container bg-white/60 backdrop-blur-2xl border border-white rounded-[2rem] p-8 md:p-12 shadow-[0_20px_60px_rgba(0,0,0,0.05)] relative">
 
                     <form ref={formRef} className="space-y-10" onSubmit={handleSubmit}>
 
@@ -205,7 +224,7 @@ export default function ContactPage() {
                           1. What best describes your business?
                         </label>
                         <div className="flex flex-wrap gap-3">
-                          {['Just starting out', '0–1 years old', 'Growing (1–3 years)', 'Established (3+ years)'].map((opt) => (
+                          {['Just starting out', 'Growing (0-3 years)', 'Settled (3-10 years)', 'Established (10+ years)'].map((opt) => (
                             <PillButton key={opt} label={opt} selected={stage === opt} onClick={() => setStage(opt)} />
                           ))}
                         </div>
@@ -231,10 +250,10 @@ export default function ContactPage() {
                       {/* Q3: Help needed */}
                       <div className="form-field">
                         <label className="block text-brand-dark text-lg font-bold mb-4">
-                          3. What are you looking for help with?
+                          3. What are you looking for?
                         </label>
                         <div className="flex flex-wrap gap-3">
-                          {['Brand strategy', 'Marketing strategy', 'Social media growth', 'End-to-end marketing support', 'Not sure yet'].map((opt) => (
+                          {['Marketing Strategy', 'Social Media Marketing', 'Performance Marketing', 'Website Development', 'Events & Trade Shows', 'Not sure yet'].map((opt) => (
                             <PillButton key={opt} label={opt} selected={help === opt} onClick={() => setHelp(opt)} />
                           ))}
                         </div>
@@ -246,7 +265,7 @@ export default function ContactPage() {
                           4. What&apos;s your biggest challenge right now?
                         </label>
                         <div className="flex flex-wrap gap-3">
-                          {['Not getting enough leads', 'Low engagement / visibility', 'No clear brand identity', 'Marketing feels random', 'Not converting customers', 'Scaling is difficult'].map((opt) => (
+                          {['Marketing feels random', 'No leads or conversion', 'Low visibility / engagement', 'No brand identity', 'Market Expansion'].map((opt) => (
                             <PillButton key={opt} label={opt} selected={challenge === opt} onClick={() => setChallenge(opt)} />
                           ))}
                         </div>
@@ -258,7 +277,7 @@ export default function ContactPage() {
                           type="submit"
                           className="group w-full py-5 bg-brand-dark text-brand-beige rounded-xl font-bold text-lg hover:bg-brand-primary hover:text-white transition-all duration-300 shadow-xl hover:shadow-2xl hover:shadow-brand-primary/20 flex items-center justify-center gap-3"
                         >
-                          Send Request & Grab Coffee ☕
+                          Book a Strategy Call
                           <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                         </button>
                       </div>

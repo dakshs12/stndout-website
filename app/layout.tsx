@@ -4,6 +4,7 @@ import "./globals.css"; // Note: Adjust this path if your globals.css is in the 
 import { SmoothScroll } from "@/components/animations/SmoothScroll";
 import { Navbar } from "@/components/sections/Navbar"; // <-- Imported the Navbar
 import { StaticBackground } from "@/components/animations/StaticBackground";
+import { Agentation } from 'agentation';
 
 const inter = Inter({ 
   subsets: ["latin"],
@@ -40,6 +41,7 @@ export default function RootLayout({
           {children}
         </SmoothScroll>
         
+        {process.env.NODE_ENV === 'development' && <Agentation />}
       </body>
     </html>
   );
