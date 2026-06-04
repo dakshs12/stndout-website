@@ -64,6 +64,7 @@ function ContactForm({ playfair }: { playfair: any }) {
       const data = await response.json();
       
       if (data.success) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         setSubmitted(true);
         setTimeout(() => {
           gsap.fromTo('.success-message',

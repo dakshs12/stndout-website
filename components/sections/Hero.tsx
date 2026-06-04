@@ -7,6 +7,7 @@ import { useGSAP } from '@gsap/react';
 import { Playfair_Display } from 'next/font/google';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import Link from 'next/link';
+import { ScrollSmoother } from 'gsap/ScrollSmoother';
 
 gsap.registerPlugin(SplitText, useGSAP);
 
@@ -174,7 +175,7 @@ export function Hero() {
         <ContentBlock isRevealed={false} hideText={true}>
           <div ref={buttonsRef} className="flex flex-wrap gap-4 justify-center pointer-events-auto px-6 mt-10 md:mt-16 w-full">
             <Link
-              href="/#services"
+              href="/services"
               className="group flex items-center justify-center gap-2 px-8 py-4 bg-brand-cream text-brand-dark font-bold text-base rounded-full shadow-[0_4px_20px_rgba(255,248,244,0.15)] hover:shadow-[0_8px_30px_rgba(255,248,244,0.3)] hover:scale-105 transition-all duration-300"
             >
               Our Services
@@ -183,10 +184,19 @@ export function Hero() {
 
             <Link
               href="/#brand-score"
+              onClick={(e) => {
+                e.preventDefault();
+                const smoother = ScrollSmoother.get();
+                if (smoother) {
+                  smoother.scrollTo('#brand-score', true, "top top");
+                } else {
+                  document.getElementById('brand-score')?.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
               className="group flex items-center justify-center gap-2 px-8 py-4 bg-[#070707]/50 backdrop-blur-md border border-brand-cream/20 text-brand-cream font-bold text-base rounded-full hover:bg-brand-cream hover:text-brand-dark hover:scale-105 transition-all duration-300"
             >
               <Sparkles className="w-5 h-5" />
-              AI Brand Score
+              Your StndOUT Score
             </Link>
           </div>
         </ContentBlock>

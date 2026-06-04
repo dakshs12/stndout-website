@@ -85,18 +85,32 @@ export function Navbar() {
 
     // Give the DOM a moment to mount the new page's sections
     const timer = setTimeout(() => {
-      const lightSections = gsap.utils.toArray('section.bg-brand-cream, section.bg-brand-white, section.bg-white, main.bg-brand-cream');
+      const lightSections = gsap.utils.toArray('section.bg-brand-cream, section.bg-brand-white, section.bg-white, main.bg-brand-cream, section.bg-transparent');
 
       lightSections.forEach((section: any, i: number) => {
         ScrollTrigger.create({
-          id: 'navTheme-' + i,
+          id: 'navThemeLight-' + i,
           trigger: section,
           start: "top 80px", 
           end: "bottom 80px", 
           onEnter: animateToLight,
-          onLeave: animateToDark,
+          onLeave: isDarkPage ? animateToDark : animateToLight,
           onEnterBack: animateToLight,
-          onLeaveBack: animateToDark,
+          onLeaveBack: isDarkPage ? animateToDark : animateToLight,
+        });
+      });
+
+      const darkSections = gsap.utils.toArray('section.bg-brand-dark, section.bg-black');
+      darkSections.forEach((section: any, i: number) => {
+        ScrollTrigger.create({
+          id: 'navThemeDark-' + i,
+          trigger: section,
+          start: "top 80px", 
+          end: "bottom 80px", 
+          onEnter: animateToDark,
+          onLeave: isDarkPage ? animateToDark : animateToLight,
+          onEnterBack: animateToDark,
+          onLeaveBack: isDarkPage ? animateToDark : animateToLight,
         });
       });
 
@@ -128,7 +142,7 @@ export function Navbar() {
           '--btn-shadow-color': isDarkPage ? 'rgba(255, 248, 244, 0.3)' : 'rgba(7, 7, 7, 0.2)',
         } as React.CSSProperties}
       >
-        <header className="w-full backdrop-blur-xl border shadow-[0_8px_32px_rgba(0,0,0,0.3)] rounded-2xl md:rounded-full px-4 md:px-8 py-3 md:py-4 flex items-center justify-between bg-[var(--nav-bg)] border-[color:var(--nav-border)]">
+        <header className="w-full backdrop-blur-xl border shadow-[0_8px_32px_rgba(0,0,0,0.3)] rounded-2xl md:rounded-full px-4 md:px-8 py-2 md:py-3 flex items-center justify-between bg-[var(--nav-bg)] border-[color:var(--nav-border)]">
           
           <Link href="/" onClick={(e) => handleSmoothScroll(e, '/')} className="relative h-10 w-10 md:h-12 md:w-12 z-50 flex-shrink-0">
             <Image 
@@ -154,8 +168,7 @@ export function Navbar() {
               onClick={(e) => handleSmoothScroll(e, '/contact')}
               className="group px-6 py-2.5 text-sm font-bold rounded-full flex items-center gap-2 bg-[var(--btn-bg)] text-[color:var(--btn-text)] [box-shadow:0px_4px_20px_0px_var(--btn-shadow-color)] hover:scale-105 transition-transform duration-300"
             >
-              Grab a coffee!
-              <span className="inline-block transition-transform duration-300 group-hover:rotate-12 group-hover:-translate-y-1">☕</span>
+              Grab a Coffee!
             </Link>
           </div>
 
@@ -185,8 +198,7 @@ export function Navbar() {
             onClick={(e) => handleSmoothScroll(e, '/contact')}
             className="group w-full max-w-xs justify-center px-6 py-4 bg-brand-cream text-[#070707] font-bold rounded-full flex items-center gap-2 shadow-[0_0_20px_rgba(255,248,244,0.3)] transition-transform hover:scale-105"
           >
-            Grab a coffee!
-            <span className="inline-block transition-transform duration-300 group-hover:rotate-12 group-hover:-translate-y-1">☕</span>
+            Grab a Coffee!
           </Link>
         </div>
       </div>

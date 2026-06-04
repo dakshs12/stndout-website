@@ -3,13 +3,14 @@
 import { useState, useRef } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { Playfair_Display } from 'next/font/google';
+import { Playfair_Display, Quicksand } from 'next/font/google';
 import { ArrowRight, Check, Sparkles, RefreshCcw, ChevronDown, AlertTriangle, TrendingUp, Zap } from 'lucide-react';
 import Link from 'next/link';
 
 gsap.registerPlugin(useGSAP);
 
 const playfair = Playfair_Display({ subsets: ['latin'], weight: ['700', '900'], style: ['italic', 'normal'] });
+const quicksand = Quicksand({ subsets: ['latin'], weight: ['300', '400', '500', '600', '700'] });
 
 const marketingChannels = ["Social Media", "SEO / Content", "Paid Ads", "Email Marketing", "Referrals / WOM", "Influencers / PR"];
 const sizeOptions = ["1 - 10 Employees", "11 - 50 Employees", "50 - 200 Employees", "200+ Employees"];
@@ -130,14 +131,30 @@ export function BrandScore() {
                               .to('.progress-bar', { width: "100%", duration: 0.5, ease: "power1.in" });
 
     } else if (phase === 2) {
-      // PHASE 2: SCORE SLAM
+      // PHASE 2: SCORE REVEAL
       gsap.to(scanRef.current, { scale: 0.5, opacity: 0, duration: 0.3, display: "none" });
-      gsap.fromTo(resultRef.current, { scale: 1.5, opacity: 0, display: "none" }, { scale: 1, opacity: 1, display: "flex", duration: 0.8, ease: "back.out(1.2)" });
+      gsap.fromTo(resultRef.current, { opacity: 0, y: 30, display: "none" }, { opacity: 1, y: 0, display: "flex", duration: 0.6, ease: "power3.out" });
 
-      gsap.fromTo('.score-number', 
-        { innerText: 0 },
-        { innerText: result.score, duration: 2, snap: { innerText: 1 }, ease: "expo.out" }, "-=0.2"
-      );
+      // Animate the score ring
+      const ringEl = document.querySelector('.score-ring');
+      if (ringEl) {
+        const c = 2 * Math.PI * 54;
+        const target = c - (Math.min(result.score, 100) / 100) * c;
+        gsap.to(ringEl, { strokeDashoffset: target, duration: 2.5, ease: "power3.out", delay: 0.3 });
+      }
+
+      // Animate the counter number
+      const counter = { val: 0 };
+      gsap.to(counter, {
+        val: result.score,
+        duration: 2.5,
+        delay: 0.3,
+        ease: "power3.out",
+        onUpdate: () => {
+          const el = document.querySelector('.score-number');
+          if (el) el.innerHTML = Math.round(counter.val).toString();
+        }
+      });
     } else if (phase === 0) {
       // RESTORE FORM
       gsap.to(resultRef.current, { opacity: 0, scale: 0.9, duration: 0.3, display: "none" });
@@ -147,43 +164,72 @@ export function BrandScore() {
     }
   }, { dependencies: [phase, result], scope: containerRef });
 
-  // Dynamic UI based on Score
+  // Dynamic UI based on Score — professional & positive
   const getScoreUI = () => {
-    if (result.score < 50) return {
-      color: "text-red-500", glow: "drop-shadow-[0_0_25px_rgba(239,68,68,0.8)]", icon: <AlertTriangle className="w-8 h-8 text-red-500 mb-4" />,
-      title: "Critical Alert: You are invisible.", cta: "Emergency Strategy Call",
+    if (result.score <= 40) return {
+      color: "text-amber-400",
+      ringColor: "stroke-amber-400",
+      glowBg: "bg-amber-400/10",
+      label: "Growth Opportunity",
+      subtitle: "Your brand has untapped potential.",
+      cta: "Let\u2019s Build Your Strategy",
     };
-    if (result.score < 75) return {
-      color: "text-yellow-400", glow: "drop-shadow-[0_0_25px_rgba(250,204,21,0.8)]", icon: <TrendingUp className="w-8 h-8 text-yellow-400 mb-4" />,
-      title: "You are blending into the noise.", cta: "Break the Mold (Book Call)",
+    if (result.score <= 60) return {
+      color: "text-sky-400",
+      ringColor: "stroke-sky-400",
+      glowBg: "bg-sky-400/10",
+      label: "Good Foundation",
+      subtitle: "You\u2019ve started strong — now let\u2019s accelerate your growth.",
+      cta: "Accelerate My Growth",
+    };
+    if (result.score <= 80) return {
+      color: "text-brand-primary",
+      ringColor: "stroke-brand-primary",
+      glowBg: "bg-brand-primary/10",
+      label: "Strong Presence",
+      subtitle: "Your brand is performing well. Let\u2019s take it to the next level.",
+      cta: "Scale My Brand",
     };
     return {
-      color: "text-brand-primary", glow: "drop-shadow-[0_0_25px_rgba(30,124,112,0.8)]", icon: <Zap className="w-8 h-8 text-brand-primary mb-4" />,
-      title: "Strong, but leaving money on the table.", cta: "Scale to Dominance",
+      color: "text-emerald-400",
+      ringColor: "stroke-emerald-400",
+      glowBg: "bg-emerald-400/10",
+      label: "Built to StndOut",
+      subtitle: "Let\u2019s keep the momentum going.",
+      cta: "Let\u2019s Dominate Together",
     };
   };
 
   const scoreUI = getScoreUI();
+  const scorePercent = Math.min(result.score, 100);
+  const circumference = 2 * Math.PI * 54; // radius = 54
+  const strokeOffset = circumference - (scorePercent / 100) * circumference;
 
   return (
     <section id="brand-score" className="relative min-h-[100svh] bg-[#070707] flex items-center py-32 px-6 lg:px-12 overflow-hidden">
       <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[40vw] h-[40vw] bg-brand-primary/20 blur-[150px] rounded-full pointer-events-none mix-blend-screen" />
 
-      <div ref={containerRef} className="w-full max-w-[1400px] mx-auto flex flex-col xl:flex-row gap-16 lg:gap-24 relative z-10">
+      <div ref={containerRef} className="w-full max-w-[1400px] mx-auto flex flex-col relative z-10">
         
-        {/* PITCH COLUMN */}
-        <div className="xl:w-5/12 flex flex-col justify-center">
-          <h2 className={`${playfair.className} text-6xl md:text-[80px] lg:text-[100px] font-black text-brand-cream leading-[0.9] tracking-tight mb-8`}>
-            How strong is your brand?
-          </h2>
-          <p className="text-brand-beige/70 text-lg md:text-xl font-light leading-relaxed max-w-md">
-            Our AI analyzes your digital footprint and industry delta to reveal exactly where you're blending in—and how StndOut can fix it.
-          </p>
-        </div>
+        {/* MASSIVE ONE-LINER HEADING */}
+        <h2 className={`${playfair.className} text-5xl md:text-7xl lg:text-[80px] xl:text-[90px] font-black text-brand-primary leading-[0.85] tracking-tight mb-12 md:mb-16 whitespace-nowrap`}>
+          Your StndOUT Score
+        </h2>
 
-        {/* TERMINAL COLUMN */}
-        <div className="xl:w-7/12 w-full max-w-[700px] xl:max-w-none relative perspective-[1000px]">
-          <div className="w-full bg-white/[0.03] backdrop-blur-2xl border border-white/10 rounded-[2rem] p-8 md:p-12 shadow-[0_0_80px_rgba(30,124,112,0.1)] relative min-h-[550px] flex flex-col justify-center">
+        <div className="flex flex-col xl:flex-row gap-16 lg:gap-24 w-full">
+          {/* PITCH COLUMN */}
+          <div className="xl:w-5/12 flex flex-col justify-start xl:pt-4">
+            <h3 className={`${quicksand.className} text-4xl md:text-5xl lg:text-[60px] font-black text-brand-cream leading-[0.9] tracking-tight mb-6`}>
+              How strong is your brand?
+            </h3>
+            <p className="text-brand-beige/70 text-lg md:text-xl font-light leading-relaxed max-w-md">
+              Get a quick score on your brand's visibility, positioning and growth potential.
+            </p>
+          </div>
+
+          {/* TERMINAL COLUMN */}
+          <div className="xl:w-7/12 w-full max-w-[700px] xl:max-w-none relative perspective-[1000px]">
+            <div className="w-full bg-white/[0.03] backdrop-blur-2xl border border-white/10 rounded-[2rem] p-8 md:p-12 shadow-[0_0_80px_rgba(30,124,112,0.1)] relative min-h-[550px] flex flex-col justify-center">
 
             {/* --- STATE 0: FORM --- */}
             <div ref={formRef} className="w-full">
@@ -241,7 +287,7 @@ export function BrandScore() {
                 onClick={handleAnalyze}
                 className="w-full group relative overflow-hidden bg-brand-cream text-[#070707] font-black text-lg py-5 rounded-2xl flex items-center justify-center gap-3 transition-transform hover:scale-[1.02] duration-300"
               >
-                <span className="relative z-10">Run AI Analysis</span>
+                <span className="relative z-10">Get My Brand Score</span>
                 <ArrowRight className="w-6 h-6 relative z-10 group-hover:translate-x-2 transition-transform duration-300" />
               </button>
             </div>
@@ -263,36 +309,68 @@ export function BrandScore() {
               </div>
             </div>
 
-            {/* --- STATE 2: DYNAMIC RESULT FUNNEL --- */}
-            <div ref={resultRef} className="absolute inset-0 w-full h-full hidden flex-col items-center justify-center text-center p-8 md:p-12">
-              {scoreUI.icon}
+            {/* --- STATE 2: REDESIGNED RESULT --- */}
+            <div ref={resultRef} className="absolute inset-0 w-full h-full hidden flex-col items-center justify-center text-center p-6 md:p-10">
               
-              <div className="flex items-start justify-center gap-2 mb-2">
-                <span className={`${playfair.className} score-number text-[100px] md:text-[140px] leading-none font-black ${scoreUI.color} ${scoreUI.glow}`}>
-                  0
-                </span>
-                <span className="text-2xl font-bold text-white/20 mt-6">/100</span>
+              {/* Score Ring */}
+              <div className="relative w-36 h-36 md:w-44 md:h-44 mb-6">
+                <svg className="w-full h-full -rotate-90" viewBox="0 0 120 120">
+                  <circle cx="60" cy="60" r="54" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="8" />
+                  <circle 
+                    cx="60" cy="60" r="54" fill="none" 
+                    className={`${scoreUI.ringColor} score-ring`}
+                    strokeWidth="8" 
+                    strokeLinecap="round"
+                    strokeDasharray={circumference}
+                    strokeDashoffset={circumference}
+                    style={{ transition: 'stroke-dashoffset 2.5s cubic-bezier(0.33,1,0.68,1)' }}
+                  />
+                </svg>
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <span className={`${playfair.className} score-number text-5xl md:text-6xl font-black ${scoreUI.color} leading-none`}>
+                    0
+                  </span>
+                  <span className="text-xs font-bold text-white/30 uppercase tracking-widest mt-1">out of 100</span>
+                </div>
               </div>
 
-              <h4 className="text-3xl md:text-4xl font-bold text-white mb-4">{scoreUI.title}</h4>
-              <p className="text-brand-beige/80 max-w-md mb-10 text-lg leading-relaxed bg-white/5 p-6 rounded-2xl border border-white/5 italic">
-                "{result.verdict}"
+              {/* Tier Label */}
+              <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full ${scoreUI.glowBg} border border-white/10 mb-4`}>
+                <Sparkles className={`w-4 h-4 ${scoreUI.color}`} />
+                <span className={`text-sm font-bold ${scoreUI.color} uppercase tracking-wider`}>{scoreUI.label}</span>
+              </div>
+
+              {/* Subtitle */}
+              <p className={`${quicksand.className} text-xl md:text-2xl font-bold text-white mb-3`}>
+                {scoreUI.subtitle}
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-4 w-full">
-                <Link href="/contact" className="flex-1 bg-brand-cream text-[#070707] font-black py-4 rounded-xl flex items-center justify-center hover:bg-white transition-colors shadow-[0_0_20px_rgba(236,220,201,0.3)]">
+              {/* AI Verdict */}
+              <p className="text-brand-beige/60 text-sm md:text-base leading-relaxed max-w-lg mb-8">
+                {result.verdict}
+              </p>
+
+              {/* CTAs */}
+              <div className="flex flex-col sm:flex-row gap-3 w-full max-w-md">
+                <Link 
+                  href="/contact" 
+                  className="flex-1 group bg-brand-primary text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 hover:bg-brand-primary/90 transition-colors shadow-[0_0_30px_rgba(30,124,112,0.3)]"
+                >
                   {scoreUI.cta}
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
                 <button 
                   onClick={handleReset}
-                  className="flex items-center justify-center gap-2 px-6 py-4 bg-transparent border border-white/20 text-brand-cream font-bold rounded-xl hover:bg-white/10 transition-colors"
+                  className="flex items-center justify-center gap-2 px-5 py-3.5 bg-white/5 border border-white/10 text-brand-cream/80 font-semibold rounded-xl hover:bg-white/10 transition-colors"
                 >
-                  <RefreshCcw className="w-5 h-5" /> Retest
+                  <RefreshCcw className="w-4 h-4" /> Retest
                 </button>
               </div>
             </div>
 
           </div>
+        </div>
+
         </div>
 
       </div>
