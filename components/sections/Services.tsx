@@ -166,10 +166,10 @@ export function Services() {
                >
                   {/* Smaller font sizes so they all fit in one frame without scrolling */}
                   <h2 
-                    className={`${quicksand.className} text-3xl sm:text-4xl md:text-5xl lg:text-[50px] xl:text-[60px] font-bold leading-[0.9] tracking-tight flex items-center gap-2 md:gap-4 transition-transform duration-500 origin-left ${activeIndex === index ? 'scale-100 lg:translate-x-4' : 'scale-100'}`}
+                    className={`${quicksand.className} text-3xl sm:text-4xl md:text-5xl lg:text-[50px] xl:text-[60px] font-bold leading-[0.9] tracking-tight flex items-center gap-2 md:gap-4 transition-transform duration-500 origin-left will-change-transform transform-gpu ${activeIndex === index ? 'scale-100 lg:translate-x-4' : 'scale-100 translate-x-0'}`}
                   >
                     <span className="flex-1">{svc.title}</span>
-                    <span className={`font-sans text-xs md:text-sm lg:text-lg font-bold whitespace-nowrap transition-colors duration-500 ${activeIndex === index ? 'text-[#D0FF27]' : 'text-white/50'}`}>
+                    <span className={`font-sans text-xs md:text-sm lg:text-lg font-bold whitespace-nowrap transition-colors duration-500 will-change-transform transform-gpu ${activeIndex === index ? 'text-[#D0FF27]' : 'text-white/50'}`}>
                       {`{ ${svc.id} }`}
                     </span>
                   </h2>

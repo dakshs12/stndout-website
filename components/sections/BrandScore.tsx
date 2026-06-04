@@ -132,7 +132,8 @@ export function BrandScore() {
 
     } else if (phase === 2) {
       // PHASE 2: SCORE REVEAL
-      gsap.to(scanRef.current, { scale: 0.5, opacity: 0, duration: 0.3, display: "none" });
+      gsap.set(formRef.current, { display: "none" });
+      gsap.set(scanRef.current, { display: "none", opacity: 0, visibility: "hidden" });
       gsap.fromTo(resultRef.current, { opacity: 0, y: 30, display: "none" }, { opacity: 1, y: 0, display: "flex", duration: 0.6, ease: "power3.out" });
 
       // Animate the score ring

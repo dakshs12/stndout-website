@@ -15,8 +15,8 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'URL is required' }, { status: 400 });
     }
 
-    // We use gemini-pro for broad compatibility with the current SDK version
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+    // We use gemini-3.5-flash as it is the currently supported fast model on your API key
+    const model = genAI.getGenerativeModel({ model: "gemini-3.5-flash" });
 
     const prompt = `
       You are an elite, ruthless brand strategist and digital marketing expert at the agency "StndOut".
