@@ -83,9 +83,7 @@ export function WhyUs() {
 
       <div className="w-full max-w-[1600px] mx-auto px-6 md:px-12 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-16 md:mb-24">
-          <p className="why-reveal text-brand-primary font-bold uppercase tracking-[0.3em] text-sm mb-4">
-            The StndOut Advantage
-          </p>
+
           <h2 className={`why-reveal ${playfair.className} text-4xl md:text-6xl font-black text-brand-cream leading-[1.1]`}>
             Why Brands <span className="italic text-brand-primary">Work With Us</span>
           </h2>

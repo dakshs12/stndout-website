@@ -213,43 +213,7 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* ============================================ */}
-        {/* TEAM SECTION                                 */}
-        {/* ============================================ */}
-        <section className="bg-brand-cream py-24 md:py-32">
-          <div className="max-w-[1600px] mx-auto px-6 md:px-12">
-            <div className="mb-16 md:mb-20">
-              <p className="about-reveal text-brand-primary font-bold uppercase tracking-[0.3em] text-sm mb-4">
-                The Humans
-              </p>
-              <h2 className={`about-reveal ${playfair.className} text-4xl md:text-6xl lg:text-7xl font-black text-brand-dark leading-[0.95] tracking-tight`}>
-                Meet the{' '}
-                <span className="italic text-brand-primary">misfits.</span>
-              </h2>
-            </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {team.map((member) => (
-                <div
-                  key={member.name}
-                  className="about-reveal group bg-white/60 backdrop-blur-xl border border-white rounded-[2rem] p-8 text-center hover:shadow-[0_20px_60px_rgba(30,124,112,0.1)] transition-all duration-500"
-                >
-                  <div className="w-24 h-24 rounded-full bg-gradient-to-br from-brand-primary to-brand-primary/60 flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
-                    <span className={`${playfair.className} text-2xl font-black text-white`}>
-                      {member.initial}
-                    </span>
-                  </div>
-                  <h3 className="text-lg font-bold text-brand-dark mb-1">
-                    {member.name}
-                  </h3>
-                  <p className="text-brand-dark/50 text-sm font-medium">
-                    {member.role}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
 
       </main>
 
