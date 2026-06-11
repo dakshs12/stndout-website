@@ -100,7 +100,7 @@ export function Services() {
             <div className="flex flex-col justify-center w-full max-w-[500px] mx-auto lg:mx-0">
 
               {/* Images Stack - Removed background box and aligned left */}
-              <div className="relative w-full max-w-[380px] aspect-[4/3] lg:aspect-[16/10] mb-6">
+              <div className="relative w-full max-w-[380px] aspect-[4/3] lg:aspect-[16/10] mb-10">
                 {services.map((svc, i) => (
                   <div
                     key={`img-${svc.id}`}

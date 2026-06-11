@@ -20,14 +20,14 @@ const playfair = Playfair_Display({
 export function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const maskRef = useRef<HTMLDivElement>(null);
-  
+
   const baseContentRef = useRef<HTMLDivElement>(null);
   const revealContentRef = useRef<HTMLDivElement>(null);
-  
+
   const headlineBaseRef = useRef<HTMLHeadingElement>(null);
   const headlineRevealRef = useRef<HTMLHeadingElement>(null);
   const buttonsRef = useRef<HTMLDivElement>(null);
-  
+
   const [isMouseDevice, setIsMouseDevice] = useState(true);
 
   useEffect(() => {
@@ -40,8 +40,8 @@ export function Hero() {
     if (!containerRef.current || !headlineBaseRef.current || !headlineRevealRef.current) return;
 
     // Center mask initially
-    gsap.set(maskRef.current, { 
-      '--x': window.innerWidth / 2, 
+    gsap.set(maskRef.current, {
+      '--x': window.innerWidth / 2,
       '--y': window.innerHeight / 2,
       '--mask-size': '0px'
     });
@@ -58,7 +58,7 @@ export function Hero() {
       // Subtle Parallax for the text
       const xOffset = (e.clientX / window.innerWidth - 0.5) * 30;
       const yOffset = (e.clientY / window.innerHeight - 0.5) * 30;
-      
+
       gsap.to([baseContentRef.current, revealContentRef.current], {
         x: -xOffset,
         y: -yOffset,
@@ -87,16 +87,16 @@ export function Hero() {
       duration: 1.5,
       stagger: 0.02,
     })
-    .to(maskRef.current, {
-      '--mask-size': isMouseDevice ? '450px' : '150vw',
-      duration: 1.5,
-      ease: "power2.inOut"
-    }, "-=1.0")
-    .to(buttonsRef.current, {
-      opacity: 1,
-      y: 0,
-      duration: 1,
-    }, "-=0.8");
+      .to(maskRef.current, {
+        '--mask-size': isMouseDevice ? '550px' : '150vw',
+        duration: 1.5,
+        ease: "power2.inOut"
+      }, "-=1.0")
+      .to(buttonsRef.current, {
+        opacity: 1,
+        y: 0,
+        duration: 1,
+      }, "-=0.8");
 
     return () => {
       if (isMouseDevice) window.removeEventListener("mousemove", moveMask);
@@ -106,30 +106,30 @@ export function Hero() {
 
   }, { scope: containerRef, dependencies: [isMouseDevice] });
 
-  const ContentBlock = ({ 
-    isRevealed, 
-    headlineRef, 
-    wrapperRef, 
+  const ContentBlock = ({
+    isRevealed,
+    headlineRef,
+    wrapperRef,
     hideText,
-    children 
-  }: { 
-    isRevealed: boolean, 
-    headlineRef?: React.RefObject<HTMLHeadingElement | null>, 
+    children
+  }: {
+    isRevealed: boolean,
+    headlineRef?: React.RefObject<HTMLHeadingElement | null>,
     wrapperRef?: React.RefObject<HTMLDivElement | null>,
     hideText?: boolean,
     children?: React.ReactNode
   }) => (
     <div ref={wrapperRef} className="flex flex-col items-center text-center max-w-5xl mx-auto px-6 w-full">
       <div className={hideText ? 'opacity-0 pointer-events-none select-none' : ''}>
-        <h1 
+        <h1
           ref={headlineRef}
           className={`${playfair.className} text-5xl sm:text-6xl md:text-7xl lg:text-[100px] xl:text-[120px] font-black leading-[0.95] tracking-tight mb-6 md:mb-8 ${isRevealed ? 'text-brand-cream' : 'text-white/10'}`}
         >
-          Most brands <span className={`italic ${isRevealed ? 'text-white' : 'text-white/5'}`}>blend in.</span><br />
-          We <span className={`italic ${isRevealed ? 'text-brand-dark' : 'text-white/20'}`}>refuse.</span>
+          Step Into the<br />
+          <span className={`italic ${isRevealed ? 'text-brand-dark' : 'text-white/20'}`}>Spotlight!</span>
         </h1>
-        <p className={`text-lg md:text-xl font-medium leading-relaxed max-w-xl mx-auto ${isRevealed ? 'text-brand-cream/80' : 'text-white/20'}`}>
-          StndOUT crafts marketing strategies that shatter the noise. We don't do "holistic 360° marketing." We do what works — and make your brand impossible to ignore.
+        <p className={`text-xl md:text-2xl font-medium leading-relaxed max-w-2xl mx-auto ${isRevealed ? 'text-brand-cream/80' : 'text-white/20'}`}>
+          StndOUT helps ambitious brands get noticed.
         </p>
       </div>
       {children}
@@ -143,20 +143,20 @@ export function Hero() {
       className="relative min-h-[100svh] w-full grid grid-cols-1 grid-rows-1 overflow-hidden bg-[#070707]"
     >
       {/* Background Noise Texture */}
-      <div className="absolute inset-0 opacity-20 mix-blend-overlay pointer-events-none z-0" 
-           style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}>
+      <div className="absolute inset-0 opacity-20 mix-blend-overlay pointer-events-none z-0"
+        style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}>
       </div>
 
       {/* LAYER 1: BASE (Boring / Dark) */}
       <div className="[grid-area:1/1] flex flex-col items-center justify-center pointer-events-none w-full h-full z-0 relative pt-32 md:pt-40 pb-16 md:pb-24">
         <ContentBlock isRevealed={false} headlineRef={headlineBaseRef} wrapperRef={baseContentRef}>
-           {/* Invisible Spacer to match button height */}
-           <div className="opacity-0 pointer-events-none flex flex-wrap gap-4 mt-10 md:mt-16 h-[56px] w-full" />
+          {/* Invisible Spacer to match button height */}
+          <div className="opacity-0 pointer-events-none flex flex-wrap gap-4 mt-10 md:mt-16 h-[56px] w-full" />
         </ContentBlock>
       </div>
 
       {/* LAYER 2: THE REVEAL (Masked Spotlight) */}
-      <div 
+      <div
         ref={maskRef}
         className="[grid-area:1/1] z-10 pointer-events-none flex flex-col items-center justify-center w-full h-full relative bg-gradient-to-br from-brand-primary via-[#18655b] to-[#0d332e] pt-32 md:pt-40 pb-16 md:pb-24"
         style={{
@@ -165,8 +165,8 @@ export function Hero() {
         } as React.CSSProperties}
       >
         <ContentBlock isRevealed={true} headlineRef={headlineRevealRef} wrapperRef={revealContentRef}>
-           {/* Invisible Spacer to match button height */}
-           <div className="opacity-0 pointer-events-none flex flex-wrap gap-4 mt-10 md:mt-16 h-[56px] w-full" />
+          {/* Invisible Spacer to match button height */}
+          <div className="opacity-0 pointer-events-none flex flex-wrap gap-4 mt-10 md:mt-16 h-[56px] w-full" />
         </ContentBlock>
       </div>
 

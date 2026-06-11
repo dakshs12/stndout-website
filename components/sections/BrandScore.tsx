@@ -207,13 +207,11 @@ export function BrandScore() {
   const strokeOffset = circumference - (scorePercent / 100) * circumference;
 
   return (
-    <section id="brand-score" className="relative min-h-[100svh] bg-[#070707] flex items-center py-32 px-6 lg:px-12 overflow-hidden">
-      <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[40vw] h-[40vw] bg-brand-primary/20 blur-[150px] rounded-full pointer-events-none mix-blend-screen" />
+    <section id="brand-score" className="relative min-h-[100svh] bg-brand-primary flex items-center py-32 px-6 lg:px-12 overflow-hidden">
 
       <div ref={containerRef} className="w-full max-w-[1400px] mx-auto flex flex-col relative z-10">
         
-        {/* MASSIVE ONE-LINER HEADING */}
-        <h2 className={`${playfair.className} text-5xl md:text-7xl lg:text-[80px] xl:text-[90px] font-black text-brand-primary leading-[0.85] tracking-tight mb-12 md:mb-16 whitespace-nowrap`}>
+        <h2 className={`${playfair.className} text-5xl md:text-7xl lg:text-[80px] xl:text-[90px] font-black text-brand-cream leading-[0.85] tracking-tight mb-12 md:mb-16 whitespace-nowrap`}>
           Your StndOUT Score
         </h2>
 

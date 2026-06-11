@@ -5,7 +5,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { Playfair_Display } from 'next/font/google';
-import { Target, Layers, Database, Target as TargetIcon } from 'lucide-react';
+import { Target, Layers, Database, LineChart } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -17,7 +17,7 @@ const playfair = Playfair_Display({
 
 const reasons = [
   {
-    icon: Target,
+    icon: LineChart,
     title: 'Strategy before execution',
     desc: 'We don\'t just execute blindly. Every action is rooted in a deep understanding of your market, competitors, and audience.',
     color: 'text-brand-primary',
@@ -38,7 +38,7 @@ const reasons = [
     bg: 'bg-yellow-400/10',
   },
   {
-    icon: TargetIcon,
+    icon: Target,
     title: 'Built around business goals',
     desc: 'We focus on what actually matters: revenue, growth, and market share. Your success is the only KPI we care about.',
     color: 'text-purple-400',
@@ -53,7 +53,7 @@ export function WhyUs() {
     if (!containerRef.current) return;
 
     const reveals = containerRef.current.querySelectorAll('.why-reveal');
-    const cards = containerRef.current.querySelectorAll('.why-card');
+    const cards = containerRef.current.querySelectorAll('.why-card-wrapper');
 
     gsap.fromTo(reveals,
       { opacity: 0, y: 30 },
@@ -76,15 +76,11 @@ export function WhyUs() {
   }, { scope: containerRef });
 
   return (
-    <section ref={containerRef} className="py-24 md:py-32 bg-[#070707] relative overflow-hidden">
-      {/* Background elements */}
-      <div className="absolute top-0 right-0 w-[40vw] h-[40vw] bg-brand-primary/5 blur-[120px] rounded-full pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[30vw] h-[30vw] bg-white/5 blur-[100px] rounded-full pointer-events-none" />
-
+    <section ref={containerRef} className="py-24 md:py-32 bg-brand-cream relative overflow-hidden">
       <div className="w-full max-w-[1600px] mx-auto px-6 md:px-12 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-16 md:mb-24">
 
-          <h2 className={`why-reveal ${playfair.className} text-4xl md:text-6xl font-black text-brand-cream leading-[1.1]`}>
+          <h2 className={`why-reveal ${playfair.className} text-4xl md:text-6xl font-black text-brand-dark leading-[1.1]`}>
             Why Brands <span className="italic text-brand-primary">Work With Us</span>
           </h2>
         </div>
@@ -93,19 +89,20 @@ export function WhyUs() {
           {reasons.map((reason, idx) => {
             const Icon = reason.icon;
             return (
-              <div
-                key={idx}
-                className="why-card group bg-white/[0.03] border border-white/[0.06] hover:bg-white/[0.08] transition-colors duration-300 rounded-[2rem] p-8 md:p-10 flex flex-col items-start"
-              >
-                <div className={`w-14 h-14 rounded-2xl ${reason.bg} flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-300`}>
-                  <Icon className={`w-6 h-6 ${reason.color}`} />
+              <div key={idx} className="why-card-wrapper h-full">
+                <div
+                  className="why-card h-full group bg-white border border-brand-primary/10 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 rounded-[2rem] p-8 md:p-10 flex flex-col items-center text-center"
+                >
+                  <div className={`w-14 h-14 rounded-2xl ${reason.bg} flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-300`}>
+                    <Icon className={`w-6 h-6 ${reason.color}`} />
+                  </div>
+                  <h3 className="text-xl font-bold text-brand-dark mb-4 leading-tight">
+                    {reason.title}
+                  </h3>
+                  <p className="text-brand-dark/70 text-sm leading-relaxed">
+                    {reason.desc}
+                  </p>
                 </div>
-                <h3 className="text-xl font-bold text-brand-cream mb-4 leading-tight">
-                  {reason.title}
-                </h3>
-                <p className="text-brand-cream/50 text-sm leading-relaxed">
-                  {reason.desc}
-                </p>
               </div>
             );
           })}
