@@ -115,13 +115,10 @@ function ContactForm({ playfair }: { playfair: any }) {
               </div>
             </div>
 
-            <div className="form-field pt-6 border-t border-brand-dark/10">
-              <p className="text-brand-primary font-bold text-sm tracking-widest uppercase mb-8">
+            <div className="form-field">
+              <p className="text-brand-primary font-bold text-sm tracking-widest uppercase mb-6">
                 Just a few quick questions
               </p>
-            </div>
-
-            <div className="form-field">
               <label className="block text-brand-dark text-lg font-bold mb-4">
                 1. What best describes your business?
               </label>

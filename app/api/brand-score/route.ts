@@ -92,7 +92,7 @@ export async function POST(req: Request) {
     return NextResponse.json(parsedData);
 
   } catch (error) {
-    console.error('Brand Score API Error:', error);
+    console.error('Brand Score API Error Details:', error);
     // Fallback deterministic logic so the site NEVER breaks even if the API fails
     const channelsCount = body.channels?.length || 0;
     const fallbackScore = Math.min(25 + (channelsCount * 12), 85);
