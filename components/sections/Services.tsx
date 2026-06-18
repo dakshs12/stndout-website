@@ -110,7 +110,7 @@ export function Services() {
                     <img
                       src={svc.image}
                       alt={svc.title}
-                      className={`absolute inset-0 w-full h-full object-contain object-left z-10 transition-transform ${svc.id === '04' ? 'scale-[1.15] origin-left' : ''}`}
+                      className={`absolute inset-0 w-full h-full object-contain object-left z-10 transition-transform ${svc.id === '03' ? 'scale-[1.8] origin-left' : svc.id === '04' ? 'scale-[1.8] origin-left' : ''}`}
                       onError={(e) => e.currentTarget.style.opacity = '0'}
                     />
                   </div>

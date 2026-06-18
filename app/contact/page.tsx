@@ -21,11 +21,10 @@ const PillButton = ({
   <button
     type="button"
     onClick={onClick}
-    className={`px-5 py-2.5 rounded-full text-sm font-bold border ${
-      selected
+    className={`px-5 py-2.5 rounded-full text-sm font-bold border ${selected
         ? 'bg-brand-primary border-brand-primary text-white shadow-lg shadow-brand-primary/30'
         : 'bg-white border-brand-dark/10 text-brand-dark/70 hover:border-brand-primary/50 hover:text-brand-dark'
-    }`}
+      }`}
   >
     {label}
   </button>
@@ -45,12 +44,12 @@ function ContactForm({ playfair }: { playfair: any }) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const formData = new FormData(e.target as HTMLFormElement);
     formData.append("access_key", "905eedf2-f663-4b8e-b56f-be8fb3c0cbc3");
     formData.append("subject", "New Strategy Call Request from StndOut!");
     formData.append("from_name", "StndOut Website");
-    
+
     if (stage) formData.append("Business Stage", stage);
     if (offering) formData.append("Offering Type", offering);
     if (help.length > 0) formData.append("Looking For", help.join(', '));
@@ -62,7 +61,7 @@ function ContactForm({ playfair }: { playfair: any }) {
         body: formData
       });
       const data = await response.json();
-      
+
       if (data.success) {
         window.scrollTo({ top: 0, behavior: 'smooth' });
         setSubmitted(true);
@@ -261,7 +260,7 @@ export default function ContactPage() {
                   <h1 className={`${playfair.className} text-5xl md:text-7xl lg:text-[90px] font-black text-brand-dark leading-[1] mb-8 tracking-tight px-4 -mx-4 py-2`}>
                     Let&apos;s brew <br />
                     <span className="italic text-brand-primary">something</span><br />
-                    massive ☕
+                    massive
                   </h1>
                 </div>
                 <p className="contact-reveal text-xl text-brand-dark/70 max-w-md font-medium leading-relaxed mb-12">

@@ -129,7 +129,7 @@ export function Hero() {
           <span className={`italic ${isRevealed ? 'text-brand-dark' : 'text-white/20'}`}>Spotlight!</span>
         </h1>
         <p className={`text-xl md:text-2xl font-medium leading-relaxed max-w-2xl mx-auto ${isRevealed ? 'text-brand-cream/80' : 'text-white/20'}`}>
-          StndOUT helps ambitious brands get noticed.
+          StndOUT helps ambitious brands get noticed
         </p>
       </div>
       {children}

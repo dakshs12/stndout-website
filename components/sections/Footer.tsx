@@ -21,10 +21,10 @@ const footerLinks = {
     { label: 'Contact', href: '/contact' },
   ],
   services: [
-    { label: 'Strategy', href: '/services#strategy' },
-    { label: 'Media & Delivery', href: '/services#media' },
-    { label: 'Content & SEO', href: '/services#content' },
-    { label: 'Technical', href: '/services#technical' },
+    { label: 'Brand Consultancy', href: '/services#strategy' },
+    { label: 'Brand Development', href: '/services#media' },
+    { label: 'Digital & Technical Growth', href: '/services#content' },
+    { label: 'Events & Experiences', href: '/services#technical' },
   ],
   resources: [
     { label: 'AI Brand Score', href: '/#brand-score' },
@@ -66,14 +66,15 @@ export function Footer() {
   const footerRef = useRef<HTMLElement>(null);
   const pathname = usePathname();
   const isContactPage = pathname === '/contact';
+  const isServicesPage = pathname === '/services';
 
   return (
     <footer ref={footerRef} className="relative bg-[#0A1A18] text-brand-cream overflow-hidden">
 
       {/* CTA Banner */}
-      {!isContactPage && (
+      {!isContactPage && !isServicesPage && (
         <div className="border-b border-white/[0.06]">
-          <div className="max-w-[1600px] mx-auto px-6 md:px-12 py-20 md:py-28 flex flex-col md:flex-row items-center justify-between gap-8">
+          <div className="max-w-[1600px] mx-auto px-6 md:px-12 py-10 md:py-14 flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="footer-reveal">
               <h2 className={`${playfair.className} text-4xl md:text-6xl lg:text-7xl font-black leading-[1] tracking-tight`}>
                 Ready to{' '}
@@ -94,7 +95,7 @@ export function Footer() {
       )}
 
       {/* Footer columns */}
-      <div className="max-w-[1600px] mx-auto px-6 md:px-12 py-16 md:py-20">
+      <div className="max-w-[1600px] mx-auto px-6 md:px-12 py-8 md:py-12">
         <div className="grid grid-cols-2 md:grid-cols-12 gap-12 md:gap-8">
           {/* Brand column */}
           <div className="col-span-2 md:col-span-4 footer-reveal">

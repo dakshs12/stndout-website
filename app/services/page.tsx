@@ -170,20 +170,29 @@ export default function ServicesPage() {
           />
 
           <div className="w-full max-w-[1600px] mx-auto px-6 md:px-12 relative z-10">
-            <div className="max-w-4xl">
-              <p className="svc-reveal text-brand-primary font-bold uppercase tracking-[0.3em] text-sm mb-6">
-                What We Do
-              </p>
-              <h1 className={`svc-reveal ${playfair.className} text-5xl md:text-7xl lg:text-[100px] font-black text-brand-dark leading-[0.95] tracking-tight mb-8`}>
-                We don&apos;t do{' '}
-                <span className="italic text-brand-dark/30">&ldquo;everything.&rdquo;</span>
-                <br />
-                We do what{' '}
-                <span className="italic text-brand-primary">works.</span>
-              </h1>
-              <p className="svc-reveal text-brand-dark/60 text-xl md:text-2xl font-light leading-relaxed max-w-2xl">
-                Four pillars of marketing excellence, each designed to solve a specific problem and deliver measurable results. No bloat, no fluff.
-              </p>
+            <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
+              <div className="lg:w-7/12">
+                <p className="svc-reveal text-brand-primary font-bold uppercase tracking-[0.3em] text-sm mb-6">
+                  What We Do
+                </p>
+                <h1 className={`svc-reveal ${playfair.className} text-5xl md:text-7xl lg:text-[100px] font-black text-brand-dark leading-[0.95] tracking-tight mb-8`}>
+                  We don&apos;t do{' '}
+                  <span className="italic text-brand-dark/30">&ldquo;everything.&rdquo;</span>
+                  <br />
+                  We do what
+                  <br />
+                  <span className="italic text-brand-primary">works.</span>
+                </h1>
+              </div>
+              
+              {/* Hero Image */}
+              <div className="lg:w-5/12 svc-reveal flex justify-center lg:justify-end w-full">
+                <img 
+                  src="/service-page.svg" 
+                  alt="StndOut Services" 
+                  className="w-full max-w-[400px] md:max-w-[500px] xl:max-w-[700px] object-contain drop-shadow-2xl scale-[1.3] md:scale-[1.4] origin-right"
+                />
+              </div>
             </div>
           </div>
         </section>
@@ -261,25 +270,7 @@ export default function ServicesPage() {
                   })}
                 </div>
 
-                {/* Process timeline */}
-                <div className="svc-reveal">
-                  <p className={`text-xs font-bold uppercase tracking-[0.2em] ${svc.textClass} opacity-30 mb-6`}>
-                    Our Process
-                  </p>
-                  <div className={`flex flex-wrap items-center gap-4 border-t ${processColor} pt-6`}>
-                    {svc.process.map((step, stepIdx) => (
-                      <div key={step} className="process-step flex items-center gap-3">
-                        <div className={`w-2 h-2 rounded-full ${processDot}`} />
-                        <span className={`text-sm font-medium ${processText}`}>
-                          {step}
-                        </span>
-                        {stepIdx < svc.process.length - 1 && (
-                          <ArrowRight className={`w-3 h-3 ${processText} opacity-40`} />
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
+
               </div>
             </section>
           );
@@ -294,7 +285,7 @@ export default function ServicesPage() {
               Not sure where to start?
             </h2>
             <p className="svc-reveal text-brand-dark/70 text-lg mb-10 max-w-xl mx-auto">
-              Take our free AI Brand Score assessment and we&apos;ll tell you exactly where you&apos;re blending in — and what to do about it.
+              Take our free AI Brand Score assessment and we will tell you exactly where you are blending in and what to do about it.
             </p>
             <div className="svc-reveal flex flex-col sm:flex-row gap-4 justify-center">
               <Link

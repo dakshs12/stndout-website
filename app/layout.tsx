@@ -21,6 +21,8 @@ export const metadata: Metadata = {
   description: "StndOut is a challenger marketing agency. We refuse to let your brand blend in. See how strong your brand is — free in 60 seconds.",
 };
 
+import Script from "next/script";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -28,6 +30,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
+      <head>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-M9PB8Y2LS6"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-M9PB8Y2LS6');
+          `}
+        </Script>
+      </head>
       <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans bg-transparent text-brand-dark antialiased`}>
         
         {/* The premium static background (sits at z-index -1) */}
