@@ -14,17 +14,23 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
   const contentRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
-    // Initializes the luxury momentum scrolling
-    let smoother = ScrollSmoother.create({
-      wrapper: wrapperRef.current,
-      content: contentRef.current,
-      smooth: 1.5, // The momentum duration (how long it glides)
-      effects: true, // Enables data-speed parallax on child elements
-      smoothTouch: 0.1,
-    });
+    // Check if device is touch-enabled
+    const isMobile = window.matchMedia("(max-width: 768px)").matches || window.matchMedia("(pointer: coarse)").matches;
+
+    let smoother: any;
+
+    // Only initialize luxury scrolling on desktop/laptop devices
+    if (!isMobile) {
+      smoother = ScrollSmoother.create({
+        wrapper: wrapperRef.current,
+        content: contentRef.current,
+        smooth: 1.5,
+        effects: true,
+      });
+    }
 
     return () => {
-      smoother.kill();
+      if (smoother) smoother.kill();
     };
   }, []);
 

@@ -162,7 +162,7 @@ export default function ServicesPage() {
         {/* ============================================ */}
         {/* HERO                                         */}
         {/* ============================================ */}
-        <section className="relative min-h-[50vh] lg:min-h-[60vh] flex items-center bg-transparent overflow-hidden pt-32 pb-8">
+        <section className="relative min-h-[30vh] lg:min-h-[40vh] flex items-center bg-transparent overflow-hidden pt-20 pb-8">
           <div className="absolute top-0 right-0 w-[50vw] h-[50vh] bg-brand-primary/[0.05] blur-[120px] rounded-full pointer-events-none" />
           {/* Subtle grid */}
           <div

@@ -123,9 +123,10 @@ export function Hero() {
       <div className={hideText ? 'opacity-0 pointer-events-none select-none' : ''}>
         <h1
           ref={headlineRef}
-          className={`${playfair.className} text-5xl sm:text-6xl md:text-7xl lg:text-[100px] xl:text-[120px] font-black leading-[0.95] tracking-tight mb-6 md:mb-8 ${isRevealed ? 'text-brand-cream' : 'text-white/10'}`}
+          className={`${playfair.className} text-5xl sm:text-6xl md:text-7xl lg:text-[100px] xl:text-[120px] font-black leading-[1.1] md:leading-[0.95] tracking-tight mb-10 md:mb-8 ${isRevealed ? 'text-brand-cream' : 'text-white/10'}`}
         >
-          Step Into the<br />
+          Step Into the
+          <div className="h-4 md:h-0"></div>
           <span className={`italic ${isRevealed ? 'text-brand-dark' : 'text-white/20'}`}>Spotlight!</span>
         </h1>
         <p className={`text-xl md:text-2xl font-medium leading-relaxed max-w-2xl mx-auto ${isRevealed ? 'text-brand-cream/80' : 'text-white/20'}`}>
@@ -133,6 +134,36 @@ export function Hero() {
         </p>
       </div>
       {children}
+    </div>
+  );
+
+  const Buttons = ({ invisible }: { invisible?: boolean }) => (
+    <div ref={!invisible ? buttonsRef : undefined} className={`flex flex-col sm:flex-row gap-6 justify-center mt-16 md:mt-16 w-full px-6 ${invisible ? 'opacity-0 pointer-events-none select-none' : 'pointer-events-auto'}`}>
+      <Link
+        href="/services"
+        className={`group flex items-center justify-center gap-2 px-8 py-4 bg-brand-cream text-brand-dark font-bold text-base rounded-full shadow-[0_4px_20px_rgba(255,248,244,0.15)] hover:shadow-[0_8px_30px_rgba(255,248,244,0.3)] hover:scale-105 transition-all duration-300 ${invisible ? '' : ''}`}
+      >
+        Our Services
+        <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+      </Link>
+
+      <Link
+        href="/#brand-score"
+        onClick={(e) => {
+          if (invisible) return;
+          e.preventDefault();
+          const smoother = ScrollSmoother.get();
+          if (smoother) {
+            smoother.scrollTo('#brand-score', true, "top top");
+          } else {
+            document.getElementById('brand-score')?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }}
+        className={`group flex items-center justify-center gap-2 px-8 py-4 bg-[#070707]/50 backdrop-blur-md border border-brand-cream/20 text-brand-cream font-bold text-base rounded-full hover:bg-brand-cream hover:text-brand-dark hover:scale-105 transition-all duration-300 ${invisible ? '' : ''}`}
+      >
+        <Sparkles className="w-5 h-5" />
+        Your StndOUT Score
+      </Link>
     </div>
   );
 
@@ -150,8 +181,7 @@ export function Hero() {
       {/* LAYER 1: BASE (Boring / Dark) */}
       <div className="[grid-area:1/1] flex flex-col items-center justify-center pointer-events-none w-full h-full z-0 relative pt-32 md:pt-40 pb-16 md:pb-24">
         <ContentBlock isRevealed={false} headlineRef={headlineBaseRef} wrapperRef={baseContentRef}>
-          {/* Invisible Spacer to match button height */}
-          <div className="opacity-0 pointer-events-none flex flex-wrap gap-4 mt-10 md:mt-16 h-[56px] w-full" />
+          <Buttons invisible={true} />
         </ContentBlock>
       </div>
 
@@ -165,40 +195,14 @@ export function Hero() {
         } as React.CSSProperties}
       >
         <ContentBlock isRevealed={true} headlineRef={headlineRevealRef} wrapperRef={revealContentRef}>
-          {/* Invisible Spacer to match button height */}
-          <div className="opacity-0 pointer-events-none flex flex-wrap gap-4 mt-10 md:mt-16 h-[56px] w-full" />
+          <Buttons invisible={true} />
         </ContentBlock>
       </div>
 
       {/* LAYER 3: INTERACTIVE UI (Buttons) */}
       <div className="[grid-area:1/1] z-20 flex flex-col items-center justify-center pointer-events-none w-full h-full relative pt-32 md:pt-40 pb-16 md:pb-24">
         <ContentBlock isRevealed={false} hideText={true}>
-          <div ref={buttonsRef} className="flex flex-wrap gap-4 justify-center pointer-events-auto px-6 mt-10 md:mt-16 w-full">
-            <Link
-              href="/services"
-              className="group flex items-center justify-center gap-2 px-8 py-4 bg-brand-cream text-brand-dark font-bold text-base rounded-full shadow-[0_4px_20px_rgba(255,248,244,0.15)] hover:shadow-[0_8px_30px_rgba(255,248,244,0.3)] hover:scale-105 transition-all duration-300"
-            >
-              Our Services
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-            </Link>
-
-            <Link
-              href="/#brand-score"
-              onClick={(e) => {
-                e.preventDefault();
-                const smoother = ScrollSmoother.get();
-                if (smoother) {
-                  smoother.scrollTo('#brand-score', true, "top top");
-                } else {
-                  document.getElementById('brand-score')?.scrollIntoView({ behavior: 'smooth' });
-                }
-              }}
-              className="group flex items-center justify-center gap-2 px-8 py-4 bg-[#070707]/50 backdrop-blur-md border border-brand-cream/20 text-brand-cream font-bold text-base rounded-full hover:bg-brand-cream hover:text-brand-dark hover:scale-105 transition-all duration-300"
-            >
-              <Sparkles className="w-5 h-5" />
-              Your StndOUT Score
-            </Link>
-          </div>
+          <Buttons invisible={false} />
         </ContentBlock>
       </div>
     </section>
