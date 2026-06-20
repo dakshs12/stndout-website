@@ -28,7 +28,7 @@ const footerLinks = {
   ],
   resources: [
     { label: 'AI Brand Score', href: '/#brand-score' },
-    { label: 'Blog', href: '/blogs' },
+    // { label: 'Blog', href: '/blogs' },
   ],
 };
 

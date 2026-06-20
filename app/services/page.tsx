@@ -28,11 +28,12 @@ const services = [
     number: '01',
     title: 'Brand Consultancy',
     tagline: 'The blueprint to dominate your market.',
-    desc: 'Expand your reach and unlock new markets with a plan tailored to your goals. From in-depth market research to cutting-edge digital strategies, we transform opportunities into real, measurable success.',
+    desc: 'We help businesses make smarter marketing decisions through audits, positioning, growth planning, strategic partnerships and tailored business advice. Every recommendation is aligned with your business goals, market realities and long-term growth ambitions.',
     color: 'brand-primary',
     bgClass: 'bg-transparent',
     textClass: 'text-brand-dark',
     icon: Globe,
+    image: '/service-consultancy.svg',
     features: [
       { icon: Search, label: 'Brand Auditing', desc: 'A detailed review of your brand, marketing and competitive presence.' },
       { icon: LineChart, label: 'Growth Strategy', desc: 'A clear roadmap to help your business scale with purpose.' },
@@ -48,11 +49,12 @@ const services = [
     number: '02',
     title: 'Brand Development',
     tagline: 'Performance marketing that actually performs.',
-    desc: 'Get real results with strategies built just for you. Whether it\'s SEO, social media ads, or programmatic marketing, we\'ll boost your visibility, skyrocket conversions, and deliver performance you can count on.',
+    desc: 'From launch strategies and market research to identity systems, packaging and brand assets, we build brands with clarity, consistency and purpose. Creating strong foundations that support recognition, trust and future growth.',
     color: 'brand-dark',
     bgClass: 'bg-transparent',
     textClass: 'text-brand-dark',
     icon: Megaphone,
+    image: '/service-development.svg',
     features: [
       { icon: Globe, label: 'Brand Launch Strategy', desc: 'A structured plan to introduce your brand with impact.' },
       { icon: Megaphone, label: 'Product Launch', desc: 'Go-to-market campaigns designed to generate attention and demand.' },
@@ -69,11 +71,12 @@ const services = [
     number: '03',
     title: 'Digital & Technical Growth',
     tagline: 'Words that work. Content that converts.',
-    desc: 'Grab your audience\'s attention with content that gets results. Whether it\'s persuasive copy, tailored emails, or scroll-stopping UGC videos, we craft authentic messages that keep your customers coming back.',
+    desc: 'We create websites, content, campaigns and digital experiences that help brands connect with the right audience and support long-term growth. Combining creativity, technology and performance to deliver measurable business outcomes.',
     color: 'brand-cream',
     bgClass: 'bg-transparent',
     textClass: 'text-brand-dark',
     icon: PenTool,
+    image: '/service-digital.svg',
     features: [
       { icon: Monitor, label: 'Website Development', desc: 'High-converting websites designed for both credibility and performance.' },
       { icon: Smartphone, label: 'Social Media Marketing', desc: 'Content and campaigns that grow visibility and engagement.' },
@@ -91,11 +94,12 @@ const services = [
     number: '04',
     title: 'Events & Experiences',
     tagline: 'Your digital presence, engineered to perfection.',
-    desc: 'Boost your digital presence and stay ahead of the competition with powerful tools and responsive web design. Measure, optimize, and scale effortlessly to drive massive growth.',
+    desc: 'We plan and execute trade shows, exhibitions and branded experiences that create meaningful interactions before, during and after the event. Ensuring every touchpoint strengthens your brand and leaves a lasting impression.',
     color: 'brand-primary',
     bgClass: 'bg-transparent',
     textClass: 'text-brand-dark',
     icon: Code,
+    image: '/service-events.svg',
     features: [
       { icon: Users, label: 'Trade Shows', desc: 'End-to-end planning and execution for industry events.' },
       { icon: Layout, label: 'Exhibitions Booth Layout', desc: 'Branded spaces designed to attract and engage visitors.' },
@@ -158,7 +162,7 @@ export default function ServicesPage() {
         {/* ============================================ */}
         {/* HERO                                         */}
         {/* ============================================ */}
-        <section className="relative min-h-[70vh] flex items-center bg-transparent overflow-hidden pt-32 pb-16">
+        <section className="relative min-h-[50vh] lg:min-h-[60vh] flex items-center bg-transparent overflow-hidden pt-32 pb-8">
           <div className="absolute top-0 right-0 w-[50vw] h-[50vh] bg-brand-primary/[0.05] blur-[120px] rounded-full pointer-events-none" />
           {/* Subtle grid */}
           <div
@@ -215,62 +219,38 @@ export default function ServicesPage() {
             <section
               key={svc.id}
               id={svc.id}
-              className={`service-section ${svc.bgClass} py-24 md:py-32 scroll-mt-20`}
+              className={`service-section ${svc.bgClass} py-8 md:py-12 scroll-mt-20 overflow-hidden`}
             >
               <div className="max-w-[1600px] mx-auto px-6 md:px-12">
-                {/* Service header */}
-                <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-16 md:mb-20">
-                  <div className="lg:w-7/12">
-                    <div className="svc-reveal flex items-center gap-4 mb-6">
-                      <span className={`${playfair.className} text-6xl md:text-8xl font-black ${svc.textClass} opacity-20`}>
-                        {svc.number}
-                      </span>
-                      <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center">
-                        <Icon className={`w-6 h-6 ${svc.textClass} opacity-70`} />
-                      </div>
-                    </div>
-                    <h2 className={`svc-reveal ${playfair.className} text-4xl md:text-6xl lg:text-7xl font-black ${svc.textClass} leading-[0.95] tracking-tight mb-4`}>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
+                  
+                  {/* Content Column */}
+                  <div className={`flex flex-col justify-center ${idx % 2 === 0 ? 'order-2 lg:order-1' : 'order-2 lg:order-2'}`}>
+                    <h2 className={`svc-reveal ${playfair.className} text-4xl md:text-6xl lg:text-7xl font-black ${svc.textClass} leading-[0.95] tracking-tight mb-8`}>
                       {svc.title}
                     </h2>
-                    <p className={`svc-reveal text-xl md:text-2xl font-light ${svc.textClass} opacity-60`}>
-                      {svc.tagline}
-                    </p>
-                  </div>
-                  <div className="lg:w-5/12">
-                    <p className={`svc-reveal text-lg leading-relaxed ${svc.textClass} opacity-50 max-w-lg`}>
+                    <p className={`svc-reveal text-lg md:text-xl leading-relaxed ${svc.textClass} opacity-70`}>
                       {svc.desc}
                     </p>
                   </div>
+
+                  {/* Illustration Column */}
+                  <div className={`relative aspect-square md:aspect-[4/3] w-full max-w-[600px] mx-auto ${idx % 2 === 0 ? 'order-1 lg:order-2' : 'order-1 lg:order-1'}`}>
+                    <div className="svc-reveal absolute inset-0 flex items-center justify-center">
+                      <img
+                        src={svc.image}
+                        alt={svc.title}
+                        className={`w-full h-full object-contain ${
+                          svc.number === '01' ? 'scale-[1.05] origin-center' :
+                          svc.number === '02' ? 'scale-100 origin-center' :
+                          svc.number === '03' ? 'scale-[1.25] origin-center' :
+                          svc.number === '04' ? 'scale-[1.2] origin-bottom translate-y-[2%]' : ''
+                        }`}
+                      />
+                    </div>
+                  </div>
+
                 </div>
-
-                {/* Feature cards */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-16">
-                  {svc.features.map((feature) => {
-                    const FeatureIcon = feature.icon;
-                    return (
-                      <div
-                        key={feature.label}
-                        className={`feature-card group ${cardBg} backdrop-blur-xl border rounded-[1.5rem] p-8 transition-all duration-300 cursor-default`}
-                      >
-                        <div className="flex items-start gap-5">
-                          <div className="w-12 h-12 rounded-xl bg-brand-primary/10 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
-                            <FeatureIcon className="w-5 h-5 text-brand-primary" />
-                          </div>
-                          <div>
-                            <h3 className={`text-lg font-bold ${cardText} mb-2`}>
-                              {feature.label}
-                            </h3>
-                            <p className={`text-sm leading-relaxed ${cardSubtext}`}>
-                              {feature.desc}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-
-
               </div>
             </section>
           );

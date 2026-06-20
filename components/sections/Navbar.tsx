@@ -131,7 +131,7 @@ export function Navbar() {
     <>
       <div 
         ref={navRef} 
-        className="fixed top-4 md:top-8 left-1/2 -translate-x-1/2 w-[95%] max-w-[1200px] z-[100]"
+        className="fixed top-4 md:top-8 left-1/2 -translate-x-1/2 w-[95%] max-w-[1000px] z-[100]"
         style={{
           '--nav-bg': isDarkPage ? 'rgba(255, 255, 255, 0.05)' : 'rgba(7, 7, 7, 0.05)',
           '--nav-border': isDarkPage ? 'rgba(255, 255, 255, 0.1)' : 'rgba(7, 7, 7, 0.2)',
@@ -142,7 +142,7 @@ export function Navbar() {
           '--btn-shadow-color': isDarkPage ? 'rgba(255, 248, 244, 0.3)' : 'rgba(7, 7, 7, 0.2)',
         } as React.CSSProperties}
       >
-        <header className="w-full backdrop-blur-xl border shadow-[0_8px_32px_rgba(0,0,0,0.3)] rounded-2xl md:rounded-full px-4 md:px-8 py-2 md:py-3 flex items-center justify-between bg-[var(--nav-bg)] border-[color:var(--nav-border)]">
+        <header className="relative w-full backdrop-blur-xl border shadow-[0_8px_32px_rgba(0,0,0,0.3)] rounded-2xl md:rounded-full px-4 md:px-8 py-2 md:py-3 flex items-center justify-between bg-[var(--nav-bg)] border-[color:var(--nav-border)]">
           
           <Link href="/" onClick={(e) => handleSmoothScroll(e, '/')} className="relative h-10 w-10 md:h-12 md:w-12 z-50 flex-shrink-0">
             <Image 
@@ -155,11 +155,11 @@ export function Navbar() {
             />
           </Link>
 
-          <nav className="hidden md:flex gap-8 lg:gap-12 text-sm font-semibold tracking-widest uppercase text-[color:var(--nav-text)]">
+          <nav className="hidden md:flex gap-8 lg:gap-12 text-sm font-semibold tracking-widest uppercase text-[color:var(--nav-text)] absolute left-1/2 -translate-x-1/2">
             <Link href="/" onClick={(e) => handleSmoothScroll(e, '/')} className={`transition-opacity duration-300 ${pathname === '/' ? 'opacity-100' : 'opacity-60 hover:opacity-100'}`}>Home</Link>
             <Link href="/about" onClick={(e) => handleSmoothScroll(e, '/about')} className={`transition-opacity duration-300 ${pathname === '/about' ? 'opacity-100' : 'opacity-60 hover:opacity-100'}`}>About Us</Link>
             <Link href="/services" onClick={(e) => handleSmoothScroll(e, '/services')} className={`transition-opacity duration-300 ${pathname === '/services' ? 'opacity-100' : 'opacity-60 hover:opacity-100'}`}>Services</Link>
-            <Link href="/blogs" onClick={(e) => handleSmoothScroll(e, '/blogs')} className={`transition-opacity duration-300 ${pathname === '/blogs' ? 'opacity-100' : 'opacity-60 hover:opacity-100'}`}>Blogs</Link>
+            {/* <Link href="/blogs" onClick={(e) => handleSmoothScroll(e, '/blogs')} className={`transition-opacity duration-300 ${pathname === '/blogs' ? 'opacity-100' : 'opacity-60 hover:opacity-100'}`}>Blogs</Link> */}
           </nav>
 
           <div className="hidden md:flex items-center gap-4">
@@ -189,7 +189,7 @@ export function Navbar() {
           <Link href="/" onClick={(e) => handleSmoothScroll(e, '/')}>Home</Link>
           <Link href="/about" onClick={(e) => handleSmoothScroll(e, '/about')}>About Us</Link>
           <Link href="/services" onClick={(e) => handleSmoothScroll(e, '/services')}>Services</Link>
-          <Link href="/blogs" onClick={(e) => handleSmoothScroll(e, '/blogs')}>Blogs</Link>
+          {/* <Link href="/blogs" onClick={(e) => handleSmoothScroll(e, '/blogs')}>Blogs</Link> */}
         </nav>
 
         <div className="flex flex-col items-center gap-4 mt-12">
