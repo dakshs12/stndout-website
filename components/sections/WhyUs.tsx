@@ -1,11 +1,11 @@
 "use client";
 
-import { useRef } from 'react';
+import { useState, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { Playfair_Display } from 'next/font/google';
-import { Target, Layers, Database, LineChart } from 'lucide-react';
+import { Target, Layers, Database, LineChart, MousePointerClick } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -46,6 +46,42 @@ const reasons = [
   },
 ];
 
+function MobileFlipCard({ reason }: { reason: any }) {
+  const [isFlipped, setIsFlipped] = useState(false);
+  const Icon = reason.icon;
+
+  return (
+    <div 
+      className="lg:hidden relative w-full aspect-square cursor-pointer [perspective:1000px]"
+      onClick={() => setIsFlipped(!isFlipped)}
+    >
+      <div 
+        className={`w-full h-full relative transition-transform duration-500 [transform-style:preserve-3d] ${isFlipped ? '[transform:rotateY(180deg)]' : ''}`}
+      >
+        {/* FRONT */}
+        <div className="absolute inset-0 [backface-visibility:hidden] bg-white border border-brand-primary/10 rounded-3xl p-4 flex flex-col items-center justify-center text-center shadow-sm">
+          <div className={`w-12 h-12 rounded-2xl ${reason.bg} flex items-center justify-center mb-3`}>
+            <Icon className={`w-6 h-6 ${reason.color}`} />
+          </div>
+          <h3 className="text-[13px] sm:text-sm font-bold text-brand-dark leading-tight px-1">
+            {reason.title}
+          </h3>
+          <div className="absolute bottom-3 right-3 opacity-30 animate-bounce">
+            <MousePointerClick className="w-4 h-4 text-brand-dark" />
+          </div>
+        </div>
+
+        {/* BACK */}
+        <div className="absolute inset-0 [backface-visibility:hidden] [transform:rotateY(180deg)] bg-brand-primary text-white rounded-3xl p-4 sm:p-5 flex flex-col items-center justify-center text-center shadow-lg">
+          <p className="text-[13px] sm:text-sm leading-relaxed text-brand-cream/90 font-medium">
+            {reason.desc}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function WhyUs() {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -77,21 +113,23 @@ export function WhyUs() {
 
   return (
     <section ref={containerRef} className="py-24 md:py-32 bg-brand-cream relative overflow-hidden">
-      <div className="w-full max-w-[1600px] mx-auto px-6 md:px-12 relative z-10">
+      <div className="w-full max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-16 md:mb-24">
-
           <h2 className={`why-reveal ${playfair.className} text-4xl md:text-6xl font-black text-brand-dark leading-[1.1]`}>
             Why Brands <span className="italic text-brand-primary">Work With Us</span>
           </h2>
         </div>
 
-        <div className="why-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Changed grid-cols-1 to grid-cols-2 for mobile */}
+        <div className="why-grid grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
           {reasons.map((reason, idx) => {
             const Icon = reason.icon;
             return (
               <div key={idx} className="why-card-wrapper h-full">
+                
+                {/* DESKTOP CARD (Original Layout) */}
                 <div
-                  className="why-card h-full group bg-white border border-brand-primary/10 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 rounded-[2rem] p-8 md:p-10 flex flex-col items-center text-center"
+                  className="hidden lg:flex h-full group bg-white border border-brand-primary/10 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 rounded-[2rem] p-8 md:p-10 flex-col items-center text-center"
                 >
                   <div className={`w-14 h-14 rounded-2xl ${reason.bg} flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-300`}>
                     <Icon className={`w-6 h-6 ${reason.color}`} />
@@ -103,6 +141,10 @@ export function WhyUs() {
                     {reason.desc}
                   </p>
                 </div>
+
+                {/* MOBILE CARD (Tap to Flip) */}
+                <MobileFlipCard reason={reason} />
+
               </div>
             );
           })}

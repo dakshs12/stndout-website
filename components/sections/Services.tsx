@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
@@ -47,9 +47,57 @@ const services = [
 
 export function Services() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isInView, setIsInView] = useState(false);
+  const [hasSeen, setHasSeen] = useState(false);
+  const [isAborted, setIsAborted] = useState(false);
   const containerRef = useRef<HTMLElement>(null);
 
-  // GSAP logic handles the crossfades smoothly when activeIndex changes
+  // Check if mobile for auto-play logic
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.matchMedia("(max-width: 1024px)").matches);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  // Intersection Observer to only play when visible
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting);
+      },
+      // Trigger when 30% visible, or if the section is taller than viewport, when a significant chunk is visible.
+      // Negative rootMargin ensures it only triggers when it's well within the screen, not just touching the edge.
+      { threshold: 0, rootMargin: "-20% 0px -20% 0px" } 
+    );
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  // Permanently abort if user scrolls away after seeing it
+  useEffect(() => {
+    if (isInView) {
+      setHasSeen(true);
+    } else if (hasSeen) {
+      setIsAborted(true);
+    }
+  }, [isInView, hasSeen]);
+
+  // Auto-play timer for mobile (5 seconds, stops after last item)
+  useEffect(() => {
+    if (!isMobile || !isInView || isAborted) return;
+    // Stop the timer if we are already on the last heading
+    if (activeIndex === services.length - 1) return;
+    
+    const timer = setInterval(() => {
+      setActiveIndex((prev) => prev + 1);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [isMobile, isInView, isAborted, activeIndex]);
+
+  // GSAP logic handles the crossfades smoothly when activeIndex changes (Desktop)
   useGSAP(() => {
     const leftImages = gsap.utils.toArray('.service-image');
     const leftContents = gsap.utils.toArray('.service-content');
@@ -81,12 +129,11 @@ export function Services() {
     <section
       ref={containerRef}
       id="services"
-      // Changed to min-h-[100svh] and added padding so content doesn't get clipped on smaller laptop screens
       className="relative min-h-[100svh] w-full bg-brand-primary text-white flex flex-col justify-center py-24 md:py-32 selection:bg-brand-cream selection:text-brand-primary"
     >
       <div className="w-full max-w-[1500px] mx-auto px-6 md:px-12 flex flex-col gap-6 lg:gap-10">
 
-        {/* Section Heading - Playfair Display (Removed negative margins) */}
+        {/* Section Heading */}
         <h3 className={`${playfair.className} text-6xl md:text-7xl lg:text-[90px] xl:text-[110px] font-black text-brand-cream tracking-tight`}>
           What we do.
         </h3>
@@ -94,12 +141,11 @@ export function Services() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center mt-6 lg:mt-12">
 
           {/* ======================================= */}
-          {/* LEFT COLUMN - Image and Subpoints       */}
+          {/* LEFT COLUMN - Desktop Only              */}
           {/* ======================================= */}
-          <div className="lg:col-span-5 flex flex-col justify-center order-2 lg:order-1">
+          <div className="hidden lg:flex lg:col-span-5 flex-col justify-center order-2 lg:order-1">
             <div className="flex flex-col justify-center w-full max-w-[500px] mx-auto lg:mx-0">
-
-              {/* Images Stack - Removed background box and aligned left */}
+              {/* Images Stack */}
               <div className="relative w-full max-w-[380px] aspect-[4/3] lg:aspect-[16/10] mb-10">
                 {services.map((svc, i) => (
                   <div
@@ -141,8 +187,6 @@ export function Services() {
                         </li>
                       ))}
                     </ul>
-
-                    {/* Redirect CTA */}
                     <Link
                       href={`/services#${svc.id === '01' ? 'strategy' : svc.id === '02' ? 'media' : svc.id === '03' ? 'content' : 'technical'}`}
                       className="group mt-2 inline-flex items-center gap-2 text-[#D0FF27] font-bold tracking-wide hover:text-white transition-colors text-sm md:text-base uppercase"
@@ -157,27 +201,58 @@ export function Services() {
           </div>
 
           {/* ======================================= */}
-          {/* RIGHT COLUMN - Hover List (All Visible) */}
+          {/* RIGHT COLUMN - Headings & Mobile Content*/}
           {/* ======================================= */}
           <div className="col-span-1 lg:col-span-7 flex flex-col w-full order-1 lg:order-2">
             <div className="border-t border-white/10 w-full"></div>
             {services.map((svc, index) => (
               <div
                 key={`heading-${svc.id}`}
-                // Reduced vertical padding to keep the list compact
-                className={`group flex flex-col w-full cursor-pointer transition-all duration-500 border-b border-white/10 py-5 lg:py-8 ${activeIndex === index ? 'opacity-100' : 'opacity-30 hover:opacity-70'}`}
-                onMouseEnter={() => setActiveIndex(index)}
-                onClick={() => setActiveIndex(index)}
+                className="group flex flex-col w-full border-b border-white/10"
               >
-                {/* Smaller font sizes so they all fit in one frame without scrolling */}
-                <h2
-                  className={`${quicksand.className} text-3xl sm:text-4xl md:text-5xl lg:text-[50px] xl:text-[60px] font-bold leading-[0.9] tracking-tight flex items-center gap-2 md:gap-4 transition-transform duration-500 origin-left will-change-transform transform-gpu ${activeIndex === index ? 'scale-100 lg:translate-x-4' : 'scale-100 translate-x-0'}`}
+                {/* Heading Toggle */}
+                <div 
+                  className={`flex flex-col w-full cursor-pointer transition-all duration-500 py-5 lg:py-8 ${activeIndex === index ? 'opacity-100' : 'opacity-30 hover:opacity-70'}`}
+                  onMouseEnter={() => !isMobile && setActiveIndex(index)}
+                  onClick={() => setActiveIndex(index)}
                 >
-                  <span className="flex-1">{svc.title}</span>
-                  <span className={`font-sans text-xs md:text-sm lg:text-lg font-bold whitespace-nowrap transition-colors duration-500 will-change-transform transform-gpu ${activeIndex === index ? 'text-[#D0FF27]' : 'text-white/50'}`}>
-                    {`{ ${svc.id} }`}
-                  </span>
-                </h2>
+                  <h2
+                    className={`${quicksand.className} text-3xl sm:text-4xl md:text-5xl lg:text-[50px] xl:text-[60px] font-bold leading-[0.9] tracking-tight flex items-center gap-2 md:gap-4 transition-transform duration-500 origin-left will-change-transform transform-gpu ${activeIndex === index ? 'scale-100 lg:translate-x-4' : 'scale-100 translate-x-0'}`}
+                  >
+                    <span className="flex-1">{svc.title}</span>
+                    <span className={`font-sans text-xs md:text-sm lg:text-lg font-bold whitespace-nowrap transition-colors duration-500 will-change-transform transform-gpu ${activeIndex === index ? 'text-[#D0FF27]' : 'text-white/50'}`}>
+                      {`{ ${svc.id} }`}
+                    </span>
+                  </h2>
+                </div>
+
+                {/* Mobile Accordion Content */}
+                <div 
+                  className={`lg:hidden overflow-hidden transition-all duration-500 ease-in-out ${activeIndex === index ? 'max-h-[800px] opacity-100 pb-6' : 'max-h-0 opacity-0'}`}
+                >
+                  <div className="flex flex-col items-start gap-4">
+                    <img 
+                      src={svc.image} 
+                      alt={svc.title} 
+                      className="w-full max-w-[280px] h-[180px] object-contain object-left"
+                    />
+                    <ul className="flex flex-col gap-1.5 mt-2">
+                      {svc.subpoints.map(sp => (
+                        <li key={sp} className="text-white text-base font-medium tracking-wide flex items-center gap-3">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#D0FF27] shadow-[0_0_10px_rgba(208,255,39,0.5)]"></span>
+                          {sp}
+                        </li>
+                      ))}
+                    </ul>
+                    <Link
+                      href={`/services#${svc.id === '01' ? 'strategy' : svc.id === '02' ? 'media' : svc.id === '03' ? 'content' : 'technical'}`}
+                      className="group mt-2 inline-flex items-center gap-2 text-[#D0FF27] font-bold tracking-wide hover:text-white transition-colors text-sm uppercase"
+                    >
+                      View Details
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </Link>
+                  </div>
+                </div>
               </div>
             ))}
           </div>

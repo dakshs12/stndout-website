@@ -126,7 +126,7 @@ export function Hero() {
           className={`${playfair.className} text-5xl sm:text-6xl md:text-7xl lg:text-[100px] xl:text-[120px] font-black leading-[1.1] md:leading-[0.95] tracking-tight mb-10 md:mb-8 ${isRevealed ? 'text-brand-cream' : 'text-white/10'}`}
         >
           Step Into the
-          <div className="h-4 md:h-0"></div>
+          <span className="block h-4 md:h-0"></span>
           <span className={`italic ${isRevealed ? 'text-brand-dark' : 'text-white/20'}`}>Spotlight!</span>
         </h1>
         <p className={`text-xl md:text-2xl font-medium leading-relaxed max-w-2xl mx-auto ${isRevealed ? 'text-brand-cream/80' : 'text-white/20'}`}>
