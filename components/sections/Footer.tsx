@@ -20,12 +20,6 @@ const footerLinks = {
     { label: 'Services', href: '/services' },
     { label: 'Contact', href: '/contact' },
   ],
-  services: [
-    { label: 'Brand Consultancy', href: '/services#strategy' },
-    { label: 'Brand Development', href: '/services#media' },
-    { label: 'Digital & Technical Growth', href: '/services#content' },
-    { label: 'Events & Experiences', href: '/services#technical' },
-  ],
   resources: [
     { label: 'AI Brand Score', href: '/#brand-score' },
     // { label: 'Blog', href: '/blogs' },
@@ -96,7 +90,7 @@ export function Footer() {
 
       {/* Footer columns */}
       <div className="max-w-[1600px] mx-auto px-6 md:px-12 py-8 md:py-12">
-        <div className="grid grid-cols-2 md:grid-cols-12 gap-12 md:gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-10 gap-12 md:gap-8">
           {/* Brand column */}
           <div className="col-span-2 md:col-span-4 footer-reveal">
             <div className="relative w-12 h-12 mb-6">
@@ -133,25 +127,6 @@ export function Footer() {
             </h4>
             <ul className="space-y-3">
               {footerLinks.company.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-brand-cream/60 hover:text-brand-primary transition-colors duration-300"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Services links */}
-          <div className="col-span-1 md:col-span-2 footer-reveal">
-            <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-brand-cream/40 mb-6">
-              Services
-            </h4>
-            <ul className="space-y-3">
-              {footerLinks.services.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}

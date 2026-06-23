@@ -63,9 +63,12 @@ function ContactForm({ playfair }: { playfair: any }) {
       const data = await response.json();
 
       if (data.success) {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
         setSubmitted(true);
         setTimeout(() => {
+          const target = document.getElementById('form-scroll-target');
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
           gsap.fromTo('.success-message',
             { opacity: 0, scale: 0.9, y: 20 },
             { opacity: 1, scale: 1, y: 0, duration: 0.6, ease: 'back.out(1.5)' }
@@ -79,7 +82,7 @@ function ContactForm({ playfair }: { playfair: any }) {
   };
 
   return (
-    <div className="lg:col-span-7">
+    <div className="lg:col-span-7" id="form-scroll-target">
       {submitted ? (
         <div className="success-message bg-white/95 border border-white rounded-[2rem] p-12 md:p-16 shadow-[0_20px_60px_rgba(0,0,0,0.05)] text-center">
           <div className="text-6xl mb-6">🎉</div>
@@ -206,29 +209,29 @@ export default function ContactPage() {
       delay: 0.6,
     });
 
-    // Form container scroll reveal
+    // Form container reveal (immediate, not scroll-dependent so it's visible on load)
     gsap.fromTo('.form-container',
       { opacity: 0, y: 80 },
       {
         opacity: 1,
         y: 0,
         duration: 1,
+        delay: 0.4,
         ease: 'power3.out',
-        scrollTrigger: {
-          trigger: '.form-container',
-          start: 'top 85%',
-        }
       }
     );
 
-    // Pin the left column since CSS 'sticky' fails inside ScrollSmoother's transform wrapper
-    ScrollTrigger.create({
-      trigger: '.sticky-column',
-      start: 'top 150px',
-      endTrigger: '.contact-grid',
-      end: 'bottom bottom',
-      pin: true,
-      pinSpacing: false,
+    // Pin the left column ONLY on desktop
+    let mm = gsap.matchMedia();
+    mm.add("(min-width: 1024px)", () => {
+      ScrollTrigger.create({
+        trigger: '.sticky-column',
+        start: 'top 150px',
+        endTrigger: '.contact-grid',
+        end: 'bottom bottom',
+        pin: true,
+        pinSpacing: false,
+      });
     });
   }, { scope: pageRef, dependencies: [] });
   return (
@@ -236,7 +239,7 @@ export default function ContactPage() {
       <main className="min-h-screen bg-brand-cream selection:bg-brand-primary selection:text-white">
 
         {/* Important: bg-brand-cream on section for chameleon navbar */}
-        <section className="relative pt-32 lg:pt-48 pb-24 min-h-[120vh] flex items-start bg-brand-cream">
+        <section className="relative pt-24 lg:pt-48 pb-24 min-h-[120vh] flex items-start bg-brand-cream">
 
           {/* Subtle Background Accents */}
           <div className="absolute top-0 right-0 w-[50vw] h-[50vw] bg-brand-primary/[0.04] blur-[150px] rounded-full pointer-events-none" />
@@ -252,7 +255,7 @@ export default function ContactPage() {
           />
 
           <div className="w-full max-w-[1600px] mx-auto px-6 md:px-12 lg:px-16 xl:px-24 relative z-10">
-            <div className="contact-grid grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-12">
+            <div className="contact-grid grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
 
               {/* Left Column: Editorial Copy + Contact Info */}
               <div className="sticky-column lg:col-span-5 flex flex-col justify-start">
@@ -263,7 +266,7 @@ export default function ContactPage() {
                     massive
                   </h1>
                 </div>
-                <p className="contact-reveal text-xl text-brand-dark/70 max-w-md font-medium leading-relaxed mb-12">
+                <p className="contact-reveal text-xl text-brand-dark/70 max-w-md font-medium leading-relaxed mb-6 lg:mb-12">
                   No boring sales pitches. <br />
                   Just a conversation about what it takes to make your brand &quot;Stand Out&quot;.
                 </p>
