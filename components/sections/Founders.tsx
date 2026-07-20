@@ -1,0 +1,156 @@
+'use client';
+
+import { useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useGSAP } from '@gsap/react';
+import { Playfair_Display } from 'next/font/google';
+
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  weight: ['700', '900'],
+  style: ['italic', 'normal'],
+});
+
+gsap.registerPlugin(ScrollTrigger, useGSAP);
+
+const foundersData = [
+  {
+    name: 'Khushi Sethi',
+    role: 'Director | Strategy & Growth',
+    bio: 'After working across hospitality and pharmaceutical marketing in the UK, Khushi came back to India with one big takeaway: great marketing always starts with understanding the business, not just creating content. Today, she\'s usually buried in strategy decks or asking "But what\'s the objective?" for the tenth time.',
+    rotation: -4,
+    align: 'left',
+  },
+  {
+    name: 'Pranita Pareek',
+    role: 'Director | Creative & Brand',
+    bio: 'With a background in marketing consultancies and an MBA in Advertising & Public Relations, Pranita believes brands are built through storytelling, and experiences that are remembered long before they\'re fully understood. She has an eye for details most people don\'t even notice. You\'ll likely find her curating moodboards and exploring visual inspiration.',
+    rotation: 5,
+    align: 'right',
+  }
+];
+
+export function Founders() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    if (!containerRef.current) return;
+
+    // Quirky parallax and rotation reveals
+    const rows = containerRef.current.querySelectorAll('.founder-row');
+    
+    rows.forEach((row, i) => {
+      const isLeft = i % 2 === 0;
+      
+      const imageWrapper = row.querySelector('.founder-image-wrapper');
+      const textBlock = row.querySelector('.founder-text-block');
+
+      // Parallax text
+      gsap.fromTo(textBlock, 
+        { y: 80, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 1,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: row,
+            start: 'top 80%',
+          }
+        }
+      );
+
+      // Spin in the image like slapping a polaroid down
+      gsap.fromTo(imageWrapper,
+        { 
+          rotation: isLeft ? -25 : 25, 
+          scale: 0.6,
+          opacity: 0,
+          x: isLeft ? -100 : 100
+        },
+        {
+          rotation: isLeft ? -4 : 5,
+          scale: 1,
+          opacity: 1,
+          x: 0,
+          duration: 1.4,
+          ease: 'elastic.out(1, 0.7)',
+          scrollTrigger: {
+            trigger: row,
+            start: 'top 85%',
+          }
+        }
+      );
+    });
+
+  }, { scope: containerRef });
+
+  return (
+    <section ref={containerRef} className="bg-brand-cream pb-24 md:pb-32 pt-8 md:pt-12 overflow-hidden relative">
+      
+      <div className="max-w-[1400px] mx-auto px-6 md:px-12 relative z-10">
+        
+        {/* Section Header */}
+        <div className="text-center mb-24 md:mb-32">
+          <h2 className={`${playfair.className} text-5xl md:text-7xl font-black text-brand-dark leading-tight`}>
+            The people behind <span className="italic text-brand-primary">StndOut</span>
+          </h2>
+        </div>
+
+        {/* Founders Zig-Zag */}
+        <div className="flex flex-col gap-24 md:gap-40">
+          {foundersData.map((founder, idx) => (
+            <div 
+              key={idx} 
+              className={`founder-row flex flex-col md:flex-row items-center gap-12 lg:gap-24 ${founder.align === 'right' ? 'md:flex-row-reverse' : ''}`}
+            >
+              
+              {/* Image Block */}
+              <div className="w-full md:w-1/2 flex justify-center relative">
+                {/* Decorative blob behind image */}
+                <div className={`absolute inset-0 bg-brand-primary/10 rounded-full blur-[80px] -z-10 transform scale-125`}></div>
+                
+                <div 
+                  className="founder-image-wrapper relative w-full max-w-[360px] aspect-[4/5] bg-[#fafafa] p-4 pb-16 md:p-5 md:pb-20 shadow-[0_20px_50px_rgba(0,0,0,0.1)] rounded-sm border border-brand-dark/5"
+                >
+                  <div className="w-full h-full bg-brand-cream border-2 border-dashed border-brand-primary/20 flex flex-col items-center justify-center overflow-hidden group cursor-crosshair relative">
+                    <span className={`${playfair.className} text-[120px] text-brand-primary/15 font-black group-hover:scale-125 group-hover:rotate-6 transition-all duration-700`}>
+                      {founder.name.charAt(0)}
+                    </span>
+                    <span className="absolute bottom-4 font-mono text-brand-primary/40 text-xs uppercase tracking-widest">Sticker Space</span>
+                  </div>
+                  
+                  {/* Quirky Tape/Pin */}
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-8 bg-brand-dark/5 backdrop-blur-md rotate-2 border border-white/40 shadow-sm"></div>
+                </div>
+              </div>
+
+              {/* Text Block */}
+              <div className="founder-text-block w-full md:w-1/2 text-center md:text-left relative">
+                {/* Decorative Quote Mark */}
+                <span className={`${playfair.className} absolute -top-16 md:-top-20 -left-4 md:-left-8 text-[120px] md:text-[160px] text-brand-primary/10 leading-none select-none`}>
+                  &ldquo;
+                </span>
+                
+                <h3 className={`${playfair.className} text-4xl md:text-6xl font-black text-brand-dark mb-5 relative z-10`}>
+                  {founder.name}
+                </h3>
+                
+                <div className="inline-block px-4 py-2 bg-brand-primary text-white text-xs md:text-sm font-bold tracking-widest uppercase mb-8 shadow-xl shadow-brand-primary/20">
+                  {founder.role}
+                </div>
+                
+                <p className="text-brand-dark/80 text-lg md:text-xl font-medium leading-relaxed relative z-10">
+                  {founder.bio}
+                </p>
+              </div>
+
+            </div>
+          ))}
+        </div>
+
+      </div>
+    </section>
+  );
+}

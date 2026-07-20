@@ -7,6 +7,7 @@ import { useGSAP } from '@gsap/react';
 import { Playfair_Display } from 'next/font/google';
 import { Footer } from '@/components/sections/Footer';
 import { Process } from '@/components/sections/Process';
+import { Founders } from '@/components/sections/Founders';
 import Link from 'next/link';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -62,12 +63,12 @@ export default function AboutPage() {
 
   return (
     <div ref={pageRef}>
-      <main className="min-h-screen selection:bg-brand-primary selection:text-white">
+      <main className="min-h-screen bg-brand-cream selection:bg-brand-primary selection:text-white overflow-hidden">
 
         {/* ============================================ */}
         {/* HERO: Brand Manifesto                        */}
         {/* ============================================ */}
-        <section className="relative min-h-[80vh] flex items-center bg-transparent overflow-hidden pt-32 pb-20">
+        <section className="relative min-h-[70vh] flex items-center bg-transparent pt-32 pb-10">
           {/* Ambient background */}
           <div className="absolute top-0 right-0 w-[60vw] h-[60vh] bg-brand-primary/10 blur-[150px] rounded-full pointer-events-none" />
           <div className="absolute bottom-0 left-0 w-[40vw] h-[40vh] bg-brand-cream/5 blur-[120px] rounded-full pointer-events-none" />
@@ -79,17 +80,11 @@ export default function AboutPage() {
                 <span className="italic text-brand-primary">mediocre marketing</span>{' '}
                 shouldn&apos;t.
               </h1>
-              <p className="about-reveal text-brand-dark/70 text-xl md:text-2xl font-light leading-relaxed max-w-2xl">
-                StndOut was born from a simple observation: many great businesses struggle to get the attention they deserve. By combining strategy, creativity and execution, we help brands grow with purpose, not guesswork.
-              </p>
             </div>
           </div>
         </section>
 
-        {/* ============================================ */}
-        {/* MISSION & VISION                             */}
-        {/* ============================================ */}
-        <section className="bg-brand-cream py-24 md:py-32">
+        <section className="bg-transparent pb-12 md:pb-16 pt-8">
           <div className="max-w-[1600px] mx-auto px-6 md:px-12">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
               {/* Mission */}
@@ -128,7 +123,10 @@ export default function AboutPage() {
         {/* ============================================ */}
         <Process />
 
-
+        {/* ============================================ */}
+        {/* OUR FOUNDERS                                 */}
+        {/* ============================================ */}
+        <Founders />
 
       </main>
 

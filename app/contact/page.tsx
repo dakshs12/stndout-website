@@ -65,10 +65,20 @@ function ContactForm({ playfair }: { playfair: any }) {
       if (data.success) {
         setSubmitted(true);
         setTimeout(() => {
-          const target = document.getElementById('form-scroll-target');
-          if (target) {
-            target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          // Force GSAP to recalculate page height since the form disappeared
+          ScrollTrigger.refresh();
+
+          // On desktop, scroll to top so the success message is perfectly in view next to the heading
+          if (window.innerWidth >= 1024) {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          } else {
+            // On mobile, scroll the success message box to the center of the screen
+            const target = document.getElementById('form-scroll-target');
+            if (target) {
+              target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
           }
+
           gsap.fromTo('.success-message',
             { opacity: 0, scale: 0.9, y: 20 },
             { opacity: 1, scale: 1, y: 0, duration: 0.6, ease: 'back.out(1.5)' }

@@ -70,7 +70,7 @@ export function Process() {
 
       ScrollTrigger.create({
         trigger: containerRef.current,
-        start: "top top",
+        start: "center center",
         end: () => `+=${scrollRef.current!.scrollWidth}`,
         pin: true,
         animation: tween,
@@ -83,7 +83,7 @@ export function Process() {
 
   return (
     <section ref={containerRef} className="bg-brand-cream text-brand-dark overflow-hidden relative">
-      <div className="flex flex-col lg:flex-row lg:h-screen">
+      <div className="flex flex-col lg:flex-row lg:py-16">
         {/* Left Panel (Sticky Context) */}
         <div className="w-full lg:w-1/3 p-8 md:p-16 lg:p-20 flex flex-col justify-center border-b lg:border-b-0 lg:border-r border-brand-dark/10 z-10 bg-brand-cream shrink-0">
           <h2 className={`${playfair.className} text-4xl md:text-5xl lg:text-6xl font-black leading-tight mb-8`}>
