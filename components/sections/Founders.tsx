@@ -5,6 +5,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { Playfair_Display } from 'next/font/google';
+import Image from 'next/image';
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
@@ -21,6 +22,7 @@ const foundersData = [
     bio: 'After working across hospitality and pharmaceutical marketing in the UK, Khushi came back to India with one big takeaway: great marketing always starts with understanding the business, not just creating content. Today, she\'s usually buried in strategy decks or asking "But what\'s the objective?" for the tenth time.',
     rotation: -4,
     align: 'left',
+    image: '/websiteimage-khushi.jpg'
   },
   {
     name: 'Pranita Pareek',
@@ -28,6 +30,7 @@ const foundersData = [
     bio: 'With a background in marketing consultancies and an MBA in Advertising & Public Relations, Pranita believes brands are built through storytelling, and experiences that are remembered long before they\'re fully understood. She has an eye for details most people don\'t even notice. You\'ll likely find her curating moodboards and exploring visual inspiration.',
     rotation: 5,
     align: 'right',
+    image: '/websiteimage-pranita.jpeg'
   }
 ];
 
@@ -114,11 +117,13 @@ export function Founders() {
                 <div 
                   className="founder-image-wrapper relative w-full max-w-[360px] aspect-[4/5] bg-[#fafafa] p-4 pb-16 md:p-5 md:pb-20 shadow-[0_20px_50px_rgba(0,0,0,0.1)] rounded-sm border border-brand-dark/5"
                 >
-                  <div className="w-full h-full bg-brand-cream border-2 border-dashed border-brand-primary/20 flex flex-col items-center justify-center overflow-hidden group cursor-crosshair relative">
-                    <span className={`${playfair.className} text-[120px] text-brand-primary/15 font-black group-hover:scale-125 group-hover:rotate-6 transition-all duration-700`}>
-                      {founder.name.charAt(0)}
-                    </span>
-                    <span className="absolute bottom-4 font-mono text-brand-primary/40 text-xs uppercase tracking-widest">Sticker Space</span>
+                  <div className="w-full h-full relative border border-brand-primary/10 flex flex-col items-center justify-center overflow-hidden group cursor-crosshair">
+                    <Image
+                      src={founder.image}
+                      alt={founder.name}
+                      fill
+                      className="object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                    />
                   </div>
                   
                   {/* Quirky Tape/Pin */}
