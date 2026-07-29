@@ -74,12 +74,23 @@ export default function AboutPage() {
           <div className="absolute bottom-0 left-0 w-[40vw] h-[40vh] bg-brand-cream/5 blur-[120px] rounded-full pointer-events-none" />
 
           <div className="w-full max-w-[1600px] mx-auto px-6 md:px-12 relative z-10">
-            <div className="max-w-4xl">
-              <h1 className={`about-reveal ${playfair.className} text-5xl md:text-7xl lg:text-[100px] font-black text-brand-dark leading-[0.95] tracking-tight mb-8`}>
-                We exist because{' '}
-                <span className="italic text-brand-primary">mediocre marketing</span>{' '}
-                shouldn&apos;t.
-              </h1>
+            <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-16 xl:gap-24">
+              <div className="w-full lg:w-7/12 flex flex-col justify-center text-left">
+                <h1 className={`about-reveal ${playfair.className} text-5xl md:text-7xl lg:text-[75px] xl:text-[90px] font-black text-brand-dark leading-[1.05] tracking-tight mb-8`}>
+                  We exist because{' '}
+                  <span className="italic text-brand-primary">mediocre marketing</span>{' '}
+                  shouldn&apos;t.
+                </h1>
+              </div>
+
+              {/* Hero Image */}
+              <div className="w-full lg:w-5/12 about-reveal flex justify-center lg:justify-end relative z-10">
+                <img 
+                  src="/aboutus-page.svg" 
+                  alt="StndOut About Us" 
+                  className="w-full max-w-[500px] lg:max-w-full object-contain drop-shadow-2xl"
+                />
+              </div>
             </div>
           </div>
         </section>

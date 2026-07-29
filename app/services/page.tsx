@@ -162,7 +162,7 @@ export default function ServicesPage() {
         {/* ============================================ */}
         {/* HERO                                         */}
         {/* ============================================ */}
-        <section className="relative min-h-[30vh] lg:min-h-[40vh] flex items-center bg-transparent overflow-hidden pt-20 pb-8">
+        <section className="relative min-h-[70vh] flex items-center bg-transparent pt-32 pb-10 overflow-hidden -mb-16 md:-mb-24 lg:-mb-32">
           <div className="absolute top-0 right-0 w-[50vw] h-[50vh] bg-brand-primary/[0.05] blur-[120px] rounded-full pointer-events-none" />
           {/* Subtle grid */}
           <div
@@ -174,12 +174,9 @@ export default function ServicesPage() {
           />
 
           <div className="w-full max-w-[1600px] mx-auto px-6 md:px-12 relative z-10">
-            <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
-              <div className="lg:w-7/12">
-                <p className="svc-reveal text-brand-primary font-bold uppercase tracking-[0.3em] text-sm mb-6">
-                  What We Do
-                </p>
-                <h1 className={`svc-reveal ${playfair.className} text-5xl md:text-7xl lg:text-[100px] font-black text-brand-dark leading-[0.95] tracking-tight mb-8`}>
+            <div className="flex flex-col lg:flex-row-reverse items-center justify-between gap-16 lg:gap-24">
+              <div className="w-full lg:w-1/2 flex flex-col justify-center text-left lg:pl-12 xl:pl-20">
+                <h1 className={`svc-reveal ${playfair.className} text-5xl md:text-7xl lg:text-[90px] xl:text-[100px] font-black text-brand-dark leading-[0.95] tracking-tight mb-8`}>
                   We don&apos;t do{' '}
                   <span className="italic text-brand-dark/30">&ldquo;everything.&rdquo;</span>
                   <br />
@@ -190,11 +187,11 @@ export default function ServicesPage() {
               </div>
               
               {/* Hero Image */}
-              <div className="lg:w-5/12 svc-reveal flex justify-center lg:justify-end w-full">
+              <div className="w-full lg:w-1/2 svc-reveal flex justify-center lg:justify-start relative z-10">
                 <img 
                   src="/service-page.svg" 
                   alt="StndOut Services" 
-                  className="w-full max-w-[400px] md:max-w-[500px] xl:max-w-[700px] object-contain drop-shadow-2xl scale-[1.3] md:scale-[1.4] origin-right"
+                  className="w-full max-w-[500px] lg:max-w-[95%] xl:max-w-[90%] object-contain drop-shadow-2xl"
                 />
               </div>
             </div>
@@ -219,7 +216,7 @@ export default function ServicesPage() {
             <section
               key={svc.id}
               id={svc.id}
-              className={`service-section ${svc.bgClass} py-8 md:py-12 scroll-mt-20 overflow-hidden`}
+              className={`service-section ${svc.bgClass} py-4 md:py-6 lg:py-8 scroll-mt-20 overflow-hidden ${svc.number === '04' ? '-mt-8 lg:-mt-16' : ''}`}
             >
               <div className="max-w-[1600px] mx-auto px-6 md:px-12">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
@@ -242,9 +239,9 @@ export default function ServicesPage() {
                         alt={svc.title}
                         className={`w-full h-full object-contain ${
                           svc.number === '01' ? 'scale-[1.05] origin-center' :
-                          svc.number === '02' ? 'scale-100 origin-center' :
+                          svc.number === '02' ? 'scale-[0.75] origin-center' :
                           svc.number === '03' ? 'scale-[1.25] origin-center' :
-                          svc.number === '04' ? 'scale-[1.2] origin-bottom translate-y-[2%]' : ''
+                          svc.number === '04' ? 'scale-[0.85] origin-center -translate-y-8 lg:-translate-y-20' : ''
                         }`}
                       />
                     </div>
@@ -259,7 +256,7 @@ export default function ServicesPage() {
         {/* ============================================ */}
         {/* BOTTOM CTA                                   */}
         {/* ============================================ */}
-        <section className="bg-transparent py-24 md:py-32 text-center">
+        <section className="bg-transparent pt-4 md:pt-8 pb-12 md:pb-16 text-center">
           <div className="max-w-3xl mx-auto px-6">
             <h2 className={`svc-reveal ${playfair.className} text-4xl md:text-6xl font-black text-brand-dark leading-tight mb-6`}>
               Not sure where to start?
