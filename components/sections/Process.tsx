@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
@@ -49,6 +49,28 @@ const steps = [
 export function Process() {
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [activeCard, setActiveCard] = useState<number>(0);
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
+          const idx = Number(entry.target.getAttribute('data-index'));
+          setActiveCard(idx);
+        }
+      });
+    }, {
+      root: null,
+      threshold: 0.5
+    });
+
+    cardsRef.current.forEach(card => {
+      if (card) observer.observe(card);
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   useGSAP(() => {
     if (!containerRef.current || !scrollRef.current) return;
@@ -95,34 +117,36 @@ export function Process() {
         </div>
 
         {/* Right Panel (Horizontal Scroll Area) */}
-        <div className="w-full lg:w-2/3 relative flex items-center overflow-hidden bg-transparent">
+        <div className="w-full lg:w-2/3 relative flex items-center overflow-x-auto lg:overflow-hidden bg-transparent snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           <div 
             ref={scrollRef} 
-            className="flex flex-col lg:flex-row items-stretch gap-8 lg:gap-12 p-8 md:p-16 lg:px-[5vw] w-full lg:w-max flex-nowrap"
+            className="flex flex-row items-stretch gap-4 md:gap-8 lg:gap-12 px-6 py-8 md:p-16 lg:px-[5vw] w-max flex-nowrap"
           >
             {steps.map((step, idx) => {
               const Icon = step.icon;
               return (
                 <div 
                   key={idx} 
-                  className="process-card flex-shrink-0 w-full lg:w-[450px] bg-white border border-brand-primary/10 shadow-[0_20px_60px_rgba(0,0,0,0.04)] rounded-[2rem] p-10 lg:p-14 hover:shadow-xl hover:-translate-y-1 transition-all duration-500 flex flex-col"
+                  ref={el => { cardsRef.current[idx] = el; }}
+                  data-index={idx}
+                  className={`process-card flex-shrink-0 w-[75vw] sm:w-[320px] lg:w-[450px] snap-center bg-white border border-brand-primary/10 rounded-[2rem] p-6 md:p-10 lg:p-14 transition-all duration-500 flex flex-col ${activeCard === idx ? '-translate-y-2 shadow-xl' : 'translate-y-0 shadow-[0_20px_60px_rgba(0,0,0,0.04)]'} lg:translate-y-0 lg:shadow-[0_20px_60px_rgba(0,0,0,0.04)] lg:hover:-translate-y-2 lg:hover:shadow-xl`}
                 >
-                  <div className="flex items-start justify-between mb-12">
-                    <div className="w-16 h-16 rounded-2xl bg-brand-primary/10 flex items-center justify-center">
-                      <Icon className="w-8 h-8 text-brand-primary" />
+                  <div className="flex items-start justify-between mb-10 lg:mb-12">
+                    <div className="w-14 h-14 lg:w-16 lg:h-16 rounded-2xl bg-brand-primary/10 flex items-center justify-center">
+                      <Icon className="w-7 h-7 lg:w-8 lg:h-8 text-brand-primary" />
                     </div>
-                    <span className={`${playfair.className} text-5xl font-black text-brand-dark/10`}>
+                    <span className={`${playfair.className} text-4xl font-black text-brand-dark/10`}>
                       {step.num}
                     </span>
                   </div>
                   
-                  <h3 className={`${playfair.className} text-3xl font-bold mb-3`}>
+                  <h3 className={`${playfair.className} text-2xl font-bold mb-2 lg:mb-3`}>
                     {step.title}
                   </h3>
-                  <p className="text-brand-primary font-medium tracking-wide mb-6">
+                  <p className="text-brand-primary text-sm font-medium tracking-wide mb-4 lg:mb-5">
                     {step.subtitle}
                   </p>
-                  <p className="text-brand-dark/70 leading-relaxed text-lg">
+                  <p className="text-brand-dark/70 leading-relaxed text-base">
                     {step.desc}
                   </p>
                 </div>

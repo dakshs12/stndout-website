@@ -185,12 +185,12 @@ export default function ServicesPage() {
                   <span className="italic text-brand-primary">works.</span>
                 </h1>
               </div>
-              
+
               {/* Hero Image */}
               <div className="w-full lg:w-1/2 svc-reveal flex justify-center lg:justify-start relative z-10">
-                <img 
-                  src="/service-page.svg" 
-                  alt="StndOut Services" 
+                <img
+                  src="/service-page.svg"
+                  alt="StndOut Services"
                   className="w-full max-w-[500px] lg:max-w-[95%] xl:max-w-[90%] object-contain drop-shadow-2xl"
                 />
               </div>
@@ -220,7 +220,7 @@ export default function ServicesPage() {
             >
               <div className="max-w-[1600px] mx-auto px-6 md:px-12">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-                  
+
                   {/* Content Column */}
                   <div className={`flex flex-col justify-center ${idx % 2 === 0 ? 'order-2 lg:order-1' : 'order-2 lg:order-2'}`}>
                     <h2 className={`svc-reveal ${playfair.className} text-4xl md:text-6xl lg:text-7xl font-black ${svc.textClass} leading-[0.95] tracking-tight mb-8`}>
@@ -237,12 +237,11 @@ export default function ServicesPage() {
                       <img
                         src={svc.image}
                         alt={svc.title}
-                        className={`w-full h-full object-contain ${
-                          svc.number === '01' ? 'scale-[1.05] origin-center' :
+                        className={`w-full h-full object-contain ${svc.number === '01' ? 'scale-[1.05] origin-center' :
                           svc.number === '02' ? 'scale-[0.75] origin-center' :
-                          svc.number === '03' ? 'scale-[1.25] origin-center' :
-                          svc.number === '04' ? 'scale-[0.85] origin-center -translate-y-8 lg:-translate-y-20' : ''
-                        }`}
+                            svc.number === '03' ? 'scale-[1.25] origin-center' :
+                              svc.number === '04' ? 'scale-[0.85] origin-center -translate-y-8 lg:-translate-y-20' : ''
+                          }`}
                       />
                     </div>
                   </div>
@@ -276,7 +275,7 @@ export default function ServicesPage() {
                 href="/contact"
                 className="group inline-flex items-center justify-center gap-3 px-10 py-5 bg-transparent border border-brand-dark/20 text-brand-dark font-bold text-lg rounded-full hover:bg-brand-dark/5 transition-all duration-300"
               >
-                Grab a Coffee ☕
+                Grab a Coffee!
               </Link>
             </div>
           </div>
