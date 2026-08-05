@@ -133,13 +133,13 @@ export function Navbar() {
         ref={navRef} 
         className="fixed top-4 md:top-8 left-1/2 -translate-x-1/2 w-[95%] max-w-[1000px] z-[100]"
         style={{
-          '--nav-bg': isDarkPage ? 'rgba(255, 255, 255, 0.05)' : 'rgba(7, 7, 7, 0.05)',
-          '--nav-border': isDarkPage ? 'rgba(255, 255, 255, 0.1)' : 'rgba(7, 7, 7, 0.2)',
-          '--logo-invert': isDarkPage ? 1 : 0,
-          '--nav-text': isDarkPage ? 'rgba(255, 248, 244, 0.9)' : 'rgba(7, 7, 7, 0.9)',
-          '--btn-bg': isDarkPage ? '#fff8f4' : '#070707',
-          '--btn-text': isDarkPage ? '#070707' : '#fff8f4',
-          '--btn-shadow-color': isDarkPage ? 'rgba(255, 248, 244, 0.3)' : 'rgba(7, 7, 7, 0.2)',
+          '--nav-bg': (isDarkPage || isMobileMenuOpen) ? 'rgba(255, 255, 255, 0.05)' : 'rgba(7, 7, 7, 0.05)',
+          '--nav-border': (isDarkPage || isMobileMenuOpen) ? 'rgba(255, 255, 255, 0.1)' : 'rgba(7, 7, 7, 0.2)',
+          '--logo-invert': (isDarkPage || isMobileMenuOpen) ? 1 : 0,
+          '--nav-text': (isDarkPage || isMobileMenuOpen) ? 'rgba(255, 248, 244, 0.9)' : 'rgba(7, 7, 7, 0.9)',
+          '--btn-bg': (isDarkPage || isMobileMenuOpen) ? '#fff8f4' : '#070707',
+          '--btn-text': (isDarkPage || isMobileMenuOpen) ? '#070707' : '#fff8f4',
+          '--btn-shadow-color': (isDarkPage || isMobileMenuOpen) ? 'rgba(255, 248, 244, 0.3)' : 'rgba(7, 7, 7, 0.2)',
         } as React.CSSProperties}
       >
         <header className="relative w-full backdrop-blur-xl border shadow-[0_8px_32px_rgba(0,0,0,0.3)] rounded-2xl md:rounded-full px-4 md:px-8 py-2 md:py-3 flex items-center justify-between bg-[var(--nav-bg)] border-[color:var(--nav-border)]">

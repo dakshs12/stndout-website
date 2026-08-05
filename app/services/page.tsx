@@ -10,7 +10,7 @@ import {
   ArrowUpRight, ArrowRight, Globe, Megaphone, PenTool, Code,
   Search, Target, BarChart3, Mail, Video, Smartphone,
   Palette, LineChart, Layers, Gauge,
-  Briefcase, Handshake, Lightbulb, Box, Image as ImageIcon, Users, Monitor, FileText, PieChart, Layout
+  Briefcase, Handshake, Lightbulb, Box, Image as ImageIcon, Users, Monitor, FileText, PieChart, Layout, ChevronDown
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -110,6 +110,38 @@ const services = [
   },
 ];
 
+function MobileServiceAccordion({ svc, idx }: { svc: any, idx: number }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className="w-full bg-white border border-brand-dark/10 rounded-2xl overflow-hidden shadow-sm transition-all duration-500">
+      <button 
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full flex items-center justify-between p-5 outline-none focus:outline-none"
+      >
+        <div className="flex items-center gap-4 text-left">
+          <span className="text-brand-primary/40 font-black text-lg sm:text-xl">{svc.number}</span>
+          <h3 className={`${playfair.className} text-xl sm:text-2xl font-black text-brand-dark leading-none`}>{svc.title}</h3>
+        </div>
+        <div className={`transform transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
+          <ChevronDown className="w-5 h-5 text-brand-primary" />
+        </div>
+      </button>
+
+      <div className={`transition-all duration-500 ease-in-out overflow-hidden ${isOpen ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0'}`}>
+        <div className="p-5 pt-0 flex flex-col items-center border-t border-brand-dark/5">
+          <div className="w-full aspect-square relative my-4">
+            <img src={svc.image} alt={svc.title} className="w-full h-full object-contain" />
+          </div>
+          <p className="text-brand-dark/80 leading-relaxed text-sm sm:text-base text-center pb-2">
+            {svc.desc}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function ServicesPage() {
   const pageRef = useRef<HTMLDivElement>(null);
   const [expandedService, setExpandedService] = useState<string | null>(null);
@@ -162,7 +194,7 @@ export default function ServicesPage() {
         {/* ============================================ */}
         {/* HERO                                         */}
         {/* ============================================ */}
-        <section className="relative min-h-[70vh] flex items-center bg-transparent pt-32 pb-10 overflow-hidden -mb-16 md:-mb-24 lg:-mb-32">
+        <section className="relative min-h-[50vh] md:min-h-[70vh] flex items-center bg-transparent pt-24 md:pt-32 pb-4 md:pb-10 overflow-hidden -mb-16 md:-mb-24 lg:-mb-32">
           <div className="absolute top-0 right-0 w-[50vw] h-[50vh] bg-brand-primary/[0.05] blur-[120px] rounded-full pointer-events-none" />
           {/* Subtle grid */}
           <div
@@ -174,15 +206,28 @@ export default function ServicesPage() {
           />
 
           <div className="w-full max-w-[1600px] mx-auto px-6 md:px-12 relative z-10">
-            <div className="flex flex-col lg:flex-row-reverse items-center justify-between gap-16 lg:gap-24">
-              <div className="w-full lg:w-1/2 flex flex-col justify-center text-left lg:pl-12 xl:pl-20">
-                <h1 className={`svc-reveal ${playfair.className} text-5xl md:text-7xl lg:text-[90px] xl:text-[100px] font-black text-brand-dark leading-[0.95] tracking-tight mb-8`}>
-                  We don&apos;t do{' '}
-                  <span className="italic text-brand-dark/30">&ldquo;everything.&rdquo;</span>
-                  <br />
-                  We do what
-                  <br />
-                  <span className="italic text-brand-primary">works.</span>
+            <div className="flex flex-col-reverse lg:flex-row-reverse items-center justify-between gap-2 md:gap-12 lg:gap-24">
+              <div className="w-full lg:w-1/2 flex flex-col justify-center text-center lg:text-left lg:pl-12 xl:pl-20">
+                <h1 className={`svc-reveal ${playfair.className} text-[38px] leading-[1.1] sm:text-5xl md:text-7xl lg:text-[90px] xl:text-[100px] font-black text-brand-dark lg:leading-[0.95] tracking-tight mb-8 md:mb-8`}>
+                  {/* Desktop formatting */}
+                  <span className="hidden md:inline">
+                    We don&apos;t do{' '}
+                    <span className="italic text-brand-dark/30">&ldquo;everything.&rdquo;</span>
+                    <br />
+                    We do what
+                    <br />
+                    <span className="italic text-brand-primary">works.</span>
+                  </span>
+                  
+                  {/* Mobile formatting */}
+                  <span className="md:hidden">
+                    We don&apos;t do
+                    <br />
+                    <span className="italic text-brand-dark/30">&ldquo;everything.&rdquo;</span>
+                    <br />
+                    We do what{' '}
+                    <span className="italic text-brand-primary">works.</span>
+                  </span>
                 </h1>
               </div>
 
@@ -201,7 +246,17 @@ export default function ServicesPage() {
         {/* ============================================ */}
         {/* SERVICE SECTIONS                              */}
         {/* ============================================ */}
-        {services.map((svc, idx) => {
+        
+        {/* Mobile Accordion View */}
+        <div className="md:hidden w-full max-w-2xl mx-auto px-6 pt-20 pb-6 flex flex-col gap-4 relative z-10">
+          {services.map((svc, idx) => (
+            <MobileServiceAccordion key={svc.id} svc={svc} idx={idx} />
+          ))}
+        </div>
+
+        {/* Desktop View */}
+        <div className="hidden md:block">
+          {services.map((svc, idx) => {
           const Icon = svc.icon;
           const isExpanded = expandedService === svc.id;
           const isDark = svc.bgClass === 'bg-[#070707]' || svc.bgClass === 'bg-brand-primary';
@@ -251,29 +306,30 @@ export default function ServicesPage() {
             </section>
           );
         })}
+        </div>
 
         {/* ============================================ */}
         {/* BOTTOM CTA                                   */}
         {/* ============================================ */}
         <section className="bg-transparent pt-4 md:pt-8 pb-12 md:pb-16 text-center">
           <div className="max-w-3xl mx-auto px-6">
-            <h2 className={`svc-reveal ${playfair.className} text-4xl md:text-6xl font-black text-brand-dark leading-tight mb-6`}>
+            <h2 className={`svc-reveal ${playfair.className} text-3xl md:text-6xl font-black text-brand-dark leading-tight mb-4 md:mb-6`}>
               Not sure where to start?
             </h2>
-            <p className="svc-reveal text-brand-dark/70 text-lg mb-10 max-w-xl mx-auto">
+            <p className="svc-reveal text-brand-dark/70 text-base md:text-lg mb-8 md:mb-10 max-w-xl mx-auto">
               Take our free AI Brand Score assessment and we will tell you exactly where you are blending in and what to do about it.
             </p>
             <div className="svc-reveal flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/#brand-score"
-                className="group inline-flex items-center justify-center gap-3 px-10 py-5 bg-brand-primary text-white font-bold text-lg rounded-full hover:bg-brand-cream hover:text-brand-dark transition-all duration-300 shadow-[0_0_40px_rgba(30,124,112,0.3)]"
+                className="group inline-flex items-center justify-center gap-3 px-6 py-4 md:px-10 md:py-5 bg-brand-primary text-white font-bold text-base md:text-lg rounded-full hover:bg-brand-cream hover:text-brand-dark transition-all duration-300 shadow-[0_0_40px_rgba(30,124,112,0.3)]"
               >
                 AI Brand Score
                 <ArrowUpRight className="w-5 h-5 group-hover:rotate-45 transition-transform duration-300" />
               </Link>
               <Link
                 href="/contact"
-                className="group inline-flex items-center justify-center gap-3 px-10 py-5 bg-transparent border border-brand-dark/20 text-brand-dark font-bold text-lg rounded-full hover:bg-brand-dark/5 transition-all duration-300"
+                className="group inline-flex items-center justify-center gap-3 px-6 py-4 md:px-10 md:py-5 bg-transparent border border-brand-dark/20 text-brand-dark font-bold text-base md:text-lg rounded-full hover:bg-brand-dark/5 transition-all duration-300"
               >
                 Grab a Coffee!
               </Link>
