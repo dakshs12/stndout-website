@@ -311,7 +311,7 @@ export default function ServicesPage() {
         {/* ============================================ */}
         {/* BOTTOM CTA                                   */}
         {/* ============================================ */}
-        <section className="relative z-20 bg-transparent pt-4 md:pt-8 pb-12 md:pb-16 text-center -mt-8 md:-mt-12 lg:-mt-20">
+        <section className="relative z-20 bg-transparent pt-4 md:pt-8 pb-12 md:pb-16 text-center mt-6 md:-mt-12 lg:-mt-20">
           <div className="max-w-3xl mx-auto px-6">
             <h2 className={`svc-reveal ${playfair.className} text-3xl md:text-6xl font-black text-brand-dark leading-tight mb-8 md:mb-10`}>
               Not sure where to start?

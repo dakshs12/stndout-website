@@ -28,7 +28,7 @@ const team = [
 
 
 
-function MobileAboutFlipCard({ badge, children, desc }: { badge: string, children: React.ReactNode, desc: string }) {
+function MobileAboutFlipCard({ badge, children, desc, pushUp }: { badge: string, children: React.ReactNode, desc: string, pushUp?: boolean }) {
   const [isFlipped, setIsFlipped] = useState(false);
 
   return (
@@ -40,7 +40,7 @@ function MobileAboutFlipCard({ badge, children, desc }: { badge: string, childre
         className={`w-full h-full relative transition-transform duration-500 [transform-style:preserve-3d] ${isFlipped ? '[transform:rotateY(180deg)]' : ''}`}
       >
         {/* FRONT */}
-        <div className="absolute inset-0 [backface-visibility:hidden] bg-white/80 backdrop-blur-xl border border-white rounded-2xl p-2 flex flex-col items-center justify-center text-center shadow-[0_20px_60px_rgba(0,0,0,0.04)]">
+        <div className={`absolute inset-0 [backface-visibility:hidden] bg-white/80 backdrop-blur-xl border border-white rounded-2xl p-2 flex flex-col items-center justify-center text-center shadow-[0_20px_60px_rgba(0,0,0,0.04)] ${pushUp ? 'pb-7' : ''}`}>
           <span className="inline-block px-3 py-1 rounded-full border border-brand-primary/20 bg-brand-primary/5 text-brand-primary text-[11px] font-bold uppercase tracking-wider mb-2 sm:mb-3">
             {badge}
           </span>
@@ -166,6 +166,7 @@ export default function AboutPage() {
                 <MobileAboutFlipCard
                   badge="Our Vision"
                   desc="Marketing should be intentional, accountable and built around real business goals. Our vision is a future where strategy comes before execution and meaningful growth follows."
+                  pushUp={true}
                 >
                   <h2 className={`${playfair.className} text-[19px] leading-[1.1] sm:text-2xl font-black text-brand-dark px-1`}>
                     Better <span className="italic text-brand-primary">Marketing.</span> Better <span className="italic text-brand-primary">Growth.</span>
