@@ -311,14 +311,11 @@ export default function ServicesPage() {
         {/* ============================================ */}
         {/* BOTTOM CTA                                   */}
         {/* ============================================ */}
-        <section className="bg-transparent pt-4 md:pt-8 pb-12 md:pb-16 text-center">
+        <section className="relative z-20 bg-transparent pt-4 md:pt-8 pb-12 md:pb-16 text-center -mt-8 md:-mt-12 lg:-mt-20">
           <div className="max-w-3xl mx-auto px-6">
-            <h2 className={`svc-reveal ${playfair.className} text-3xl md:text-6xl font-black text-brand-dark leading-tight mb-4 md:mb-6`}>
+            <h2 className={`svc-reveal ${playfair.className} text-3xl md:text-6xl font-black text-brand-dark leading-tight mb-8 md:mb-10`}>
               Not sure where to start?
             </h2>
-            <p className="svc-reveal text-brand-dark/70 text-base md:text-lg mb-8 md:mb-10 max-w-xl mx-auto">
-              Take our free AI Brand Score assessment and we will tell you exactly where you are blending in and what to do about it.
-            </p>
             <div className="svc-reveal flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/#brand-score"

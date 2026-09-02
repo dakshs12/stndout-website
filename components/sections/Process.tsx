@@ -21,7 +21,7 @@ const steps = [
     icon: Search,
     title: 'Discover',
     subtitle: 'Understand Before We Build.',
-    desc: 'We start by understanding your business, audience, competitors and growth ambitions. Every strong strategy begins with asking the right questions.',
+    desc: 'We start by asking a lot of questions about your business, audience, competitors and growth ambitions.',
   },
   {
     num: '02',
@@ -35,14 +35,14 @@ const steps = [
     icon: Rocket,
     title: 'Execute',
     subtitle: 'Bring the Plan to Life.',
-    desc: 'From branding and websites to campaigns and content, we turn strategy into real-world results.',
+    desc: 'From branding and websites to campaigns and content, we turn strategy and creatives into real-world results.',
   },
   {
     num: '04',
     icon: TrendingUp,
     title: 'Evolve',
     subtitle: 'Improve What Matters.',
-    desc: 'We believe in long-term partnerships therefore, we monitor performance, uncover insights and continuously refine what’s working to maximize results.',
+    desc: 'We then monitor performance, uncover insights and continuously refine what’s working to maximize results.',
   },
 ];
 
@@ -81,7 +81,7 @@ export function Process() {
       // Get the amount to scroll
       const getScrollAmount = () => {
         let scrollWidth = scrollRef.current!.scrollWidth;
-        return -(scrollWidth - window.innerWidth + (window.innerWidth / 3)); 
+        return -(scrollWidth - window.innerWidth + (window.innerWidth / 3));
         // We subtract the left panel width (approx 1/3 of window) so it stops at the end
       };
 
@@ -112,21 +112,21 @@ export function Process() {
             Our <span className="italic text-brand-primary">Process</span>
           </h2>
           <p className="text-brand-dark/70 text-lg leading-relaxed max-w-md">
-            Good marketing is rarely accidental. Our process ensures every move is deliberate, measurable and aligned with your business objectives.
+            Holistic marketing drives sustainable growth. Our process ensures every move is deliberate, measurable and aligned with your business objectives.
           </p>
         </div>
 
         {/* Right Panel (Horizontal Scroll Area) */}
         <div className="w-full lg:w-2/3 relative flex items-center overflow-x-auto lg:overflow-hidden bg-transparent snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-          <div 
-            ref={scrollRef} 
+          <div
+            ref={scrollRef}
             className="flex flex-row items-stretch gap-4 md:gap-8 lg:gap-12 px-6 py-8 md:p-16 lg:px-[5vw] w-max flex-nowrap"
           >
             {steps.map((step, idx) => {
               const Icon = step.icon;
               return (
-                <div 
-                  key={idx} 
+                <div
+                  key={idx}
                   ref={el => { cardsRef.current[idx] = el; }}
                   data-index={idx}
                   className={`process-card flex-shrink-0 w-[75vw] sm:w-[320px] lg:w-[450px] snap-center bg-white border border-brand-primary/10 rounded-[2rem] p-6 md:p-10 lg:p-14 transition-all duration-500 flex flex-col ${activeCard === idx ? '-translate-y-2 shadow-xl' : 'translate-y-0 shadow-[0_20px_60px_rgba(0,0,0,0.04)]'} lg:translate-y-0 lg:shadow-[0_20px_60px_rgba(0,0,0,0.04)] lg:hover:-translate-y-2 lg:hover:shadow-xl`}
@@ -139,7 +139,7 @@ export function Process() {
                       {step.num}
                     </span>
                   </div>
-                  
+
                   <h3 className={`${playfair.className} text-2xl font-bold mb-2 lg:mb-3`}>
                     {step.title}
                   </h3>

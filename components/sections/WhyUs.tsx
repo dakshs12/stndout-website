@@ -18,29 +18,29 @@ const playfair = Playfair_Display({
 const reasons = [
   {
     icon: LineChart,
-    title: 'Strategy before execution',
-    desc: 'We don\'t just execute blindly. Every action is rooted in a deep understanding of your market, competitors, and audience.',
+    title: 'Strategy before Execution',
+    desc: 'We don\'t execute blindly. Every action is rooted in a deep understanding of your business, competitors, and audience.',
     color: 'text-brand-primary',
     bg: 'bg-brand-primary/10',
   },
   {
     icon: Layers,
-    title: 'One partner for everything',
-    desc: 'From branding and strategy to digital marketing and web experiences, we handle the entire spectrum so you don\'t have to juggle agencies.',
+    title: 'One Partner for Everything',
+    desc: 'From strategy and branding to digital marketing and events, we handle your entire marketing ecosystem for complete growth.',
     color: 'text-blue-400',
     bg: 'bg-blue-400/10',
   },
   {
     icon: Database,
-    title: 'Creative backed by data',
-    desc: 'Beautiful design means nothing if it doesn\'t convert. Our creative decisions are driven by analytics and performance metrics.',
+    title: 'Creativity backed by Data',
+    desc: 'Beautiful design means nothing if it does not convert. Our creative decisions are driven by analytics and performance metrics.',
     color: 'text-yellow-400',
     bg: 'bg-yellow-400/10',
   },
   {
     icon: Target,
-    title: 'Built around business goals',
-    desc: 'We focus on what actually matters: revenue, growth, and market share. Your success is the only KPI we care about.',
+    title: 'Built around Business Goals',
+    desc: 'We focus on what matters for your business: revenue, growth, and market share. Your success is the only KPI we care about.',
     color: 'text-purple-400',
     bg: 'bg-purple-400/10',
   },
@@ -51,11 +51,11 @@ function MobileFlipCard({ reason }: { reason: any }) {
   const Icon = reason.icon;
 
   return (
-    <div 
+    <div
       className="lg:hidden relative w-full aspect-square cursor-pointer [perspective:1000px]"
       onClick={() => setIsFlipped(!isFlipped)}
     >
-      <div 
+      <div
         className={`w-full h-full relative transition-transform duration-500 [transform-style:preserve-3d] ${isFlipped ? '[transform:rotateY(180deg)]' : ''}`}
       >
         {/* FRONT */}
@@ -126,7 +126,7 @@ export function WhyUs() {
             const Icon = reason.icon;
             return (
               <div key={idx} className="why-card-wrapper h-full">
-                
+
                 {/* DESKTOP CARD (Original Layout) */}
                 <div
                   className="hidden lg:flex h-full group bg-white border border-brand-primary/10 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 rounded-[2rem] p-8 md:p-10 flex-col items-center text-center"

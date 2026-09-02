@@ -32,11 +32,11 @@ function MobileAboutFlipCard({ badge, children, desc }: { badge: string, childre
   const [isFlipped, setIsFlipped] = useState(false);
 
   return (
-    <div 
+    <div
       className="md:hidden relative w-full aspect-square cursor-pointer [perspective:1000px]"
       onClick={() => setIsFlipped(!isFlipped)}
     >
-      <div 
+      <div
         className={`w-full h-full relative transition-transform duration-500 [transform-style:preserve-3d] ${isFlipped ? '[transform:rotateY(180deg)]' : ''}`}
       >
         {/* FRONT */}
@@ -119,9 +119,9 @@ export default function AboutPage() {
 
               {/* Hero Image */}
               <div className="w-full lg:w-5/12 about-reveal flex justify-center lg:justify-end relative z-10">
-                <img 
-                  src="/aboutus-page.svg" 
-                  alt="StndOut About Us" 
+                <img
+                  src="/aboutus-page.svg"
+                  alt="StndOut About Us"
                   className="w-full max-w-[320px] sm:max-w-[400px] md:max-w-[500px] lg:max-w-full object-contain drop-shadow-2xl"
                 />
               </div>
@@ -134,54 +134,54 @@ export default function AboutPage() {
             <div className="grid grid-cols-2 gap-2 sm:gap-6 md:gap-12">
               {/* Mission */}
               {/* Mission */}
-              <div className="about-reveal">
+              <div className="about-reveal h-full">
                 {/* Mobile Flip Card */}
-                <MobileAboutFlipCard 
-                  badge="Our Mission" 
-                  desc="Too many businesses waste time and money chasing trends, tactics and quick fixes. We're here to simplify marketing, focus on what matters and build strategies that create long-term value."
+                <MobileAboutFlipCard
+                  badge="Our Mission"
+                  desc="Marketing works best when every piece works together, from strategy to content and campaigns. We want to connect it all into one system, helping businesses evolve."
                 >
                   <h2 className={`${playfair.className} text-[19px] leading-[1.1] sm:text-2xl font-black text-brand-dark px-1`}>
-                    To bring <span className="italic text-brand-primary">clarity</span> to marketing
+                    Build Marketing that <span className="italic text-brand-primary whitespace-nowrap">Moves Together</span>
                   </h2>
                 </MobileAboutFlipCard>
 
                 {/* Desktop Normal Card */}
-                <div className="hidden md:block bg-white/60 backdrop-blur-xl border border-white rounded-[2rem] p-10 md:p-14 shadow-[0_20px_60px_rgba(0,0,0,0.04)]">
-                  <span className="inline-block px-4 py-2 rounded-full border border-brand-primary/20 bg-brand-primary/5 text-brand-primary text-xs font-bold uppercase tracking-[0.2em] mb-6">
+                <div className="hidden md:flex flex-col h-full bg-white/60 backdrop-blur-xl border border-white rounded-[2rem] p-10 md:p-14 shadow-[0_20px_60px_rgba(0,0,0,0.04)]">
+                  <span className="inline-block self-start px-4 py-2 rounded-full border border-brand-primary/20 bg-brand-primary/5 text-brand-primary text-xs font-bold uppercase tracking-[0.2em] mb-6">
                     Our Mission
                   </span>
-                  <h2 className={`${playfair.className} text-3xl md:text-4xl font-black text-brand-dark leading-tight mb-6`}>
-                    To bring <span className="italic text-brand-primary">clarity</span> to marketing
+                  <h2 className={`${playfair.className} text-3xl lg:text-[28px] xl:text-[32px] 2xl:text-[36px] lg:whitespace-nowrap font-black text-brand-dark leading-tight mb-6`}>
+                    Build Marketing that <span className="italic text-brand-primary">Moves Together</span>
                   </h2>
                   <p className="text-brand-dark/60 text-lg leading-relaxed">
-                    Too many businesses waste time and money chasing trends, tactics and quick fixes. We're here to simplify marketing, focus on what matters and build strategies that create long-term value.
+                    Marketing works best when every piece works together, from strategy to content and campaigns. We want to connect it all into one system, helping businesses evolve.
                   </p>
                 </div>
               </div>
 
               {/* Vision */}
               {/* Vision */}
-              <div className="about-reveal">
+              <div className="about-reveal h-full">
                 {/* Mobile Flip Card */}
-                <MobileAboutFlipCard 
-                  badge="Our Vision" 
-                  desc="We believe marketing should be intentional, accountable and built around real business goals. Our vision is a future where strategy comes first and meaningful growth follows."
+                <MobileAboutFlipCard
+                  badge="Our Vision"
+                  desc="Marketing should be intentional, accountable and built around real business goals. Our vision is a future where strategy comes before execution and meaningful growth follows."
                 >
                   <h2 className={`${playfair.className} text-[19px] leading-[1.1] sm:text-2xl font-black text-brand-dark px-1`}>
-                    Better <span className="italic text-brand-primary">marketing.</span> Better <span className="italic text-brand-primary">businesses.</span>
+                    Better <span className="italic text-brand-primary">Marketing.</span> Better <span className="italic text-brand-primary">Growth.</span>
                   </h2>
                 </MobileAboutFlipCard>
 
                 {/* Desktop Normal Card */}
-                <div className="hidden md:block bg-white/40 backdrop-blur-xl border border-brand-primary/10 rounded-[2rem] p-10 md:p-14 shadow-[0_20px_60px_rgba(0,0,0,0.04)]">
-                  <span className="inline-block px-4 py-2 rounded-full border border-brand-primary/20 bg-brand-primary/5 text-brand-primary text-xs font-bold uppercase tracking-[0.2em] mb-6">
+                <div className="hidden md:flex flex-col h-full bg-white/40 backdrop-blur-xl border border-brand-primary/10 rounded-[2rem] p-10 md:p-14 shadow-[0_20px_60px_rgba(0,0,0,0.04)]">
+                  <span className="inline-block self-start px-4 py-2 rounded-full border border-brand-primary/20 bg-brand-primary/5 text-brand-primary text-xs font-bold uppercase tracking-[0.2em] mb-6">
                     Our Vision
                   </span>
-                  <h2 className={`${playfair.className} text-3xl md:text-4xl font-black text-brand-dark leading-tight mb-6`}>
-                    Better <span className="italic text-brand-primary">marketing.</span> Better <span className="italic text-brand-primary">businesses.</span>
+                  <h2 className={`${playfair.className} text-3xl lg:text-[28px] xl:text-[32px] 2xl:text-[36px] lg:whitespace-nowrap font-black text-brand-dark leading-tight mb-6`}>
+                    Better <span className="italic text-brand-primary">Marketing.</span> Better <span className="italic text-brand-primary">Growth.</span>
                   </h2>
                   <p className="text-brand-dark/60 text-lg leading-relaxed">
-                    We believe marketing should be intentional, accountable and built around real business goals. Our vision is a future where strategy comes first and meaningful growth follows.
+                    Marketing should be intentional, accountable and built around real business goals. Our vision is a future where strategy comes before execution and meaningful growth follows.
                   </p>
                 </div>
               </div>
