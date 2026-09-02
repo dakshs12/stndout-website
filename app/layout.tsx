@@ -44,6 +44,26 @@ export default function RootLayout({
             `,
           }}
         />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              name: "StndOUT",
+              alternateName: [
+                "StndOut",
+                "Stnd OUT",
+                "stndout",
+                "Stndout Marketing",
+                "Stndout consultancy",
+                "Stndout indore",
+                "Stnd Out Indore"
+              ],
+              url: "https://stndoutmarketing.com/",
+            }),
+          }}
+        />
       </head>
       <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans bg-transparent text-brand-dark antialiased`}>
 
