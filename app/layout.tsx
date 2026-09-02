@@ -32,18 +32,18 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <head>
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-M9PB8Y2LS6"
-          strategy="afterInteractive"
+        {/* Standard script tags used here instead of next/script so Google Search Console can detect it for verification */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-M9PB8Y2LS6"></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-M9PB8Y2LS6');
+            `,
+          }}
         />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-M9PB8Y2LS6');
-          `}
-        </Script>
       </head>
       <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans bg-transparent text-brand-dark antialiased`}>
 
