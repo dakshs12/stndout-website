@@ -76,6 +76,8 @@ export function BrandScore() {
   };
 
   const handleAnalyze = async () => {
+    if (phase !== 0) return; // Prevent double clicks
+    
     if (!formData.url) {
       setError("Please enter your Website URL.");
       return;
@@ -97,19 +99,23 @@ export function BrandScore() {
       setTimeout(() => {
         if (progressTimeline.current) progressTimeline.current.timeScale(4);
         setPhase(2);
-      }, 1500);
+      }, 2500);
       return;
     }
 
     try {
       // Fetch from our new Gemini Backend
-      const res = await fetch('/api/brand-score', {
+      const fetchReq = fetch('/api/brand-score', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...formData, channels: selectedChannels }),
-      });
+      }).then(res => res.json());
       
-      const data = await res.json();
+      // Enforce a minimum delay so the scanning animation always plays beautifully
+      const minDelay = new Promise(resolve => setTimeout(resolve, 2500));
+      
+      const [data] = await Promise.all([fetchReq, minDelay]);
+      
       setResult({ score: data.score, verdict: data.verdict });
       
       // Force progress bar to finish quickly
@@ -119,8 +125,10 @@ export function BrandScore() {
 
     } catch (err) {
       // Fallback if API completely fails network-side
+      await new Promise(resolve => setTimeout(resolve, 2500));
       setResult({ score: 45, verdict: "System fallback triggered. Your digital footprint lacks cohesive structure." });
-      setPhase(2);
+      if (progressTimeline.current) progressTimeline.current.timeScale(4);
+      setTimeout(() => setPhase(2), 500);
     }
   };
 
