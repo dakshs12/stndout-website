@@ -6,6 +6,7 @@ import { useGSAP } from '@gsap/react';
 import { Playfair_Display, Quicksand } from 'next/font/google';
 import { ArrowRight, Check, Sparkles, RefreshCcw, ChevronDown, AlertTriangle, TrendingUp, Zap } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 gsap.registerPlugin(useGSAP);
 
@@ -82,6 +83,24 @@ export function BrandScore() {
     setError('');
     setPhase(1);
 
+    // Easter Egg for own domain
+    let cleanUrl = formData.url.trim().toLowerCase();
+    cleanUrl = cleanUrl.replace('https://', '').replace('http://', '').replace('www.', '');
+    if (cleanUrl.endsWith('/')) cleanUrl = cleanUrl.slice(0, -1);
+    
+    if (cleanUrl === 'stndoutmarketing.com') {
+      setResult({ 
+        score: -1, 
+        verdict: "Checking the people who check brands? We respect it." 
+      });
+      // Allow a brief scanning animation for suspense
+      setTimeout(() => {
+        if (progressTimeline.current) progressTimeline.current.timeScale(4);
+        setPhase(2);
+      }, 1500);
+      return;
+    }
+
     try {
       // Fetch from our new Gemini Backend
       const res = await fetch('/api/brand-score', {
@@ -107,7 +126,14 @@ export function BrandScore() {
 
   const handleReset = () => {
     setPhase(0);
-    setResult({ score: 0, verdict: '' });
+    setFormData({ url: '', industry: '', size: '' });
+    setSelectedChannels([]);
+    setError('');
+
+    // Delay score reset so the result card doesn't flash the score ring while fading out
+    setTimeout(() => {
+      setResult({ score: 0, verdict: '' });
+    }, 400);
   };
 
   useGSAP(() => {
@@ -167,6 +193,21 @@ export function BrandScore() {
 
   // Dynamic UI based on Score — professional & positive
   const getScoreUI = () => {
+    let cleanUrl = formData.url.trim().toLowerCase();
+    cleanUrl = cleanUrl.replace('https://', '').replace('http://', '').replace('www.', '');
+    if (cleanUrl.endsWith('/')) cleanUrl = cleanUrl.slice(0, -1);
+
+    if (cleanUrl === 'stndoutmarketing.com' && result.score === -1) {
+      return {
+        color: "text-[#D0FF27]",
+        ringColor: "stroke-[#D0FF27]",
+        glowBg: "bg-[#D0FF27]/10",
+        label: "Top Secret",
+        subtitle: "Well, well, well... 👀",
+        cta: "Go Back",
+      };
+    }
+
     if (result.score <= 40) return {
       color: "text-amber-400",
       ringColor: "stroke-amber-400",
@@ -309,62 +350,91 @@ export function BrandScore() {
             </div>
 
             {/* --- STATE 2: REDESIGNED RESULT --- */}
-            <div ref={resultRef} className="absolute inset-0 w-full h-full hidden flex-col items-center justify-center text-center p-4 sm:p-6 md:p-10">
+            <div ref={resultRef} className="absolute inset-0 w-full h-full hidden flex-col items-center justify-center text-center p-4 sm:p-6 md:p-10 overflow-hidden rounded-[2rem]">
               
-              {/* Score Ring */}
-              <div className="relative w-28 h-28 md:w-44 md:h-44 mb-4 md:mb-6">
-                <svg className="w-full h-full -rotate-90" viewBox="0 0 120 120">
-                  <circle cx="60" cy="60" r="54" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="8" />
-                  <circle 
-                    cx="60" cy="60" r="54" fill="none" 
-                    className={`${scoreUI.ringColor} score-ring`}
-                    strokeWidth="8" 
-                    strokeLinecap="round"
-                    strokeDasharray={circumference}
-                    strokeDashoffset={circumference}
-                    style={{ transition: 'stroke-dashoffset 2.5s cubic-bezier(0.33,1,0.68,1)' }}
-                  />
-                </svg>
-                <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <span className={`${playfair.className} score-number text-4xl md:text-6xl font-black ${scoreUI.color} leading-none`}>
-                    0
-                  </span>
-                  <span className="text-[10px] md:text-xs font-bold text-white/30 uppercase tracking-widest mt-1">out of 100</span>
-                </div>
-              </div>
+              {/* Easter Egg Background */}
+              {result.score === -1 && (
+                <div 
+                  className="absolute inset-0 w-full h-full z-0 bg-center bg-no-repeat scale-[1.15] md:scale-[1.25]"
+                  style={{ backgroundImage: 'url(/easteregg.svg)', backgroundSize: 'cover' }}
+                />
+              )}
 
-              {/* Tier Label */}
-              <div className={`inline-flex items-center gap-1.5 md:gap-2 px-3 py-1 md:px-4 md:py-1.5 rounded-full ${scoreUI.glowBg} border border-white/10 mb-3 md:mb-4`}>
-                <Sparkles className={`w-3.5 h-3.5 md:w-4 md:h-4 ${scoreUI.color}`} />
-                <span className={`text-[11px] md:text-sm font-bold ${scoreUI.color} uppercase tracking-wider`}>{scoreUI.label}</span>
-              </div>
-
-              {/* Subtitle */}
-              <p className={`${quicksand.className} text-lg md:text-2xl font-bold text-white mb-2 md:mb-3`}>
-                {scoreUI.subtitle}
-              </p>
-
-              {/* AI Verdict */}
-              <p className="text-brand-beige/60 text-[12px] md:text-base leading-relaxed max-w-[95%] md:max-w-lg mb-5 md:mb-8">
-                {result.verdict}
-              </p>
-
-              {/* CTAs */}
-              <div className="flex flex-col sm:flex-row gap-2.5 md:gap-3 w-full max-w-md">
-                <Link 
-                  href="/contact" 
-                  className="flex-1 group bg-brand-primary text-white text-sm md:text-base font-bold py-3 md:py-3.5 rounded-xl flex items-center justify-center gap-2 hover:bg-brand-primary/90 transition-colors shadow-[0_0_30px_rgba(30,124,112,0.3)]"
-                >
-                  {scoreUI.cta}
-                  <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
-                </Link>
+              {/* Easter Egg CTA */}
+              {result.score === -1 && (
                 <button 
                   onClick={handleReset}
-                  className="flex items-center justify-center gap-2 px-4 md:px-5 py-3 md:py-3.5 bg-white/5 border border-white/10 text-brand-cream/80 text-sm md:text-base font-semibold rounded-xl hover:bg-white/10 transition-colors"
+                  className="absolute bottom-8 md:bottom-12 z-10 group bg-brand-cream text-brand-dark text-base md:text-lg font-bold px-6 py-3 md:px-8 md:py-3.5 rounded-xl flex items-center justify-center gap-2.5 hover:bg-[#D0FF27] transition-all shadow-2xl hover:scale-[1.02]"
                 >
-                  <RefreshCcw className="w-3.5 h-3.5 md:w-4 md:h-4" /> Retest
+                  Alright, show me my score
+                  <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
                 </button>
-              </div>
+              )}
+
+              {/* Score Ring */}
+              {result.score !== -1 && (
+                <div className="relative w-28 h-28 md:w-44 md:h-44 mb-4 md:mb-6 z-10">
+                  <svg className="w-full h-full -rotate-90" viewBox="0 0 120 120">
+                    <circle cx="60" cy="60" r="54" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="8" />
+                    <circle 
+                      cx="60" cy="60" r="54" fill="none" 
+                      className={`${scoreUI.ringColor} score-ring`}
+                      strokeWidth="8" 
+                      strokeLinecap="round"
+                      strokeDasharray={circumference}
+                      strokeDashoffset={circumference}
+                      style={{ transition: 'stroke-dashoffset 2.5s cubic-bezier(0.33,1,0.68,1)' }}
+                    />
+                  </svg>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center">
+                    <span className={`${playfair.className} score-number text-4xl md:text-6xl font-black ${scoreUI.color} leading-none`}>
+                      0
+                    </span>
+                    <span className="text-[10px] md:text-xs font-bold text-white/30 uppercase tracking-widest mt-1">out of 100</span>
+                  </div>
+                </div>
+              )}
+
+              {/* Tier Label */}
+              {result.score !== -1 && (
+                <div className={`relative z-10 inline-flex items-center gap-1.5 md:gap-2 px-3 py-1 md:px-4 md:py-1.5 rounded-full ${scoreUI.glowBg} border border-white/10 mb-3 md:mb-4 backdrop-blur-sm`}>
+                  <Sparkles className={`w-3.5 h-3.5 md:w-4 md:h-4 ${scoreUI.color}`} />
+                  <span className={`text-[11px] md:text-sm font-bold ${scoreUI.color} uppercase tracking-wider`}>{scoreUI.label}</span>
+                </div>
+              )}
+
+              {/* Subtitle */}
+              {result.score !== -1 && (
+                <p className={`relative z-10 ${quicksand.className} text-lg md:text-2xl font-bold text-white mb-2 md:mb-3 drop-shadow-md`}>
+                  {scoreUI.subtitle}
+                </p>
+              )}
+
+              {/* AI Verdict */}
+              {result.score !== -1 && (
+                <p className="relative z-10 text-brand-beige/80 text-[12px] md:text-base leading-relaxed max-w-[95%] md:max-w-lg mb-5 md:mb-8 drop-shadow-md font-medium">
+                  {result.verdict}
+                </p>
+              )}
+
+              {/* CTAs */}
+              {result.score !== -1 && (
+                <div className="relative z-10 flex flex-col sm:flex-row gap-2.5 md:gap-3 w-full max-w-md">
+                  <Link 
+                    href="/contact" 
+                    className="flex-1 group bg-brand-primary text-white text-sm md:text-base font-bold py-3 md:py-3.5 rounded-xl flex items-center justify-center gap-2 hover:bg-brand-primary/90 transition-colors shadow-[0_0_30px_rgba(30,124,112,0.3)]"
+                  >
+                    {scoreUI.cta}
+                    <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
+                  </Link>
+                  <button 
+                    onClick={handleReset}
+                    className="flex items-center justify-center gap-2 px-4 md:px-5 py-3 md:py-3.5 bg-white/5 border border-white/10 text-brand-cream/80 text-sm md:text-base font-semibold rounded-xl hover:bg-white/10 transition-colors"
+                  >
+                    <RefreshCcw className="w-3.5 h-3.5 md:w-4 md:h-4" /> Retest
+                  </button>
+                </div>
+              )}
             </div>
 
           </div>
