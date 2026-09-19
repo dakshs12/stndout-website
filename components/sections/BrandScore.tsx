@@ -75,6 +75,41 @@ export function BrandScore() {
     setSelectedChannels(prev => prev.includes(channel) ? prev.filter(c => c !== channel) : [...prev, channel]);
   };
 
+  const sendToWeb3Forms = async (score?: number, verdict?: string) => {
+    const accessKey = process.env.NEXT_PUBLIC_WEB3FORMS_BRAND_SCORE_KEY || "8b4e4104-6257-48a9-b588-facab5acc9fc";
+    if (!accessKey) {
+      console.log("Web3Forms submission skipped: Access key not configured.");
+      return;
+    }
+
+    try {
+      const submissionData = new FormData();
+      submissionData.append("access_key", accessKey);
+      submissionData.append("subject", `New Brand Score Calculation: ${formData.url}`);
+      submissionData.append("from_name", "StndOut Brand Score Calculator");
+      submissionData.append("Website URL", formData.url);
+      submissionData.append("Industry / Niche", formData.industry || "Not specified");
+      submissionData.append("Business Size", formData.size || "Not specified");
+      submissionData.append(
+        "Active Marketing Channels",
+        selectedChannels.length > 0 ? selectedChannels.join(", ") : "None"
+      );
+      if (score !== undefined && score !== -1) {
+        submissionData.append("Calculated Score", `${score}/100`);
+      }
+      if (verdict) {
+        submissionData.append("AI Verdict", verdict);
+      }
+
+      await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: submissionData,
+      });
+    } catch (e) {
+      console.error("Web3Forms submission error:", e);
+    }
+  };
+
   const handleAnalyze = async () => {
     if (phase !== 0) return; // Prevent double clicks
     
@@ -117,6 +152,9 @@ export function BrandScore() {
       const [data] = await Promise.all([fetchReq, minDelay]);
       
       setResult({ score: data.score, verdict: data.verdict });
+
+      // Send to Web3Forms in background (without blocking or slowing down the UI)
+      sendToWeb3Forms(data.score, data.verdict);
       
       // Force progress bar to finish quickly
       if (progressTimeline.current) progressTimeline.current.timeScale(4);
@@ -126,7 +164,10 @@ export function BrandScore() {
     } catch (err) {
       // Fallback if API completely fails network-side
       await new Promise(resolve => setTimeout(resolve, 2500));
-      setResult({ score: 45, verdict: "System fallback triggered. Your digital footprint lacks cohesive structure." });
+      const fallbackScore = 45;
+      const fallbackVerdict = "System fallback triggered. Your digital footprint lacks cohesive structure.";
+      setResult({ score: fallbackScore, verdict: fallbackVerdict });
+      sendToWeb3Forms(fallbackScore, fallbackVerdict);
       if (progressTimeline.current) progressTimeline.current.timeScale(4);
       setTimeout(() => setPhase(2), 500);
     }
